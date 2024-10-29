@@ -1,437 +1,323 @@
-'use client'
-import KeyBoard from "@/components/key-board";
-import fetchWords, { fetcher } from "@/lib/api";
-import { useEffect, useState, useRef } from 'react';
-import { toast } from 'sonner';
-import { cn, formatTime, generateRandomWords, getNegativeMessage, getPositiveMessage } from "@/lib/utils";
-import { Minus, PartyPopper, Plus } from "lucide-react";
-import { ResultModal } from "@/components/result-modal";
-import useSWR from 'swr';
-import UseTimes from "@/components/use-times";
+import Games from "@/components/games";
 
-const gridColMaps: Record<number, string> = {
-    3: 'grid-cols-3',
-    4: 'grid-cols-4',
-    5: 'grid-cols-5',
-    6: 'grid-cols-6',
-    7: 'grid-cols-7',
-    8: 'grid-cols-8',
-}
-
-// console.log(words)
 export default function HomePage() {
-    
-    const [columns, setColumns] = useState(3); // 总列数
-    const rows = 6; // 总行数
-    const [totalCells, setTotalCells] = useState(18); // 总单元格数
-    const [gridCol, setGridCol] = useState('grid-cols-3'); // 网格列数样式
-    const [showControls, setShowControls] = useState(true); // 是否显示控制按钮
-    const [showKeyboard, setShowKeyboard] = useState(false); // 是否显示键盘
-
-    
-    const [currentCell, setCurrentCell] = useState(-1); // 当前单元格
-    const [word, setWord] = useState(''); // 目标单词
-    const [gridContent, setGridContent] = useState<string[]>([]); // 网格内容
-    const [isEnterEnabled, setIsEnterEnabled] = useState(false); // 是否启用提交
-    const [matchResults, setMatchResults] = useState<string[]>([]); // 匹配结果
-    const [invalidRows, setInvalidRows] = useState<Set<number>>(new Set());
-    const [flippingRows, setFlippingRows] = useState<Set<number>>(new Set()); // 翻转的行
-    const [noMatchLetters, setNoMatchLetters] = useState<string[]>([]); // 不匹配的字母
-    const [dialogVisible, setDialogVisible] = useState(false); // 对话框是否可见
-    const [dialogTitle, setDialogTitle] = useState(''); // 对话框标题
-    const [dialogMessage, setDialogMessage] = useState(''); // 对话框消息
-    const [cellMatchClasses, setCellMatchClasses] = useState<string[]>([]); // 单元格匹配类
-    const [totalTime, setTotalTime] = useState(1); // 总时间
-
-    const handleFetchWord = (cell: number) => {
-      const randomWords = generateRandomWords();
-      // debugger;
-      // console.log(randomWords);
-      const result = randomWords[cell] || [];
-      let len = result.length;
-      if (len > 0) {
-        let word = result[Math.floor(Math.random() * len)];
-        setWord(word?.toUpperCase() || '');
-      }
-    }
-    // 获取单词
-    useEffect(() => {
-      handleFetchWord(columns);
-    }, []);
-
-    // 获取单词
-    const fetchWord = async () => {
-      const randomWords = await useSWR('/api/words', fetcher);
-      // console.log(randomWords);
-    }
-
-
-    const initGrid = (rows: number, columns: number) => {
-      setTotalCells(columns * rows);
-      const newGridCol = gridColMaps[columns] || 'grid-cols-3';
-      setGridCol(newGridCol);
-      setGridContent(new Array(columns * rows).fill(''));
-      handleFetchWord(columns);
-      setTotalTime(1);
-    }
-
-    // 删除列
-    const handleDecrease = () => {
-      if (columns > 3) {
-          setColumns(prevColumns => prevColumns - 1);
-      } else {
-          toast.warning('Minimum columns reached');
-      }
-    };
-
-    // 增加列
-    const handleIncrease = () => {
-        if (columns < 8) {
-            setColumns(prevColumns => prevColumns + 1);
-        } else {
-            toast.warning('Maximum columns reached');
-        }
-    };
-
-    // 获取当前行
-    const getCurrentRow = () => {
-      const currentRow = Math.floor(currentCell / columns);
-      return currentRow;
-    }
-
-    const handleReset = () => {
-        // setColumns(columns);
-        setGridContent([]);
-        setCurrentCell(-1);
-        setCellMatchClasses([]);
-        initGrid(rows, columns);
-    };
-
-    // 开始游戏
-    const handleStartGame = () => {
-        setShowControls(false);
-        setShowKeyboard(true);
-        setCurrentCell(0);
-        // setTimer(0);
-        // setIsTimerRunning(true);
-        setGridContent(new Array(totalCells).fill('')); // 确保初始化为空字符串
-        setIsEnterEnabled(false); // 重置 Enter 按钮状态
-        setCellMatchClasses([]);
-        setMatchResults([]);
-        setNoMatchLetters([]);
-    };
-
-    // 判断行是否填满
-    const isRowFilled = (row: number) => {
-        const startIndex = row * columns;
-        const endIndex = startIndex + columns;
-        return gridContent.slice(startIndex, endIndex).every(cell => cell.trim() !== '');
-    };
-
-    // 获取当前行单词
-    const getCurrentRowWord = () => {
-        const currentRow = getCurrentRow();
-        const startIndex = currentRow * columns;
-        const endIndex = startIndex + columns;
-        return gridContent.slice(startIndex, endIndex).join('');
-    };
-
-    // 检查单词是否有效
-    const checkWord = async (word: string) => {
-      // console.log(en)
-      // TODO 先查表， 验证单词的合法性
-      const isValid = await fetchWords(word);
-      // TODO 如果是合法的单词， 保存至库中
-      return isValid;
-    };
-
-    // 匹配单词
-    const matchWord = (guessedWord: string, targetWord: string) => {
-        const matchWords: string[] = [];
-        guessedWord.split('').forEach((letter, index) => {
-          // if (targetWord[index] === letter) { 
-          //   setCellMatchClasses(prev => [...prev, 'C']); // 正确
-          // } else if (targetWord.includes(letter)) {
-          //   matchWords.push(letter);
-          //   setCellMatchClasses(prev => [...prev, 'P']); // 部分正确
-          // } else {
-          //   setNoMatchLetters(prev => [...prev, letter]);
-          //   setCellMatchClasses(prev => [...prev, 'X']);
-          // }
-          if (targetWord.includes(letter)) {
-            matchWords.push(letter);
-            setCellMatchClasses(prev => [...prev, targetWord[index] === letter ? 'C' : 'P']); // 正确
-          } else {
-            setNoMatchLetters(prev => [...prev, letter]);
-            setCellMatchClasses(prev => [...prev, 'X']);
-          }
-        });
-        return matchWords;
-    };
-
-    // 提交单词
-    const handleEnter = async () => {
-        // const currentRow = Math.floor(currentCell / columns);
-        const currentRow = getCurrentRow();
-        const guessedWord = getCurrentRowWord().toLowerCase();
-        const isCurrentRowFilled = isRowFilled(currentRow);
-
-        if (isCurrentRowFilled) {
-          const isValid = await checkWord(guessedWord);
-          if (isValid) {
-              const result = matchWord(guessedWord.toUpperCase(), word);
-              // setMatchResults(prev => [...prev, result]);
-              setMatchResults(result);
-              // 触发翻转动画
-              setFlippingRows(new Set([currentRow]));
-
-              // 在动画完成清除翻转状态
-              setTimeout(() => {
-                  setFlippingRows(new Set());
-              }, columns * 100); // 假设每个格子的动画持续300ms
-
-              if (guessedWord.toUpperCase() === word) {
-                  // 猜对了，游戏结束
-                  // setIsTimerRunning(false);
-                  setShowKeyboard(false);
-                  setShowControls(true);
-                  setDialogTitle('You Won!');
-                  setDialogVisible(true);
-                  setDialogMessage(getPositiveMessage() || '');
-                  setCurrentCell(-1);
-                  setDialogTitle('You Won!');
-                  // setErrorMessage('恭喜你猜对了！');
-              } else {
-                  // 移动到下一行
-                  if (currentRow < rows - 1) {
-                      setCurrentCell((currentRow + 1) * columns);
-                  } else {
-                      // 如果是最后一行，游戏结束
-                      // setIsTimerRunning(false);
-                      setShowKeyboard(false);
-                      setShowControls(true);
-                      setDialogTitle('You Lost!');
-                      setDialogVisible(true);
-                      setDialogMessage(getNegativeMessage() || '');
-                      // setErrorMessage(`游戏结束，正确单词是 ${word}`);
-                      // toast.success(`Game over, the correct word is ${word}`);
-                  }
-              }
-          } else {
-              // 不是有效单词
-              // setErrorMessage('不是有效的单词，请重试');
-              // toast.error('不是有效的单词，请重试');
-              toast.error('Word not found');
-              setInvalidRows(prev => new Set(prev).add(currentRow));
-          }
-        } else {
-            // setErrorMessage('请填完整行后再提交');
-            // toast.error('请填完整行后再提交');
-            toast.warning('Please fill in the row before submitting');
-        }
-
-        // setTimeout(() => setErrorMessage(''), 2000);
-    };
-
-    const handleKeyPress = (letter: string) => {
-        if (currentCell >= 0 && currentCell < totalCells) {
-            const newGridContent = [...gridContent];
-            newGridContent[currentCell] = letter;
-            setGridContent(newGridContent);
-            
-            const currentRow = Math.floor(currentCell / columns);
-            const isRowEnd = (currentCell + 1) % columns === 0;
-            
-            if (!isRowEnd) {
-                setCurrentCell(prevCell => prevCell + 1);
-            }
-
-            const isCurrentRowFilled = isRowFilled(currentRow);
-            setIsEnterEnabled(isCurrentRowFilled);
-
-            // 清除当前行的无效状态
-            setInvalidRows(prev => {
-                const newSet = new Set(prev);
-                newSet.delete(currentRow);
-                return newSet;
-            });
-
-            // console.log(`Current row: ${currentRow}, Is filled: ${isCurrentRowFilled}, Current cell: ${currentCell}, Grid content: ${newGridContent.slice(currentRow * columns, (currentRow + 1) * columns).join(',')}`);
-        }
-    };
-
-    // 删除单元格
-    const handleDelete = () => {
-        if (currentCell > 0) {
-            const currentRow = Math.floor(currentCell / columns);
-            const currentRowStart = currentRow * columns;  // 当前行的起始位置
-            
-            // 如果当前位置在行首，不执行删除操作
-            if (currentCell === currentRowStart) {
-                return;
-            }
-
-            const newGridContent = [...gridContent];
-            if (newGridContent[currentCell] !== '') {
-                // 如果当前格子有内容，删除当前格子的内容
-                newGridContent[currentCell] = '';
-                setGridContent(newGridContent);
-                // 不移动光标
-            } else {
-                // 如果当前格子为空，删除前一个格子的内容并移动光标
-                // 确保不会跨行删除
-                const targetCell = currentCell - 1;
-                if (Math.floor(targetCell / columns) === currentRow) {
-                    newGridContent[targetCell] = '';
-                    setGridContent(newGridContent);
-                    setCurrentCell(targetCell);
-                }
-            }
-
-            // 清除当前行的无效状态
-            setInvalidRows(prev => {
-                const newSet = new Set(prev);
-                newSet.delete(currentRow);
-                return newSet;
-            });
-        }
-    };
-
-    useEffect(() => {
-      if (columns > 0) {
-        // setTotalCells(columns * rows);
-        // const newGridCol = gridColMaps[columns] || 'grid-cols-3';
-        // setGridCol(newGridCol);
-        // setGridContent(new Array(columns * rows).fill(''));
-        initGrid(rows, columns);
-      }
-    }, [columns]);
-
-
-    // 处理键盘输入
-    const handleKeyDown = (event: KeyboardEvent) => {
-        if (showKeyboard && currentCell >= 0 && currentCell < totalCells) {
-            const key = event.key.toUpperCase();
-            if (/^[A-Z]$/.test(key)) {
-                handleKeyPress(key);
-            } else if (event.key === 'Backspace') {
-                event.preventDefault(); // 阻止默认行为
-                handleDelete();
-            } else if (event.key === 'Enter') {
-                event.preventDefault(); // 阻止默认行为
-                handleEnter();
-            }
-        }
-    };
-
-    useEffect(() => {
-        window.addEventListener('keydown', handleKeyDown);
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [showKeyboard, currentCell, totalCells]); // 依赖项包括可能在handleKeyDown中使用的状态
-
     return (
-      <>
-        {/* <p className="absolute top-5 right-5 text-zinc-500 text-sm text-white">答案: {word}  total time: {formatTime(totalTime)}</p> */}
-        <main className="flex flex-1 flex-col items-center justify-center text-white">
-          {
-            gridContent.length > 0 ? (    
-              <div className={`grid ${gridCol} gap-2 h-[400px]`}>
-                {gridContent.map((content, index) => {
-                const row = Math.floor(index / columns);
-                const col = index % columns;
-                const isInvalidRow = invalidRows.has(row);
-                const isFlipping = flippingRows.has(row);
-                // console.log(cellMatchClasses);
-                // debugger;
-                const matchClass = cellMatchClasses[index] ? cellMatchClasses[index] : '';
-                return (
-                    <div 
-                        key={index} 
-                        className={cn(`
-                            w-14 h-14 
-                          bg-slate-300 
-                            flex items-center justify-center 
-                            text-2xl font-bold 
-                            rounded-md 
-                            ${index === currentCell ? 'ring-2 ring-blue-500' : ''}
-                            ${isInvalidRow && content ? 'border-red-500 text-red-500' : 'text-black'}
-                            ${isFlipping ? 'animate-flip' : ''}`, 
-                            matchClass === 'C' ? 'bg-green-500' : 
-                            matchClass === 'P' ? 'bg-yellow-500' : 
-                            matchClass === 'X' ? 'bg-slate-500' : 'bg-slate-300'
-                        )}
-                        style={{
-                            animationDelay: isFlipping ? `${col * 100}ms` : '0ms'
-                        }}
-                    >
-                        {content}
-                    </div>
-                );
-                })}
-              </div>
-            ) : (
-              <div className="h-[400px] flex items-center justify-center text-center">
-                <div className="relative">
-                  <div className="w-12 h-12 border-4 border-zinc-200 border-t-blue-500 rounded-full animate-loading"></div>
-                  <span className="absolute top-14 left-1/2 -translate-x-1/2 text-zinc-400">Loading...</span>
-                </div>
-              </div>
-            )
-          }
-          {showControls && (
-              <div className="mt-5 flex justify-center space-x-4">
-                <button onClick={handleReset} className="px-4 py-2 bg-blue-500 text-white rounded">Reset</button>
-                <button onClick={handleDecrease} className="px-2 py-2 bg-blue-500 text-white rounded"><Minus /></button>
-                <button onClick={handleIncrease} className="px-2 py-2 bg-blue-500 text-white rounded"><Plus /></button>
-                <button onClick={handleStartGame} className="px-4 py-2 bg-blue-500 text-white rounded">Start</button>
-              </div>
-          )}
-          {showKeyboard && <KeyBoard 
-            onKeyPress={handleKeyPress} 
-            onDelete={handleDelete} 
-            onEnter={handleEnter} 
-            matchedLetters={matchResults} 
-            isEnterEnabled={isEnterEnabled}
-            noMatchLetters={noMatchLetters}
-          />}
-          <UseTimes showKeyboard={showKeyboard} onTimeChange={(time: number) => {
-            // console.log(time);
-            setTotalTime(time);
-          }} />
-        </main>
-
-        <ResultModal
-          isOpen={dialogVisible}
-          onClose={() => {
-            setDialogVisible(false);
-            // handleReset();
-          }}
-          title={dialogTitle || 'You Won!'}
-          description={dialogMessage}
-          // titleClassName="bg-red-500"
-          titleClassName="text-center text-2xl border-b-2 border-zinc-200 py-2"
-        >
-          <div className="flex flex-col items-center border-b-2 border-zinc-200 pb-5">
-            {
-              dialogTitle === 'You Lost!' ? ( 
-                <>
-                  <label className="text-lg leading-6 text-zinc-800 mt-5">The word was</label>
-                  <h1 className="text-4xl font-bold my-5">{word?.toUpperCase()}</h1>
-                </>
-              ) : (
-                <div className="flex flex-col items-center justify-center ">
-                  {/* <label className="text-lg leading-6 text-zinc-800 mt-5">The word was</label>
-                  <h1 className="text-4xl font-bold my-5">{word?.toUpperCase()}</h1> */}
-                  <PartyPopper className="w-10 h-10 text-orange-300" />
-                  <p className="mt-2 text-zinc-500 text-lg"> Congratulations!  </p>
-                  <p className=" text-base text-zinc-500">You've guessed the word in {formatTime(totalTime)}</p>
-                </div>
-              )
-            }
+      <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white">
+        {/* 游戏区域 */}
+        <div className="w-full bg-gradient-to-b from-violet-50 via-violet-50/50 to-white py-8 md:py-16 relative">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.05),transparent)] pointer-events-none"></div>
+          <div className="container mx-auto relative px-4">
+            <Games />
           </div>
-        </ResultModal>
-      </>
+        </div>
+
+        {/* 标题区域 */}
+        <div className="py-8 md:py-16 bg-gradient-to-b from-white to-zinc-50/50">
+          <div className="container mx-auto max-w-4xl px-4">
+            <div className="relative">
+              <div className="absolute -inset-x-4 -inset-y-6 bg-violet-50/50 rounded-2xl -z-10"></div>
+              
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 py-6 px-4">
+                {/* 标题部分 */}
+                <div className="text-center md:text-left w-full md:w-auto">
+                  <h1 className="text-2xl md:text-4xl font-bold mb-2">
+                    <span className="text-zinc-700">Word</span>
+                    <span className="text-violet-500">Puzzle</span>
+                  </h1>
+                  <p className="text-base md:text-lg text-zinc-500">Challenge Your Word Power!</p>
+                </div>
+
+                {/* 按钮组 */}
+                <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+                  <div className="flex items-center gap-3 w-full md:w-auto justify-center">
+                    <div className="px-3 py-2 md:px-4 md:py-2 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm">
+                      <span className="text-sm md:text-base text-violet-700 font-medium">6 tries</span>
+                    </div>
+                    <div className="px-3 py-2 md:px-4 md:py-2 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm">
+                      <span className="text-sm md:text-base text-violet-700 font-medium">3-8 letters</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 w-full md:w-auto justify-center">
+                    <button className="p-2 text-sm md:text-base rounded-lg bg-white/80 backdrop-blur-sm shadow-sm hover:bg-violet-50 transition-colors">
+                      <span className="text-violet-600">📊 Stats</span>
+                    </button>
+                    <button className="p-2 text-sm md:text-base rounded-lg bg-white/80 backdrop-blur-sm shadow-sm hover:bg-violet-50 transition-colors">
+                      <span className="text-violet-600">⚡ Daily</span>
+                    </button>
+                    <button className="p-2 text-sm md:text-base rounded-lg bg-white/80 backdrop-blur-sm shadow-sm hover:bg-violet-50 transition-colors">
+                      <span className="text-violet-600">🎯 Practice</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 游戏说明区域 */}
+        <div id="how-to-play" className="max-w-4xl mx-auto px-4 py-12 md:py-20">
+          {/* 主要说明 - 修改标题样式 */}
+          <div className="mb-16">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-zinc-800">How to Play</h2>
+              <div className="mt-2 w-20 h-1 bg-violet-200 mx-auto rounded-full"></div>
+            </div>
+            
+            <div className="flex items-start space-x-6">
+              <span className="text-6xl font-black text-violet-500/10">1</span>
+              <div className="flex-1">
+                <p className="text-lg text-zinc-600 pt-4 mb-8">
+                  Can you crack the hidden word? You've got 6 tries to guess it right! 
+                  After each guess, we'll give you some color hints:
+                </p>
+
+                {/* 示例区域 */}
+                <div className="bg-white/50 rounded-xl p-6 space-y-6">
+                  <h3 className="text-lg font-semibold text-zinc-700 mb-4">Examples:</h3>
+                  
+                  {/* 示例1：全部正确 */}
+                  <div className="space-y-2">
+                    <p className="text-sm text-zinc-500">If the word is "HEART"</p>
+                    <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+                      <div className="flex gap-1 md:gap-2 flex-wrap">
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-green-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          H
+                        </div>
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-green-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          E
+                        </div>
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-green-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          A
+                        </div>
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-green-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          R
+                        </div>
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-green-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          T
+                        </div>
+                      </div>
+                      <span className="text-sm md:text-base text-zinc-600">All letters are correct and in position!</span>
+                    </div>
+                  </div>
+
+                  {/* 示例2：部分正确位置 */}
+                  <div className="space-y-2">
+                    <p className="text-sm text-zinc-500">If you guess "EARTH"</p>
+                    <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+                      <div className="flex gap-1 md:gap-2 flex-wrap">
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-yellow-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          E
+                        </div>
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-yellow-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          A
+                        </div>
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-green-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          R
+                        </div>
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-green-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          T
+                        </div>
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          H
+                        </div>
+                      </div>
+                      <span className="text-sm md:text-base text-zinc-600">Some letters are correct but in wrong positions</span>
+                    </div>
+                  </div>
+
+                  {/* 示例3：字母存在但位置错误 */}
+                  <div className="space-y-2">
+                    <p className="text-sm text-zinc-500">If you guess "TRAIN"</p>
+                    <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+                      <div className="flex gap-1 md:gap-2 flex-wrap">
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-green-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          T
+                        </div>
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-yellow-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          R
+                        </div>
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-yellow-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          A
+                        </div>
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          I
+                        </div>
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          N
+                        </div>
+                      </div>
+                      <span className="text-sm md:text-base text-zinc-600">T is correct, R and A exist but in wrong spots</span>
+                    </div>
+                  </div>
+
+                  {/* 示例4：完全错误 */}
+                  <div className="space-y-2">
+                    <p className="text-sm text-zinc-500">If you guess "CLOUD"</p>
+                    <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+                      <div className="flex gap-1 md:gap-2 flex-wrap">
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          C
+                        </div>
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          L
+                        </div>
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          O
+                        </div>
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          U
+                        </div>
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                          D
+                        </div>
+                      </div>
+                      <span className="text-sm md:text-base text-zinc-600">None of these letters are in the word</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 颜色提示说明 */}
+          <div className="mb-16 ml-16">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
+                <div className="flex items-center mb-2">
+                  <div className="w-4 h-4 bg-green-500 rounded-full mr-3"></div>
+                  <span className="font-semibold text-green-700">Correct Spot</span>
+                </div>
+                <p className="text-green-600 text-sm">Letter is in the right position</p>
+              </div>
+
+              <div className="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
+                <div className="flex items-center mb-2">
+                  <div className="w-4 h-4 bg-yellow-500 rounded-full mr-3"></div>
+                  <span className="font-semibold text-yellow-700">Wrong Spot</span>
+                </div>
+                <p className="text-yellow-600 text-sm">Letter exists but wrong position</p>
+              </div>
+
+              <div className="bg-zinc-50 p-6 rounded-lg border-l-4 border-zinc-500">
+                <div className="flex items-center mb-2">
+                  <div className="w-4 h-4 bg-zinc-500 rounded-full mr-3"></div>
+                  <span className="font-semibold text-zinc-700">Not Found</span>
+                </div>
+                <p className="text-zinc-600 text-sm">Letter is not in the word</p>
+              </div>
+            </div>
+          </div>
+
+          {/* 难度说明 */}
+          <div className="mb-16">
+            <div className="flex items-start space-x-6">
+              <span className="text-6xl font-black text-violet-500/10">2</span>
+              <div className="pt-4">
+                <h3 className="text-lg font-semibold text-zinc-800 mb-2">Level Up Your Game</h3>
+                <p className="text-lg text-zinc-600">
+                  Use the "+" and "-" buttons to switch between 3-8 letter words. 
+                  Whether you're a word newbie or a vocabulary pro, there's a perfect challenge waiting for you.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* FAQ 部分 */}
+          <div className="w-full bg-gradient-to-b from-zinc-50/50 via-zinc-100/30 to-zinc-50/50 py-12 md:py-20 my-12 md:my-20">
+            <div className="max-w-4xl mx-auto px-4">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-zinc-800">Frequently Asked Questions</h2>
+                <div className="mt-2 w-20 h-1 bg-violet-200 mx-auto rounded-full"></div>
+              </div>
+              
+              <div className="grid gap-4 md:gap-6">
+                {/* Question 1 */}
+                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
+                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
+                    How do I know if my guess is correct?
+                  </h3>
+                  <p className="text-zinc-600 ml-12">
+                    After each guess, the letters will change color to give you hints. Green means the letter is correct and in the right spot, 
+                    yellow means the letter exists but is in the wrong position, and gray means the letter isn't in the word at all.
+                  </p>
+                </div>
+
+                {/* Question 2 */}
+                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
+                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
+                    Can I play the same word multiple times?
+                  </h3>
+                  <p className="text-zinc-600 ml-12">
+                    Yes! You can play as many times as you want. Use the "Reset" button to start a new game with a different word. 
+                    Each game generates a new random word based on your chosen length.
+                  </p>
+                </div>
+
+                {/* Question 3 */}
+                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
+                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
+                    How do I adjust the difficulty?
+                  </h3>
+                  <p className="text-zinc-600 ml-12">
+                    Use the "+" and "-" buttons before starting a game to change the word length from 3 to 8 letters. 
+                    Longer words generally provide a greater challenge. You can also track your solving time to challenge yourself.
+                  </p>
+                </div>
+
+                {/* Question 4 */}
+                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
+                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
+                    What happens if I run out of tries?
+                  </h3>
+                  <p className="text-zinc-600 ml-12">
+                    If you don't guess the word within 6 attempts, the game ends and reveals the correct word. 
+                    Don't worry though - you can always start a new game and try again with a different word!
+                  </p>
+                </div>
+
+                {/* Question 5 */}
+                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
+                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
+                    Can I use the keyboard to type my guesses?
+                  </h3>
+                  <p className="text-zinc-600 ml-12">
+                    Yes! You can use either your physical keyboard or the on-screen keyboard to enter letters. 
+                    Use Backspace to delete and Enter to submit your guess. The game supports both input methods for your convenience.
+                  </p>
+                </div>
+
+                {/* Question 6 */}
+                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
+                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
+                    Are all words in English?
+                  </h3>
+                  <p className="text-zinc-600 ml-12">
+                    Yes, all words are common English words. We've carefully selected words that are familiar and frequently used, 
+                    making the game both challenging and educational for English language learners and native speakers alike.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 底部号召 */}
+          <div className="text-center py-6 md:py-8 bg-violet-50 rounded-2xl mx-4">
+            <h2 className="text-2xl font-bold text-violet-900 mb-2">
+              Ready to Test Your Skills?
+            </h2>
+            <p className="text-lg text-violet-700">
+              Jump in and see how fast you can solve the puzzle!
+              <span className="inline-block animate-bounce ml-2">🚀</span>
+            </p>
+          </div>
+        </div>
+      </div>
     )
-}
+} 
