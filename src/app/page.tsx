@@ -262,8 +262,15 @@ export default function HomePage() {
 
     // 删除单元格
     const handleDelete = () => {
-        // debugger;
         if (currentCell > 0) {
+            const currentRow = Math.floor(currentCell / columns);
+            const currentRowStart = currentRow * columns;  // 当前行的起始位置
+            
+            // 如果当前位置在行首，不执行删除操作
+            if (currentCell === currentRowStart) {
+                return;
+            }
+
             const newGridContent = [...gridContent];
             if (newGridContent[currentCell] !== '') {
                 // 如果当前格子有内容，删除当前格子的内容
@@ -272,14 +279,16 @@ export default function HomePage() {
                 // 不移动光标
             } else {
                 // 如果当前格子为空，删除前一个格子的内容并移动光标
+                // 确保不会跨行删除
                 const targetCell = currentCell - 1;
-                newGridContent[targetCell] = '';
-                setGridContent(newGridContent);
-                setCurrentCell(targetCell);
+                if (Math.floor(targetCell / columns) === currentRow) {
+                    newGridContent[targetCell] = '';
+                    setGridContent(newGridContent);
+                    setCurrentCell(targetCell);
+                }
             }
 
             // 清除当前行的无效状态
-            const currentRow = Math.floor(currentCell / columns);
             setInvalidRows(prev => {
                 const newSet = new Set(prev);
                 newSet.delete(currentRow);
