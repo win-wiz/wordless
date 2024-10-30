@@ -3,6 +3,7 @@
 import Image from "next/image";
 import logo from "@/../public/wordless.png";
 import { CircleHelp } from "lucide-react";
+import Link from "next/link";
 
 export default function Header() {
   const scrollToHelp = () => {
@@ -19,7 +20,7 @@ export default function Header() {
   return (
     <header className="w-full bg-gradient-to-b from-zinc-50 to-transparent py-3 md:py-4">
       <div className="container mx-auto max-w-screen-md px-4 flex items-center justify-between">
-        <div className="flex items-center space-x-2 md:space-x-3">
+        <Link href="/" className="flex items-center space-x-2 md:space-x-3">
           <Image 
             src={logo} 
             alt="logo" 
@@ -30,7 +31,7 @@ export default function Header() {
           <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-zinc-800 to-violet-500 bg-clip-text text-transparent">
             Wordless
           </h1>
-        </div>
+        </Link>
         <div>
           <CircleHelp 
             onClick={scrollToHelp}
