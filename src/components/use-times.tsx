@@ -1,5 +1,6 @@
 import { formatTime } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
+import { Clock } from "lucide-react";
 
 export default function UseTimes({
   showKeyboard,
@@ -8,9 +9,9 @@ export default function UseTimes({
   showKeyboard: boolean,
   onTimeChange: (time: number) => void
 }) {
-  const [timer, setTimer] = useState(1); // 计时器
-  const timerRef = useRef<NodeJS.Timeout | null>(null); // 获取定时器
-  const [isTimerRunning, setIsTimerRunning] = useState(false); // 是否运行计时器
+  const [timer, setTimer] = useState(1);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   useEffect(() => {
     if (isTimerRunning) {
@@ -33,7 +34,6 @@ export default function UseTimes({
   }, [isTimerRunning]);
 
   useEffect(() => {
-    // debugger;
     if (showKeyboard) { 
       setIsTimerRunning(true);
     } else {
@@ -42,8 +42,13 @@ export default function UseTimes({
   }, [showKeyboard]);
   
   return showKeyboard && (
-      <div className="absolute top-20 right-5">
-          <p>Total time: <span className="inline-block md:w-20 w-14">{formatTime(timer)}</span></p>
+    <div className="absolute -top-4 sm:-top-6 md:-top-12 right-0">
+      <div className="flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1.5 md:py-2 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border border-violet-100">
+        <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-violet-500" />
+        <span className="text-sm md:text-base text-violet-700 font-medium">
+          {formatTime(timer)}
+        </span>
       </div>
+    </div>
   )
 }

@@ -127,7 +127,7 @@ export default function KeyBoard({ onKeyPress, onDelete, onEnter, matchedLetters
             "md:w-20 w-14",
             isEnterEnabled 
               ? "bg-violet-500 hover:bg-violet-600 text-white border-violet-400" 
-              : "bg-violet-200 text-violet-400 border-violet-100 cursor-not-allowed"
+              : "bg-violet-200 text-violet-400 border-violet-100 cursor-pointer"
           )}
         />
       </div>

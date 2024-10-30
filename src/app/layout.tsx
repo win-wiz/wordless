@@ -1,13 +1,9 @@
 import "@/styles/globals.css";
-
-import { Inter } from 'next/font/google'
 import { type Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner"
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { ScrollToTop } from "@/components/scroll-to-top";
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: "Word Puzzle - Challenge Your Word Power",
@@ -20,7 +16,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-zinc-50`}>
+      <body className={`bg-zinc-50`}>
         <Header />
         {children}
         <Footer />

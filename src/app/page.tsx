@@ -1,10 +1,12 @@
+'use client';
+
 import Games from "@/components/games";
 
 export default function HomePage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white">
         {/* 游戏区域 */}
-        <div className="w-full bg-gradient-to-b from-violet-50 via-violet-50/50 to-white py-8 md:py-16 relative animate-fade-in">
+        <div className="w-full bg-gradient-to-b from-violet-50 via-violet-50/50 to-white py-8 md:py-16 relative game-section">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.05),transparent)] pointer-events-none"></div>
           <div className="container mx-auto relative px-4">
             <Games />
@@ -12,44 +14,130 @@ export default function HomePage() {
         </div>
 
         {/* 标题区域 */}
-        <div className="py-8 md:py-16 bg-gradient-to-b from-white to-zinc-50/50 animate-slide-in">
-          <div className="container mx-auto max-w-4xl px-4">
-            <div className="relative">
-              <div className="absolute -inset-x-4 -inset-y-6 bg-violet-50/50 rounded-2xl -z-10"></div>
-              
-              <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 py-6 px-4">
-                {/* 标题部分 */}
-                <div className="text-center md:text-left w-full md:w-auto">
-                  <h1 className="text-2xl md:text-4xl font-bold mb-2">
-                    <span className="text-zinc-700">Word</span>
-                    <span className="text-violet-500">Puzzle</span>
-                  </h1>
-                  <p className="text-base md:text-lg text-zinc-500">Challenge Your Word Power!</p>
+        <div className="w-full bg-gradient-to-b from-white via-violet-50/30 to-white py-16 md:py-24">
+          <div className="container mx-auto max-w-6xl px-4">
+            <div className="flex flex-col items-center">
+              {/* 主标题和副标题 */}
+              <div className="text-center mb-16">
+                <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 bg-gradient-to-r from-zinc-800 via-violet-600 to-zinc-800 bg-clip-text text-transparent">
+                  Wordless Game: Discover the Secret Word
+                </h2>
+                <p className="text-xl md:text-2xl text-zinc-500 max-w-3xl mx-auto">
+                  Here's how it works:
+                </p>
+              </div>
+
+              {/* 游戏规则说明 - 重新布局为两列 */}
+              <div className="w-full max-w-4xl mx-auto grid md:grid-cols-2 gap-12">
+                {/* 左侧：游戏规则和颜色提示 */}
+                <div className="space-y-8">
+                  <div className="flex items-start gap-6 group">
+                    <div className="flex-none w-14 h-14 bg-violet-100 rounded-full flex items-center justify-center">
+                      <span className="text-2xl">🎯</span>
+                    </div>
+                    <div className="flex-1 pt-2">
+                      <h3 className="text-xl font-semibold text-zinc-800 mb-2 group-hover:text-violet-600 transition-colors">
+                        Guess a word
+                      </h3>
+                      <p className="text-zinc-600">with 4 to 11 letters</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-6 group">
+                    <div className="flex-none w-14 h-14 bg-violet-100 rounded-full flex items-center justify-center">
+                      <span className="text-2xl">🎲</span>
+                    </div>
+                    <div className="flex-1 pt-2">
+                      <h3 className="text-xl font-semibold text-zinc-800 mb-2 group-hover:text-violet-600 transition-colors">
+                        Use the color clues
+                      </h3>
+                      <div className="space-y-2 text-zinc-600">
+                        <div className="flex items-center gap-3">
+                          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                          <span>Green means correct spot</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                          <span>Yellow means wrong spot</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className="w-3 h-3 bg-zinc-400 rounded-full"></div>
+                          <span>Gray means not in word</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                {/* 按钮组 */}
-                <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-                  <div className="flex items-center gap-3 w-full md:w-auto justify-center">
-                    <div className="px-3 py-2 md:px-4 md:py-2 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm">
-                      <span className="text-sm md:text-base text-violet-700 font-medium">6 tries</span>
+                {/* 右侧：游戏目标和提示 */}
+                <div className="space-y-8">
+                  <div className="flex items-start gap-6 group">
+                    <div className="flex-none w-14 h-14 bg-violet-100 rounded-full flex items-center justify-center">
+                      <span className="text-2xl">⚡</span>
                     </div>
-                    <div className="px-3 py-2 md:px-4 md:py-2 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm">
-                      <span className="text-sm md:text-base text-violet-700 font-medium">3-8 letters</span>
+                    <div className="flex-1 pt-2">
+                      <h3 className="text-xl font-semibold text-zinc-800 mb-2 group-hover:text-violet-600 transition-colors">
+                        Your goal
+                      </h3>
+                      <p className="text-zinc-600">figure out the secret word in just 6 tries</p>
                     </div>
                   </div>
-                  
-                  <div className="flex items-center gap-2 w-full md:w-auto justify-center">
-                    <button className="p-2 text-sm md:text-base rounded-lg bg-white/80 backdrop-blur-sm shadow-sm hover:bg-violet-50 transition-colors">
-                      <span className="text-violet-600">📊 Stats</span>
-                    </button>
-                    <button className="p-2 text-sm md:text-base rounded-lg bg-white/80 backdrop-blur-sm shadow-sm hover:bg-violet-50 transition-colors">
-                      <span className="text-violet-600">⚡ Daily</span>
-                    </button>
-                    <button className="p-2 text-sm md:text-base rounded-lg bg-white/80 backdrop-blur-sm shadow-sm hover:bg-violet-50 transition-colors">
-                      <span className="text-violet-600">🎯 Practice</span>
-                    </button>
+
+                  {/* Pro Tips 部分 */}
+                  <div className="flex items-start gap-6 group">
+                    <div className="flex-none w-14 h-14 bg-violet-100 rounded-full flex items-center justify-center">
+                      <span className="text-2xl">💡</span>
+                    </div>
+                    <div className="flex-1 pt-2">
+                      <h3 className="text-xl font-semibold text-zinc-800 mb-2 group-hover:text-violet-600 transition-colors">
+                        Pro Tips
+                      </h3>
+                      <div className="space-y-3 text-zinc-600">
+                        <div>
+                          {/* <p className="font-medium text-zinc-700">Strategy Tips:</p> */}
+                          <ul className="mt-2 space-y-1.5 text-sm list-disc list-inside">
+                            <li>Start with words containing common vowels (A, E, I, O)</li>
+                            <li>Use words with common consonants (R, S, T, N)</li>
+                            <li>Avoid repeated letters in your first guess</li>
+                            <li>Use your previous guesses as clues</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
+              </div>
+
+              {/* 操作按钮组 */}
+              <div className="mt-16 flex flex-wrap justify-center gap-4">
+                <button 
+                  onClick={() => {
+                    const gameSection = document.querySelector('.game-section');
+                    if (gameSection) {
+                      gameSection.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                      });
+                    }
+                  }}
+                  className="px-8 py-3 bg-violet-600 text-white rounded-full hover:bg-violet-700 transition-all hover:scale-105 font-medium text-lg shadow-lg shadow-violet-200"
+                >
+                  Let's Play!
+                </button>
+                <button 
+                  onClick={() => {
+                    const howToPlaySection = document.getElementById('how-to-play');
+                    if (howToPlaySection) {
+                      howToPlaySection.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                      });
+                    }
+                  }}
+                  className="px-8 py-3 bg-white text-violet-600 rounded-full hover:bg-violet-50 transition-all hover:scale-105 font-medium text-lg border-2 border-violet-200"
+                >
+                  Learn More
+                </button>
               </div>
             </div>
           </div>
@@ -60,7 +148,7 @@ export default function HomePage() {
           {/* 主要说明 - 修改标题样式 */}
           <div className="mb-16">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-zinc-800">How to Play</h2>
+              <h2 className="text-3xl font-bold text-zinc-800">How to play the Wordless Game?</h2>
               <div className="mt-2 w-20 h-1 bg-violet-200 mx-auto rounded-full"></div>
             </div>
             
@@ -293,6 +381,54 @@ export default function HomePage() {
                 </div>
 
                 {/* Question 6 */}
+                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
+                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
+                    Are all words in English?
+                  </h3>
+                  <p className="text-zinc-600 ml-12">
+                    Yes, all words are common English words. We've carefully selected words that are familiar and frequently used, 
+                    making the game both challenging and educational for English language learners and native speakers alike.
+                  </p>
+                </div>
+
+                {/* Question 7 */}
+                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
+                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
+                    Are all words in English?
+                  </h3>
+                  <p className="text-zinc-600 ml-12">
+                    Yes, all words are common English words. We've carefully selected words that are familiar and frequently used, 
+                    making the game both challenging and educational for English language learners and native speakers alike.
+                  </p>
+                </div>
+
+                {/* Question 8 */}
+                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
+                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
+                    Are all words in English?
+                  </h3>
+                  <p className="text-zinc-600 ml-12">
+                    Yes, all words are common English words. We've carefully selected words that are familiar and frequently used, 
+                    making the game both challenging and educational for English language learners and native speakers alike.
+                  </p>
+                </div>
+
+                {/* Question 9 */}
+                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
+                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
+                    Are all words in English?
+                  </h3>
+                  <p className="text-zinc-600 ml-12">
+                    Yes, all words are common English words. We've carefully selected words that are familiar and frequently used, 
+                    making the game both challenging and educational for English language learners and native speakers alike.
+                  </p>
+                </div>
+
+                {/* Question 10 */}
                 <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
                   <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
                     <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>

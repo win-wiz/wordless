@@ -322,7 +322,11 @@ export default function Games() {
 
     return (
       <>
-        <div className="container mx-auto max-w-screen-md flex flex-1 flex-col items-center justify-center">
+        <div className="container mx-auto max-w-screen-md flex flex-1 flex-col items-center justify-center relative">
+          <UseTimes 
+            showKeyboard={showKeyboard} 
+            onTimeChange={(time: number) => { setTotalTime(time); }} 
+          />
           {
             gridContent.length > 0 ? (    
               <div className={`grid ${gridCol} gap-2`}>
