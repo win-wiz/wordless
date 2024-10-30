@@ -299,16 +299,23 @@ export default function Games() {
 
     // 处理键盘输入
     const handleKeyDown = (event: KeyboardEvent) => {
+
+      // debugger;
         if (showKeyboard && currentCell >= 0 && currentCell < totalCells) {
             const key = event.key.toUpperCase();
             if (/^[A-Z]$/.test(key)) {
+              // debugger;
                 handleKeyPress(key);
             } else if (event.key === 'Backspace') {
                 event.preventDefault(); // 阻止默认行为
                 handleDelete();
             } else if (event.key === 'Enter') {
                 event.preventDefault(); // 阻止默认行为
-                handleEnter();
+                console.log('gridContent', gridContent);
+
+                // setTimeout(() => {
+                //   handleEnter();
+                // }, 10);
             }
         }
     };
@@ -322,6 +329,7 @@ export default function Games() {
 
     return (
       <>
+        
         <div className="container mx-auto max-w-screen-md flex flex-1 flex-col items-center justify-center relative">
           <UseTimes 
             showKeyboard={showKeyboard} 

@@ -43,9 +43,9 @@ export default function UseTimes({
   
   return showKeyboard && (
     <div className="absolute -top-4 sm:-top-6 md:-top-12 right-0">
-      <div className="flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1.5 md:py-2 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border border-violet-100">
-        <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-violet-500" />
-        <span className="text-sm md:text-base text-violet-700 font-medium">
+      <div className="flex w-[96px] items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1.5 md:py-2 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border border-violet-100">
+        <Clock className="w-3.5 h-3.5 md:w-5 md:h-5 text-violet-500" />
+        <span className="inline-block text-sm md:text-base leading-5 text-violet-700 font-medium">
           {formatTime(timer)}
         </span>
       </div>
