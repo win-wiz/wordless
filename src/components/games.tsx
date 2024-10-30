@@ -202,7 +202,7 @@ export default function Games() {
                       setDialogTitle('You Lost!');
                       setDialogVisible(true);
                       setDialogMessage(getNegativeMessage() || '');
-                      // setErrorMessage(`游戏结束，正确单词是 ${word}`);
+                      // setErrorMessage(`游戏结束，正单词是 ${word}`);
                       // toast.success(`Game over, the correct word is ${word}`);
                   }
               }
@@ -347,7 +347,7 @@ export default function Games() {
                         ${isFlipping ? 'animate-flip' : ''}`, 
                         matchClass === 'C' ? 'bg-green-500 text-white border-green-400' : 
                         matchClass === 'P' ? 'bg-yellow-500 text-white border-yellow-400' : 
-                        matchClass === 'X' ? 'bg-zinc-500 text-white border-zinc-400' : 'bg-white',
+                        matchClass === 'X' ? 'bg-zinc-400 text-white border-zinc-400' : 'bg-white',
                       )}
                       style={{
                         animationDelay: isFlipping ? `${col * 100}ms` : '0ms'
@@ -404,20 +404,26 @@ export default function Games() {
           }}
           title={dialogTitle || 'You Won!'}
           description={dialogMessage}
-          titleClassName="text-center text-2xl border-b-2 border-zinc-200 py-2"
+          titleClassName="text-center text-2xl border-b-2 border-violet-100 py-2"
         >
-          <div className="flex flex-col items-center border-b-2 border-zinc-200 pb-5">
+          <div className="flex flex-col items-center border-b-2 border-violet-100 pb-5">
             {
               dialogTitle === 'You Lost!' ? ( 
                 <>
-                  <label className="text-lg leading-6 text-zinc-800 mt-5">The word was</label>
-                  <h1 className="text-4xl font-bold my-5">{word?.toUpperCase()}</h1>
+                  <label className="text-lg leading-6 text-zinc-700 mt-5">The word was</label>
+                  <h1 className="text-4xl font-bold my-5 bg-gradient-to-r from-zinc-800 to-violet-500 bg-clip-text text-transparent">
+                    {word?.toUpperCase()}
+                  </h1>
                 </>
               ) : (
                 <div className="flex flex-col items-center justify-center">
-                  <PartyPopper className="w-10 h-10 text-violet-500" />
-                  <p className="mt-2 text-zinc-500 text-lg">Congratulations!</p>
-                  <p className="text-base text-zinc-500">You've guessed the word in {formatTime(totalTime)}</p>
+                  <PartyPopper className="w-12 h-12 text-violet-500" />
+                  <p className="mt-4 text-zinc-700 text-lg font-medium">Congratulations!</p>
+                  <div className="mt-2 px-4 py-2 bg-violet-50 rounded-lg">
+                    <p className="text-violet-600">
+                      You've guessed the word in <span className="font-semibold">{formatTime(totalTime)}</span>
+                    </p>
+                  </div>
                 </div>
               )
             }

@@ -72,6 +72,7 @@ export function generateRandomWords(): Record<number, string[]> {
       'the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'any', 'can',
       'had', 'her', 'was', 'one', 'our', 'out', 'day', 'get', 'has', 'him',
       'his', 'how', 'man', 'new', 'now', 'old', 'see', 'two', 'way', 'who',
+      'boy', 'did', 'its', 'let', 'put', 'say', 'she', 'too', 'use', 'dad',
       // ... 继续添加更多常用三字母单词直到100个
     ],
     4: [
@@ -79,6 +80,7 @@ export function generateRandomWords(): Record<number, string[]> {
       'time', 'life', 'work', 'home', 'love', 'year', 'hand', 'mind', 'help',
       'word', 'some', 'make', 'take', 'find', 'here', 'more', 'look', 'good',
       'give', 'live', 'feel', 'have', 'play', 'read', 'keep', 'hope', 'talk',
+      'walk', 'turn', 'move', 'like', 'show', 'need', 'want', 'tell', 'call',
       // ... 继续添加更多常用四字母单词直到100个
     ],
     5: [

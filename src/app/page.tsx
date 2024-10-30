@@ -4,7 +4,7 @@ export default function HomePage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white">
         {/* 游戏区域 */}
-        <div className="w-full bg-gradient-to-b from-violet-50 via-violet-50/50 to-white py-8 md:py-16 relative">
+        <div className="w-full bg-gradient-to-b from-violet-50 via-violet-50/50 to-white py-8 md:py-16 relative animate-fade-in">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.05),transparent)] pointer-events-none"></div>
           <div className="container mx-auto relative px-4">
             <Games />
@@ -12,7 +12,7 @@ export default function HomePage() {
         </div>
 
         {/* 标题区域 */}
-        <div className="py-8 md:py-16 bg-gradient-to-b from-white to-zinc-50/50">
+        <div className="py-8 md:py-16 bg-gradient-to-b from-white to-zinc-50/50 animate-slide-in">
           <div className="container mx-auto max-w-4xl px-4">
             <div className="relative">
               <div className="absolute -inset-x-4 -inset-y-6 bg-violet-50/50 rounded-2xl -z-10"></div>
@@ -56,7 +56,7 @@ export default function HomePage() {
         </div>
 
         {/* 游戏说明区域 */}
-        <div id="how-to-play" className="max-w-4xl mx-auto px-4 py-12 md:py-20">
+        <div id="how-to-play" className="max-w-4xl mx-auto px-4 py-12 md:py-20 animate-scale-in">
           {/* 主要说明 - 修改标题样式 */}
           <div className="mb-16">
             <div className="text-center mb-12">
@@ -118,7 +118,7 @@ export default function HomePage() {
                         <div className="w-8 h-8 md:w-12 md:h-12 bg-green-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
                           T
                         </div>
-                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-400 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
                           H
                         </div>
                       </div>
@@ -140,10 +140,10 @@ export default function HomePage() {
                         <div className="w-8 h-8 md:w-12 md:h-12 bg-yellow-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
                           A
                         </div>
-                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-400 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
                           I
                         </div>
-                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-400 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
                           N
                         </div>
                       </div>
@@ -156,19 +156,19 @@ export default function HomePage() {
                     <p className="text-sm text-zinc-500">If you guess "CLOUD"</p>
                     <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
                       <div className="flex gap-1 md:gap-2 flex-wrap">
-                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-400 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
                           C
                         </div>
-                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-400 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
                           L
                         </div>
-                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-400 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
                           O
                         </div>
-                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-400 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
                           U
                         </div>
-                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-500 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-zinc-400 text-white font-bold flex items-center justify-center rounded text-sm md:text-base">
                           D
                         </div>
                       </div>
@@ -199,9 +199,9 @@ export default function HomePage() {
                 <p className="text-yellow-600 text-sm">Letter exists but wrong position</p>
               </div>
 
-              <div className="bg-zinc-50 p-6 rounded-lg border-l-4 border-zinc-500">
+              <div className="bg-zinc-50 p-6 rounded-lg border-l-4 border-zinc-400">
                 <div className="flex items-center mb-2">
-                  <div className="w-4 h-4 bg-zinc-500 rounded-full mr-3"></div>
+                  <div className="w-4 h-4 bg-zinc-400 rounded-full mr-3"></div>
                   <span className="font-semibold text-zinc-700">Not Found</span>
                 </div>
                 <p className="text-zinc-600 text-sm">Letter is not in the word</p>
@@ -224,7 +224,7 @@ export default function HomePage() {
           </div>
 
           {/* FAQ 部分 */}
-          <div className="w-full bg-gradient-to-b from-zinc-50/50 via-zinc-100/30 to-zinc-50/50 py-12 md:py-20 my-12 md:my-20">
+          <div className="w-full bg-gradient-to-b from-zinc-50/50 via-zinc-100/30 to-zinc-50/50 py-12 md:py-20 my-12 md:my-20 animate-fade-in [animation-delay:200ms]">
             <div className="max-w-4xl mx-auto px-4">
               <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold text-zinc-800">Frequently Asked Questions</h2>
@@ -308,7 +308,7 @@ export default function HomePage() {
           </div>
 
           {/* 底部号召 */}
-          <div className="text-center py-6 md:py-8 bg-violet-50 rounded-2xl mx-4">
+          <div className="text-center py-6 md:py-8 bg-violet-50 rounded-2xl mx-4 animate-float">
             <h2 className="text-2xl font-bold text-violet-900 mb-2">
               Ready to Test Your Skills?
             </h2>

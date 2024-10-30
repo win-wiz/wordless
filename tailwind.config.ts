@@ -21,11 +21,16 @@ export default {
   			loading: {
   				'0%': { transform: 'rotate(0deg)' },
   				'100%': { transform: 'rotate(360deg)' }
-  			}
+  			},
+        ripple: {
+          '0%': { transform: 'scale(0)', opacity: '0.5' },
+          '100%': { transform: 'scale(4)', opacity: '0' },
+        }
   		},
   		animation: {
   			flip: 'flip 0.6s ease-in-out',
-        loading: 'loading 1s linear infinite'
+        loading: 'loading 1s linear infinite',
+        ripple: 'ripple 0.6s linear',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

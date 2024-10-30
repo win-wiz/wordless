@@ -4,6 +4,8 @@ import { Inter } from 'next/font/google'
 import { type Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner"
 import Header from "@/components/header";
+import Footer from "@/components/footer";
+import { ScrollToTop } from "@/components/scroll-to-top";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,6 +23,8 @@ export default function RootLayout({
       <body className={`${inter.className} bg-zinc-50`}>
         <Header />
         {children}
+        <Footer />
+        <ScrollToTop />
       </body>
       <Toaster position="top-right" richColors duration={2000} />
     </html>

@@ -16,19 +16,19 @@ export default function KeyBoard({ onKeyPress, onDelete, onEnter, matchedLetters
   const handleKeyPress = (letter: string) => {
     setPressedKey(letter);
     onKeyPress(letter);
-    setTimeout(() => setPressedKey(null), 100);
+    setTimeout(() => setPressedKey(null), 200);
   };
 
   const handleDelete = () => {
     setPressedKey('Del');
     onDelete();
-    setTimeout(() => setPressedKey(null), 100);
+    setTimeout(() => setPressedKey(null), 200);
   };
 
   const handleEnter = () => {
     setPressedKey('Enter');
     onEnter();
-    setTimeout(() => setPressedKey(null), 100);
+    setTimeout(() => setPressedKey(null), 200);
   };
 
   const RenderBtn = ({
@@ -50,18 +50,29 @@ export default function KeyBoard({ onKeyPress, onDelete, onEnter, matchedLetters
         className={cn(
           `md:w-14 md:h-14 w-8 h-8 
           rounded-md font-bold 
-          transition-all duration-200
-          hover:opacity-90 hover:scale-105
           text-zinc-700
-          border border-violet-100`,
+          border border-violet-100
+          relative
+          overflow-hidden
+          transition-colors duration-200`,
           isMatched ? 'bg-green-500 text-white border-green-400' : 
           noMatched ? 'bg-zinc-400 text-white border-zinc-300' : 
           'bg-white hover:bg-violet-50',
-          pressedKey === letter ? 'scale-95 opacity-80' : '',
+          pressedKey === letter ? 'after:animate-ripple' : '',
           className
         )}
       >
         {letter}
+        <span className={cn(
+          "absolute inset-0 bg-black/5 pointer-events-none opacity-0 transition-opacity",
+          pressedKey === letter ? "opacity-100" : ""
+        )} />
+        <span className="absolute inset-0 pointer-events-none">
+          <span className={cn(
+            "absolute inset-0 rounded-md opacity-0",
+            pressedKey === letter ? "animate-press-effect" : ""
+          )} />
+        </span>
       </button>
     )
   }
