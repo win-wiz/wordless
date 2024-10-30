@@ -39,7 +39,7 @@ export default function HomePage() {
                       <h3 className="text-xl font-semibold text-zinc-800 mb-2 group-hover:text-violet-600 transition-colors">
                         Guess a word
                       </h3>
-                      <p className="text-zinc-600">with 4 to 11 letters</p>
+                      <p className="text-zinc-600">with 3 to 8 letters</p>
                     </div>
                   </div>
 
@@ -96,8 +96,8 @@ export default function HomePage() {
                         <div>
                           {/* <p className="font-medium text-zinc-700">Strategy Tips:</p> */}
                           <ul className="mt-2 space-y-1.5 text-sm list-disc list-inside">
-                            <li>Start with words containing common vowels (A, E, I, O)</li>
-                            <li>Use words with common consonants (R, S, T, N)</li>
+                            <li>Start with words containing common vowels (eg A, E, I, O)</li>
+                            <li>Use words with common consonants (eg R, S, T, N)</li>
                             <li>Avoid repeated letters in your first guess</li>
                             <li>Use your previous guesses as clues</li>
                           </ul>

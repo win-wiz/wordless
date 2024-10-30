@@ -41,6 +41,10 @@ export default function Games() {
     const [cellMatchClasses, setCellMatchClasses] = useState<string[]>([]); // 单元格匹配类
     const [totalTime, setTotalTime] = useState(1); // 总时间
 
+    const [gridWriteData, setGridWriteData] = useState<string[]>([]); // 网格写入数据
+
+    const [isProcessingEnter, setIsProcessingEnter] = useState(false);
+
     const handleFetchWord = (cell: number) => {
       const randomWords = generateRandomWords();
       // debugger;
@@ -93,8 +97,16 @@ export default function Games() {
 
     // 获取当前行
     const getCurrentRow = () => {
-      const currentRow = Math.floor(currentCell / columns);
-      return currentRow;
+        // 如果光标隐藏，需要找到最后一个非空格子所在的行
+        if (currentCell === -1) {
+            for (let i = gridContent.length - 1; i >= 0; i--) {
+                if (gridContent[i] !== '') {
+                    return Math.floor(i / columns);
+                }
+            }
+            return 0; // 如果没有找到非空格子，返回第一行
+        }
+        return Math.floor(currentCell / columns);
     }
 
     const handleReset = () => {
@@ -123,7 +135,8 @@ export default function Games() {
     const isRowFilled = (row: number) => {
         const startIndex = row * columns;
         const endIndex = startIndex + columns;
-        return gridContent.slice(startIndex, endIndex).every(cell => cell.trim() !== '');
+        const rowContent = gridContent.slice(startIndex, endIndex);
+        return rowContent.every(cell => cell.trim() !== '');
     };
 
     // 获取当前行单词
@@ -160,79 +173,87 @@ export default function Games() {
 
     // 提交单词
     const handleEnter = async () => {
-        // const currentRow = Math.floor(currentCell / columns);
+        // 如果正在处理 enter，直接返回
+        if (isProcessingEnter) {
+            return;
+        }
+
         const currentRow = getCurrentRow();
         const guessedWord = getCurrentRowWord().toLowerCase();
         const isCurrentRowFilled = isRowFilled(currentRow);
 
         if (isCurrentRowFilled) {
-          const isValid = await checkWord(guessedWord);
-          if (isValid) {
-              const result = matchWord(guessedWord.toUpperCase(), word);
-              // setMatchResults(prev => [...prev, result]);
-              setMatchResults(result);
-              // 触发翻转动画
-              setFlippingRows(new Set([currentRow]));
+            setIsProcessingEnter(true); // 开始处理
+            
+            try {
+                const isValid = await checkWord(guessedWord);
+                if (isValid) {
+                    const result = matchWord(guessedWord.toUpperCase(), word);
+                    setMatchResults(result);
+                    setFlippingRows(new Set([currentRow]));
 
-              // 在动画完成清除翻转状态
-              setTimeout(() => {
-                  setFlippingRows(new Set());
-              }, columns * 100); // 假设每个格子的动画持续300ms
+                    // 在动画完成后再清除状态
+                    setTimeout(() => {
+                        setFlippingRows(new Set());
+                        setIsProcessingEnter(false); // 处理完成
 
-              if (guessedWord.toUpperCase() === word) {
-                  // 猜对了，游戏结束
-                  // setIsTimerRunning(false);
-                  setShowKeyboard(false);
-                  setShowControls(true);
-                  setDialogTitle('You Won!');
-                  setDialogVisible(true);
-                  setDialogMessage(getPositiveMessage() || '');
-                  setCurrentCell(-1);
-                  setDialogTitle('You Won!');
-                  // setErrorMessage('恭喜你猜对了！');
-              } else {
-                  // 移动到下一行
-                  if (currentRow < rows - 1) {
-                      setCurrentCell((currentRow + 1) * columns);
-                  } else {
-                      // 如果是最后一行，游戏结束
-                      // setIsTimerRunning(false);
-                      setShowKeyboard(false);
-                      setShowControls(true);
-                      setDialogTitle('You Lost!');
-                      setDialogVisible(true);
-                      setDialogMessage(getNegativeMessage() || '');
-                      // setErrorMessage(`游戏结束，正单词是 ${word}`);
-                      // toast.success(`Game over, the correct word is ${word}`);
-                  }
-              }
-          } else {
-              // 不是有效单词
-              // setErrorMessage('不是有效的单词，请重试');
-              // toast.error('不是有效的单词，请重试');
-              toast.error('Word not found');
-              setInvalidRows(prev => new Set(prev).add(currentRow));
-          }
+                        if (guessedWord.toUpperCase() === word) {
+                            setShowKeyboard(false);
+                            setShowControls(true);
+                            setDialogTitle('You Won!');
+                            setDialogVisible(true);
+                            setDialogMessage(getPositiveMessage() || '');
+                            setCurrentCell(-1);
+                        } else {
+                            // 移动到下一行
+                            if (currentRow < rows - 1) {
+                                setCurrentCell((currentRow + 1) * columns);
+                            } else {
+                                setShowKeyboard(false);
+                                setShowControls(true);
+                                setDialogTitle('You Lost!');
+                                setDialogVisible(true);
+                                setDialogMessage(getNegativeMessage() || '');
+                            }
+                        }
+                    }, columns * 100);
+                } else {
+                    toast.error('Word not found');
+                    setInvalidRows(prev => new Set(prev).add(currentRow));
+                    setIsProcessingEnter(false); // 处理完成
+                }
+            } catch (error) {
+                setIsProcessingEnter(false); // 发生错误时也要重置状态
+                toast.error('An error occurred');
+            }
         } else {
-            // setErrorMessage('请填完整行后再提交');
-            // toast.error('请填完整行后再提交');
             toast.warning('Please fill in the row before submitting');
         }
-
-        // setTimeout(() => setErrorMessage(''), 2000);
     };
 
     const handleKeyPress = (letter: string) => {
         if (currentCell >= 0 && currentCell < totalCells) {
-            const newGridContent = [...gridContent];
-            newGridContent[currentCell] = letter;
-            setGridContent(newGridContent);
-            
             const currentRow = Math.floor(currentCell / columns);
             const isRowEnd = (currentCell + 1) % columns === 0;
+            const newGridContent = [...gridContent];
             
+            // 如果是最后一格且已有内容，不接收新值
+            if (isRowEnd && newGridContent[currentCell] !== '') {
+                return;
+            }
+            
+            newGridContent[currentCell] = letter;
+            setGridContent([...newGridContent]);
+            
+            // 只有在不是行尾或行尾为空时才移动光标
             if (!isRowEnd) {
                 setCurrentCell(prevCell => prevCell + 1);
+            } else if (newGridContent[currentCell] === '') {
+                // 如果是行尾且为空，允许输入
+                setCurrentCell(currentCell);
+            } else {
+                // 如果是行尾且已输入，隐藏光标
+                setCurrentCell(-1);
             }
 
             const isCurrentRowFilled = isRowFilled(currentRow);
@@ -244,16 +265,31 @@ export default function Games() {
                 newSet.delete(currentRow);
                 return newSet;
             });
-
-            // console.log(`Current row: ${currentRow}, Is filled: ${isCurrentRowFilled}, Current cell: ${currentCell}, Grid content: ${newGridContent.slice(currentRow * columns, (currentRow + 1) * columns).join(',')}`);
         }
     };
 
     // 删除单元格
     const handleDelete = () => {
+        // 如果光标隐藏（-1），需要计算当前行
+        if (currentCell === -1) {
+            // 找到最后一个非空格子所在的行
+            for (let i = gridContent.length - 1; i >= 0; i--) {
+                if (gridContent[i] !== '') {
+                    const row = Math.floor(i / columns);
+                    const rowEnd = (row + 1) * columns - 1;
+                    const newGridContent = [...gridContent];
+                    newGridContent[rowEnd] = ''; // 清除该行最后一个格子的值
+                    setGridContent(newGridContent);
+                    setCurrentCell(rowEnd); // 设置光标到该行最后一个格子
+                    break;
+                }
+            }
+            return;
+        }
+
         if (currentCell > 0) {
             const currentRow = Math.floor(currentCell / columns);
-            const currentRowStart = currentRow * columns;  // 当前行的起始位置
+            const currentRowStart = currentRow * columns;
             
             // 如果当前位置在行首，不执行删除操作
             if (currentCell === currentRowStart) {
@@ -299,37 +335,46 @@ export default function Games() {
 
     // 处理键盘输入
     const handleKeyDown = (event: KeyboardEvent) => {
-
-      // debugger;
-        if (showKeyboard && currentCell >= 0 && currentCell < totalCells) {
-            const key = event.key.toUpperCase();
-            if (/^[A-Z]$/.test(key)) {
-              // debugger;
-                handleKeyPress(key);
-            } else if (event.key === 'Backspace') {
-                event.preventDefault(); // 阻止默认行为
+        if (showKeyboard) {
+            const key = event.key;
+            
+            // 处理回车键，需要检查 isProcessingEnter
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                // 如果正在处理 enter，直接返回
+                if (isProcessingEnter) {
+                    return;
+                }
+                handleEnter();
+                return;
+            }
+            
+            // 其他按键操作需要检查 currentCell 是否有效
+            if (currentCell >= 0 && currentCell < totalCells) {
+                if (/^[A-Z]$/.test(key.toUpperCase())) {
+                    handleKeyPress(key.toUpperCase());
+                } else if (event.key === 'Backspace') {
+                    event.preventDefault();
+                    handleDelete();
+                }
+            } else if (event.key === 'Backspace' && currentCell === -1) {
+                // 特殊处理：当光标隐藏时也允许删除操作
+                event.preventDefault();
                 handleDelete();
-            } else if (event.key === 'Enter') {
-                event.preventDefault(); // 阻止默认行为
-                console.log('gridContent', gridContent);
-
-                // setTimeout(() => {
-                //   handleEnter();
-                // }, 10);
             }
         }
     };
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
+        // console.log('add event');
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [showKeyboard, currentCell, totalCells]); // 依赖项包括可能在handleKeyDown中使用的状态
+    }, [currentCell, totalCells, isProcessingEnter]); // 添加 isProcessingEnter 到依赖项
 
     return (
       <>
-        
         <div className="container mx-auto max-w-screen-md flex flex-1 flex-col items-center justify-center relative">
           <UseTimes 
             showKeyboard={showKeyboard} 

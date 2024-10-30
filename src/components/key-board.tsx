@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface KeyBoardProps {
   onKeyPress: (letter: string) => void;
@@ -8,10 +8,12 @@ interface KeyBoardProps {
   matchedLetters: string[];
   isEnterEnabled: boolean;
   noMatchLetters: string[];
+  
 }
 
+    // 依赖项包括可能在handleKeyDown中使用的状态
 export default function KeyBoard({ onKeyPress, onDelete, onEnter, matchedLetters, isEnterEnabled, noMatchLetters }: KeyBoardProps) {
-  const [pressedKey, setPressedKey] = useState<string | null>(null);
+  const [pressedKey, setPressedKey] = useState<string | null>(null); 
 
   const handleKeyPress = (letter: string) => {
     setPressedKey(letter);
