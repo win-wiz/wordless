@@ -23,7 +23,7 @@ export default function Footer() {
           {/* Logo and Description */}
           <div className="text-center">
             <h2 className="text-xl font-bold bg-gradient-to-r from-zinc-800 to-violet-500 bg-clip-text text-transparent mb-2">
-              Word Puzzle
+              Wordless
             </h2>
             <p className="text-zinc-500 text-sm max-w-md">
               A fun and challenging word guessing game to test your vocabulary and deduction skills.

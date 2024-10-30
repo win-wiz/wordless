@@ -396,11 +396,10 @@ export default function HomePage() {
                 <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
                   <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
                     <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
-                    Are all words in English?
+                    What is the best word to start the game?
                   </h3>
                   <p className="text-zinc-600 ml-12">
-                    Yes, all words are common English words. We've carefully selected words that are familiar and frequently used, 
-                    making the game both challenging and educational for English language learners and native speakers alike.
+                    At the beginning of the game, try to use a word without repeating letters and with as many vowels as possible, such as the word "RADIO". However, mathematician Grant Sanderson found that the best starting word is “CRANE" or “SLOTH”, which includes frequently used letters.
                   </p>
                 </div>
 
@@ -408,11 +407,10 @@ export default function HomePage() {
                 <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
                   <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
                     <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
-                    Are all words in English?
+                    What dictionary are you using?
                   </h3>
                   <p className="text-zinc-600 ml-12">
-                    Yes, all words are common English words. We've carefully selected words that are familiar and frequently used, 
-                    making the game both challenging and educational for English language learners and native speakers alike.
+                    In American English, we use a dictionary from the Letterpress word list that includes a list of ~275,000 words. This dictionary is constantly updated with new words based on real feedback from people.
                   </p>
                 </div>
 
@@ -420,11 +418,10 @@ export default function HomePage() {
                 <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
                   <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
                     <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
-                    Are all words in English?
+                    Why did I get a "Word not found" message?
                   </h3>
                   <p className="text-zinc-600 ml-12">
-                    Yes, all words are common English words. We've carefully selected words that are familiar and frequently used, 
-                    making the game both challenging and educational for English language learners and native speakers alike.
+                    This alert message means that the given word was not found in our word bank. Try another word, or if you think the word is correct, let us know.
                   </p>
                 </div>
 
@@ -432,11 +429,10 @@ export default function HomePage() {
                 <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
                   <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
                     <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
-                    Are all words in English?
+                    The hidden word was incorrect. Can you fix this?
                   </h3>
                   <p className="text-zinc-600 ml-12">
-                    Yes, all words are common English words. We've carefully selected words that are familiar and frequently used, 
-                    making the game both challenging and educational for English language learners and native speakers alike.
+                    If you think that the hidden word is wrong or incorrect, let us know. We will definitely fix this as soon as possible.
                   </p>
                 </div>
               </div>

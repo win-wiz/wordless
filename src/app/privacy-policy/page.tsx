@@ -23,7 +23,7 @@ export default function PrivacyPolicy() {
     "privacy_policy_update": "Privacy Policy Update",
     "privacy_policy_update_description": "We may update our privacy policy periodically. We will notify you of any changes by posting the updated privacy policy on this page and updating the 'Effective Date' at the top of the page. We will also notify you of significant changes via email.",
     "contact_us": "Contact Us",
-    "contact_us_description": "If you have any questions or concerns about this privacy policy, please contact us at support@subrise.co."
+    "contact_us_description": "If you have any questions or concerns about this privacy policy, please contact us at support@wordless.online"
   }
 
   return (

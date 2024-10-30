@@ -25,7 +25,7 @@ export default function TermsOfService() {
     "governing_law": "Governing Law",
     "governing_law_description": "These terms and conditions are governed by and construed in accordance with the laws of the State of California, USA, and you irrevocably submit to the exclusive jurisdiction of the courts in that State or location.",
     "contact_us": "Contact Us",
-    "contact_us_description": "If you have any questions about these terms of service, please contact us at support@subrise.co."
+    "contact_us_description": "If you have any questions about these terms of service, please contact us at support@wordless.online"
   }
 
   return (
