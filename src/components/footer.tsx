@@ -3,7 +3,7 @@
 import Link from "next/link";
 import LinksComp from "./links-comp";
 import { usePathname } from "next/navigation";
-import { EmailLink, FeedbackLink } from "./email-link";
+// import { EmailLink, FeedbackLink } from "./email-link";
 
 export default function Footer() {
   const pathname = usePathname();
@@ -50,11 +50,13 @@ export default function Footer() {
 
           {/* Social Links */}
           <div className="flex items-center space-x-4">
-            <EmailLink>
+            {/* <EmailLink>
               Contact Us
             </EmailLink>
-            <FeedbackLink />
+            <FeedbackLink /> */}
+            <LinksComp />
           </div>
+
 
           {/* Copyright */}
           <div className="text-zinc-400 text-sm">
