@@ -1,6 +1,6 @@
 'use client';
-
-import { EmailLink } from "@/components/email-link";
+// import { EmailLink } from "@/components/email-link";
+import FAQ from "@/components/faq";
 import Games from "@/components/games";
 
 export default function HomePage() {
@@ -320,123 +320,7 @@ export default function HomePage() {
                 <div className="mt-2 w-20 h-1 bg-violet-200 mx-auto rounded-full"></div>
               </div>
               
-              <div className="grid gap-4 md:gap-6">
-                {/* Question 1 */}
-                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
-                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
-                    How do I know if my guess is correct?
-                  </h3>
-                  <p className="text-zinc-600 ml-12">
-                    After each guess, the letters will change color to give you hints. Green means the letter is correct and in the right spot, 
-                    yellow means the letter exists but is in the wrong position, and gray means the letter isn't in the word at all.
-                  </p>
-                </div>
-
-                {/* Question 2 */}
-                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
-                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
-                    Can I play the same word multiple times?
-                  </h3>
-                  <p className="text-zinc-600 ml-12">
-                    Yes! You can play as many times as you want. Use the "Reset" button to start a new game with a different word. 
-                    Each game generates a new random word based on your chosen length.
-                  </p>
-                </div>
-
-                {/* Question 3 */}
-                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
-                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
-                    How do I adjust the difficulty?
-                  </h3>
-                  <p className="text-zinc-600 ml-12">
-                    Use the "+" and "-" buttons before starting a game to change the word length from 3 to 8 letters. 
-                    Longer words generally provide a greater challenge. You can also track your solving time to challenge yourself.
-                  </p>
-                </div>
-
-                {/* Question 4 */}
-                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
-                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
-                    What happens if I run out of tries?
-                  </h3>
-                  <p className="text-zinc-600 ml-12">
-                    If you don't guess the word within 6 attempts, the game ends and reveals the correct word. 
-                    Don't worry though - you can always start a new game and try again with a different word!
-                  </p>
-                </div>
-
-                {/* Question 5 */}
-                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
-                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
-                    Can I use the keyboard to type my guesses?
-                  </h3>
-                  <p className="text-zinc-600 ml-12">
-                    Yes! You can use either your physical keyboard or the on-screen keyboard to enter letters. 
-                    Use Backspace to delete and Enter to submit your guess. The game supports both input methods for your convenience.
-                  </p>
-                </div>
-
-                {/* Question 6 */}
-                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
-                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
-                    Are all words in English?
-                  </h3>
-                  <p className="text-zinc-600 ml-12">
-                    Yes, all words are common English words. We've carefully selected words that are familiar and frequently used, 
-                    making the game both challenging and educational for English language learners and native speakers alike.
-                  </p>
-                </div>
-
-                {/* Question 7 */}
-                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
-                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
-                    What is the best word to start the game?
-                  </h3>
-                  <p className="text-zinc-600 ml-12">
-                    At the beginning of the game, try to use a word without repeating letters and with as many vowels as possible, such as the word "RADIO". However, mathematician Grant Sanderson found that the best starting word is “CRANE" or “SLOTH”, which includes frequently used letters.
-                  </p>
-                </div>
-
-                {/* Question 8 */}
-                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
-                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
-                    What dictionary are you using?
-                  </h3>
-                  <p className="text-zinc-600 ml-12">
-                    In American English, we use a dictionary from the Letterpress word list that includes a list of ~275,000 words. This dictionary is constantly updated with new words based on real feedback from people.
-                  </p>
-                </div>
-
-                {/* Question 9 */}
-                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
-                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
-                    Why did I get a "Word not found" message?
-                  </h3>
-                  <p className="text-zinc-600 ml-12">
-                    This alert message means that the given word was not found in our word bank. Try another word, or if you think the word is correct, <EmailLink>let us know</EmailLink>.
-                  </p>
-                </div>
-
-                {/* Question 10 */}
-                <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <h3 className="text-lg font-semibold text-zinc-800 mb-3 flex items-center">
-                    <span className="flex-none w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4">Q</span>
-                    The hidden word was incorrect. Can you fix this?
-                  </h3>
-                  <p className="text-zinc-600 ml-12">
-                    If you think that the hidden word is wrong or incorrect, <EmailLink>let us know</EmailLink>. We will definitely fix this as soon as possible.
-                  </p>
-                </div>
-              </div>
+              <FAQ />
             </div>
           </div>
 
