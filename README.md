@@ -1,29 +1,40 @@
-# Create T3 App
+# Wordless Game
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+## Website
+[Wordless](https://wordless.online/)
 
-## What's next? How do I make an app with this?
+## Website Screenshots
+- Game Area
+![Game Area](./doc/image.png)
+![Game Area](./doc/game.png)
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- Introduction Page
+![Introduction Page](./doc/desc.png)
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+- How to Play
+![How to Play](./doc/help.png)
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Game Features
 
-## Learn More
+Wordless is an innovative word game designed to stimulate creativity and problem-solving skills through engaging puzzles and challenges. Players must solve puzzles and strategize to complete various tasks within the game.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### How to Play
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+1. **Start the Game**: Upon entering the game, you will see a simple interface. Click the "Start" button to begin.
+2. **Solve Puzzles**: The game presents various puzzles that require observation and thought to solve.
+3. **Feedback and Support**: If you encounter any issues or have suggestions, you can contact us through the in-game feedback feature.
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Technology Stack
 
-## How do I deploy this?
+- **React**: Used for building the user interface.
+- **TypeScript**: Provides static type checking for the project.
+- **Lucide-react**: Used for icon display.
+- **PNPM**: Used for package management.
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## Feedback and Support
+
+If you encounter any issues or have suggestions while playing the game, please contact us through the following methods:
+
+- **Support Link**: Click the "let us know" button in the game.
+
+Thank you for your support and interest in the Wordless game!
