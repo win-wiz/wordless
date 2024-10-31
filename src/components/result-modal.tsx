@@ -31,7 +31,7 @@ export function ResultModal({ isOpen, onClose, title, description, titleClassNam
             </DialogDescription>
           </DialogHeader>
           {children}
-          <DialogFooter className="flex justify-center">
+          <DialogFooter className="flex justify-center gap-y-2">
             <Button className="px-4 py-2 bg-violet-500 text-white rounded-md hover:bg-violet-600 transition-colors" onClick={onNewGame}>New Game</Button>
             <Button className="px-4 py-2 bg-white text-violet-600 rounded-md hover:bg-violet-50 transition-all font-medium text-lg border-2 border-violet-200" onClick={onClose}>Close</Button>
           </DialogFooter>
