@@ -1,9 +1,12 @@
+
 import "@/styles/globals.css";
 import { type Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner"
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { ScrollToTop } from "@/components/scroll-to-top";
+import { UseGoogleAnalysic } from "@/components/use-google-analysic";
+
 
 export const metadata: Metadata = {
   title: "Discover the Hidden Word! Wordless - A Wordle-Style Game with 4 to 11 Letter Words. Can You Guess the Mystery Word in Only 6 Tries?",
@@ -24,6 +27,7 @@ export default function RootLayout({
         <ScrollToTop />
       </body>
       <Toaster position="top-right" richColors duration={2000} />
+      <UseGoogleAnalysic />
     </html>
   );
 }

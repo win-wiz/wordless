@@ -459,6 +459,11 @@ export default function Games() {
           onClose={() => {
             setDialogVisible(false);
           }}
+          onNewGame={() => {
+            setDialogVisible(false);
+            handleReset();
+            handleStartGame();
+          }}
           title={dialogTitle || 'You Won!'}
           description={dialogMessage}
           titleClassName="text-center text-2xl border-b-2 border-violet-100 py-2"

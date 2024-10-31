@@ -1,5 +1,6 @@
 'use client';
 
+import { EmailLink } from "@/components/email-link";
 import Games from "@/components/games";
 
 export default function HomePage() {
@@ -421,7 +422,7 @@ export default function HomePage() {
                     Why did I get a "Word not found" message?
                   </h3>
                   <p className="text-zinc-600 ml-12">
-                    This alert message means that the given word was not found in our word bank. Try another word, or if you think the word is correct, let us know.
+                    This alert message means that the given word was not found in our word bank. Try another word, or if you think the word is correct, <EmailLink>let us know</EmailLink>.
                   </p>
                 </div>
 
@@ -432,7 +433,7 @@ export default function HomePage() {
                     The hidden word was incorrect. Can you fix this?
                   </h3>
                   <p className="text-zinc-600 ml-12">
-                    If you think that the hidden word is wrong or incorrect, let us know. We will definitely fix this as soon as possible.
+                    If you think that the hidden word is wrong or incorrect, <EmailLink>let us know</EmailLink>. We will definitely fix this as soon as possible.
                   </p>
                 </div>
               </div>

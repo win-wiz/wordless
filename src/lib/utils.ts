@@ -89,7 +89,7 @@ export function generateRandomWords(): Record<number, string[]> {
       'after', 'where', 'right', 'thing', 'place', 'great', 'again', 'heart',
       'study', 'learn', 'plant', 'light', 'every', 'never', 'start', 'might',
       'story', 'point', 'heard', 'whole', 'earth', 'found', 'state', 'stand',
-      'crane', 'sloth', 'adieu',
+      'crane', 'sloth', 'adieu', 'radio', 'tiger'
       // ... 继续添加更多常用五字母单词直到100个
     ],
     6: [

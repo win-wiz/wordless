@@ -17,9 +17,10 @@ interface ResultModalProps {
   description?: string;
   onClose: () => void;
   children: React.ReactNode;
+  onNewGame: () => void;
 }
 
-export function ResultModal({ isOpen, onClose, title, description, titleClassName, children, className }: ResultModalProps) {
+export function ResultModal({ isOpen, onClose, title, description, titleClassName, children, className, onNewGame }: ResultModalProps) {
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent className={cn(className)}>
@@ -30,8 +31,9 @@ export function ResultModal({ isOpen, onClose, title, description, titleClassNam
             </DialogDescription>
           </DialogHeader>
           {children}
-          <DialogFooter>
-            <Button className="mt-5" onClick={onClose}>Close</Button>
+          <DialogFooter className="flex justify-center">
+            <Button className="px-4 py-2 bg-violet-500 text-white rounded-md hover:bg-violet-600 transition-colors" onClick={onNewGame}>New Game</Button>
+            <Button className="px-4 py-2 bg-white text-violet-600 rounded-md hover:bg-violet-50 transition-all font-medium text-lg border-2 border-violet-200" onClick={onClose}>Close</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
