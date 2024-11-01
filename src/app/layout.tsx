@@ -9,8 +9,8 @@ import { UseGoogleAnalysic } from "@/components/use-google-analysic";
 
 
 export const metadata: Metadata = {
-  title: "Discover the Hidden Word! Wordless - A Wordle-Style Game with 3 to 8 Letter Words. Can You Guess the Mystery Word in Only 6 Tries?",
-  description: "Embark on a boundless word-guessing adventure with Wordless! This game is a fresh take on the Wordle phenomenon, offering a vast array of words ranging from 3 to 8 letters. Unlike traditional Wordle, Wordless challenges you with an unlimited selection of words, keeping the excitement going. Test your vocabulary and deduction skills to uncover the secret word within a maximum of 6 attempts. Are you ready to put your word knowledge to the test and see how many words you can crack?",
+  title: "Unlimited Wordless Online: Guess the Word in 6 Tries!",
+  description: "Wordless Online: Endless Word Challenges Dive into Wordless, the unlimited word-guessing game. Test your skills with a new word every time, ranging from 3 to 8 letters. Can you solve them all in just 6 tries? Sharpen your vocabulary and have fun with Wordless online.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
   keywords: "wordless,wordly, wordle, game, puzzle, word, words, letters, play, online, guess，unlimited",
 };
