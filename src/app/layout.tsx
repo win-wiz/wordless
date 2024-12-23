@@ -20,6 +20,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="google-adsense-account" content="ca-pub-1939625526338391" />
+      </head>
       <body className={`bg-zinc-50`}>
         <Header />
         {children}
