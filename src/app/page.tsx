@@ -2,6 +2,7 @@
 // import { EmailLink } from "@/components/email-link";
 import FAQ from "@/components/faq";
 import Games from "@/components/games";
+import Script from 'next/script';
 
 export default function HomePage() {
     return (
@@ -335,6 +336,17 @@ export default function HomePage() {
             </p>
           </div>
         </div>
+
+        <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></Script>
+        <ins className="adsbygoogle"
+            style={{ display: 'block' }}
+            data-ad-client="ca-pub-1939625526338391"
+            data-ad-slot="1234567890"  // 请替换为您的广告单元 ID
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <Script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </Script>
       </div>
     )
 } 

@@ -6,6 +6,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { UseGoogleAnalysic } from "@/components/use-google-analysic";
+import Script from "next/script";
 
 
 export const metadata: Metadata = {
@@ -28,6 +29,20 @@ export default function RootLayout({
         {children}
         <Footer />
         <ScrollToTop />
+
+        {/* Google 广告代码 */}
+        <div className="container mx-auto px-4 my-12">
+          <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></Script>
+          <ins className="adsbygoogle"
+              style={{ display: 'block' }}
+              data-ad-client="ca-pub-1939625526338391"
+              data-ad-slot="f08c47fec0942fa0"
+              data-ad-format="auto"
+              data-full-width-responsive="true"></ins>
+          <Script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </Script>
+        </div>
       </body>
       <Toaster position="top-right" richColors duration={2000} />
       <UseGoogleAnalysic />

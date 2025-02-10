@@ -48,6 +48,13 @@ export default function Footer() {
             </Link>
           </div>
 
+          <div className="flex flex-wrap justify-center gap-6 text-sm">
+            Friends: 
+            <Link href="https://emojis.click/en" target="_blank" className="text-zinc-600 hover:text-violet-500 transition-colors">
+              EmojiClick
+            </Link>
+          </div>
+
           {/* Social Links */}
           <div className="flex items-center space-x-4">
             {/* <EmailLink>

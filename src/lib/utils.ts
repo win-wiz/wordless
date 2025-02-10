@@ -1,3 +1,4 @@
+import { WORD_LISTS } from "@/data/word-lists";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -65,60 +66,120 @@ export function getNegativeMessage() {
   return negativeMessages[Math.floor(Math.random() * negativeMessages.length)];
 }
 
-export function generateRandomWords(): Record<number, string[]> {
-  const words: Record<number, string[]> = {
-    3: [
-      // 常用三字母单词
-      'the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'any', 'can',
-      'had', 'her', 'was', 'one', 'our', 'out', 'day', 'get', 'has', 'him',
-      'his', 'how', 'man', 'new', 'now', 'old', 'see', 'two', 'way', 'who',
-      'boy', 'did', 'its', 'let', 'put', 'say', 'she', 'too', 'use', 'dad',
-      // ... 继续添加更多常用三字母单词直到100个
-    ],
-    4: [
-      // 常用四字母单词
-      'time', 'life', 'work', 'home', 'love', 'year', 'hand', 'mind', 'help',
-      'word', 'some', 'make', 'take', 'find', 'here', 'more', 'look', 'good',
-      'give', 'live', 'feel', 'have', 'play', 'read', 'keep', 'hope', 'talk',
-      'walk', 'turn', 'move', 'like', 'show', 'need', 'want', 'tell', 'call',
-      // ... 继续添加更多常用四字母单词直到100个
-    ],
-    5: [
-      // 常用五字母单词
-      'world', 'house', 'about', 'think', 'would', 'could', 'first', 'water',
-      'after', 'where', 'right', 'thing', 'place', 'great', 'again', 'heart',
-      'study', 'learn', 'plant', 'light', 'every', 'never', 'start', 'might',
-      'story', 'point', 'heard', 'whole', 'earth', 'found', 'state', 'stand',
-      'crane', 'sloth', 'adieu', 'radio', 'tiger'
-      // ... 继续添加更多常用五字母单词直到100个
-    ],
-    6: [
-      // 常用六字母单词
-      'people', 'before', 'family', 'school', 'friend', 'mother', 'father',
-      'should', 'system', 'social', 'number', 'always', 'nature', 'public',
-      'action', 'reason', 'person', 'change', 'health', 'market', 'morning',
-      'spirit', 'simple', 'wonder', 'better', 'theory', 'result', 'moment',
-      // ... 继续添加更多常用六字母单词直到100个
-    ],
-    7: [
-      // 常用七字母单词
-      'because', 'through', 'history', 'present', 'without', 'between',
-      'country', 'example', 'science', 'problem', 'company', 'service',
-      'general', 'program', 'question', 'working', 'system', 'government',
-      'different', 'national', 'possible', 'another', 'student', 'process',
-      // ... 继续添加更多常用七字母单词直到100个
-    ],
-    8: [
-      // 常用八字母单词
-      'children', 'business', 'important', 'together', 'education', 'practice',
-      'position', 'possible', 'interest', 'american', 'activity', 'decision',
-      'personal', 'computer', 'national', 'research', 'evidence', 'security',
-      'economic', 'political', 'remember', 'hospital', 'material', 'continue',
-      // ... 继续添加更多常用八字母单词直到100个
-    ]
-  };
+// 优化的单词生成和缓存机制
+class WordGenerator {
+  private static instance: WordGenerator;
+  private readonly cache: Map<number, string[]> = new Map();
+  private readonly usedIndices: Map<number, Set<number>> = new Map();
+  private readonly shuffledIndices: Map<number, number[]> = new Map();
 
-  return words;
+  private constructor() {
+    // 初始化缓存和索引
+    Object.entries(WORD_LISTS).forEach(([length, words]) => {
+      const numLength = Number(length);
+      this.cache.set(numLength, words); // 直接使用原始数组，避免复制
+      this.usedIndices.set(numLength, new Set());
+      this.shuffledIndices.set(numLength, this.generateShuffledIndices(words.length));
+    });
+  }
+
+  public static getInstance(): WordGenerator {
+    if (!WordGenerator.instance) {
+      WordGenerator.instance = new WordGenerator();
+    }
+    return WordGenerator.instance;
+  }
+
+  private generateShuffledIndices(length: number | undefined): number[] {
+    // 确保length是有效的数字
+    if (typeof length !== 'number' || length <= 0) {
+      throw new Error('长度参数必须是大于0的数字');
+    }
+    const indices = Array.from({ length }, (_, i) => i);
+    // Fisher-Yates洗牌算法
+    for (let i = length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = indices[i];
+      indices[i] = indices[j] !== undefined ? indices[j]! : 0;
+      indices[j] = temp !== undefined? temp : 0;
+    }
+    return indices;
+  }
+
+  public getRandomWord(length: number): string {
+    if (length < 3 || length > 8) {
+      throw new Error(`无效的单词长度: ${length}。单词长度必须在3到8之间。`);
+    }
+
+    const words = this.cache.get(length);
+    const used = this.usedIndices.get(length);
+    const shuffled = this.shuffledIndices.get(length);
+    
+    if (!words || !used || !shuffled) {
+      throw new Error(`无法获取${length}个字母的单词列表。请确保单词列表已正确初始化。`);
+    }
+
+    // 如果所有单词都用过了，重新洗牌并重置使用记录
+    if (used.size >= words.length) {
+      used.clear();
+      this.shuffledIndices.set(length, this.generateShuffledIndices(words.length));
+    }
+
+    // 从洗牌后的索引中获取未使用的单词
+    for (const index of shuffled) {
+      if (!used.has(index)) {
+        used.add(index);
+        return words[index]!.toUpperCase();
+      }
+    }
+
+    return '';
+  }
+
+  public resetCache(): void {
+    this.usedIndices.forEach((set, length) => {
+      set.clear();
+      this.shuffledIndices.set(length, this.generateShuffledIndices(this.cache.get(length)?.length || 0));
+    });
+  }
+}
+
+// 导出优化后的函数
+export function generateRandomWords(length?: number): Record<number, string[]> {
+  try {
+    const result: Record<number, string[]> = {};
+    const generator = WordGenerator.getInstance();
+    
+    // 为每个长度生成单词列表
+    [3, 4, 5, 6, 7, 8].forEach(wordLength => {
+      try {
+        result[wordLength] = Array.from({ length: 500 }, () => 
+          generator.getRandomWord(wordLength)
+        ).filter((word): word is string => word !== ''); // 类型谓词确保过滤后的数组元素为string类型
+      } catch (error) {
+        console.error(`生成${wordLength}个字母的单词列表时出错:`, error);
+        result[wordLength] = [];
+      }
+    });
+
+    return result;
+  } catch (error) {
+    console.error('生成随机单词列表时出错:', error);
+    return {};
+  }
+}
+
+export function getRandomWord(length: number): string {
+  try {
+    return WordGenerator.getInstance().getRandomWord(length);
+  } catch (error) {
+    console.error('获取随机单词时出错:', error);
+    return '';
+  }
+}
+
+export function resetWordCache(): void {
+  WordGenerator.getInstance().resetCache();
 }
 
 export function formatTime(seconds: number): string {

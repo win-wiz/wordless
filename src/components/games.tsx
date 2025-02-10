@@ -2,13 +2,14 @@
 
 import KeyBoard from "@/components/key-board";
 import fetchWords, { fetcher } from "@/lib/api";
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
 import { cn, formatTime, generateRandomWords, getNegativeMessage, getPositiveMessage } from "@/lib/utils";
-import { Minus, PartyPopper, Plus } from "lucide-react";
+import { Minus, PartyPopper, Plus, RefreshCw } from "lucide-react";
 import { ResultModal } from "@/components/result-modal";
-import useSWR from 'swr';
 import UseTimes from "@/components/use-times";
+import ConfettiEffect from "@/components/confetti-effect";
+import { GameGrid } from './game-grid';
 
 const gridColMaps: Record<number, string> = {
     3: 'grid-cols-3',
@@ -45,50 +46,120 @@ export default function Games() {
 
     const [isProcessingEnter, setIsProcessingEnter] = useState(false);
 
-    const handleFetchWord = (cell: number) => {
-      const randomWords = generateRandomWords();
-      // debugger;
-      // console.log(randomWords);
-      const result = randomWords[cell] || [];
-      let len = result.length;
-      if (len > 0) {
-        let word = result[Math.floor(Math.random() * len)];
-        setWord(word?.toUpperCase() || '');
+    const [isLoading, setIsLoading] = useState(false);
+    const isInitialMount = useRef(true);  // 添加这行来跟踪初始挂载
+
+    const [hasFirstInput, setHasFirstInput] = useState(false);  // 添加这个状态来跟踪第一次输入
+
+    const [isGameOver, setIsGameOver] = useState(false);
+
+    const [showConfetti, setShowConfetti] = useState(false);
+
+    const handleFetchWord = async (cell: number) => {
+      if (isLoading) return;  // 如果正在加载，直接返回
+      
+      setIsLoading(true);
+      try {
+        const randomWords = await generateRandomWords(cell);
+        // console.log('随机单词===>>>', randomWords);
+        const result = randomWords[cell] || [];
+        // console.log('result===>>>', result);
+        let len = result.length;
+        if (len > 0) {
+            let word = result[Math.floor(Math.random() * len)];
+            // console.log('word ===>>>', word);
+            setWord(word?.toUpperCase() || '');
+        }
+      } finally {
+        setIsLoading(false);
       }
     }
-    // 获取单词
+
+    // 只在列数变化时初始化网格和获取新单词
     useEffect(() => {
-      handleFetchWord(columns);
-    }, []);
-
-    // 获取单词
-    const fetchWord = async () => {
-      const randomWords = await useSWR('/api/words', fetcher);
-      // console.log(randomWords);
-    }
-
+        if (columns > 0) {
+            initGrid(rows, columns);
+            setShowKeyboard(true);
+            setCurrentCell(0);
+            handleFetchWord(columns);  // 最后获取新单词
+        }
+    }, [columns]);
 
     const initGrid = (rows: number, columns: number) => {
-      setTotalCells(columns * rows);
-      const newGridCol = gridColMaps[columns] || 'grid-cols-3';
-      setGridCol(newGridCol);
-      setGridContent(new Array(columns * rows).fill(''));
-      handleFetchWord(columns);
-      setTotalTime(1);
-    }
+        setTotalCells(columns * rows);
+        const newGridCol = gridColMaps[columns] || 'grid-cols-3';
+        setGridCol(newGridCol);
+        setGridContent(new Array(columns * rows).fill(''));
+        setTotalTime(1);
+    };
+
+    // 重置游戏，需要获取新单词
+    const handleReset = () => {
+        setGridContent([]);
+        setCurrentCell(-1);
+        setCellMatchClasses([]);
+        setMatchResults([]);
+        setNoMatchLetters([]);
+        initGrid(rows, columns);
+        handleFetchWord(columns);  // 重置时获取新单词
+    };
+
+    // 开始新游戏，需要获取新单词
+    const handleStartGame = () => {
+        // 清除所有状态
+        setGridContent(new Array(totalCells).fill(''));
+        setCurrentCell(0);
+        setIsEnterEnabled(false);
+        setCellMatchClasses([]); // 确保完全清除匹配状态
+        setMatchResults([]);
+        setNoMatchLetters([]);
+        setHasFirstInput(false);
+        setShowKeyboard(true);
+        setIsGameOver(false);
+        setInvalidRows(new Set()); // 清除无效行状态
+        setFlippingRows(new Set()); // 清除翻转状态
+        setIsProcessingEnter(false); // 重置处理状态
+        
+        // 最后获取新单词
+        handleFetchWord(columns);
+    };
+
+    // 获取单词
+    // const fetchWord = async () => {
+    //   const randomWords = await useSWR('/api/words', fetcher);
+    //   // console.log(randomWords);
+    // }
 
     // 删除列
     const handleDecrease = () => {
-      if (columns > 3) {
-          setColumns(prevColumns => prevColumns - 1);
-      } else {
-          toast.warning('Minimum columns reached');
-      }
+        if (columns > 3) {
+            // 先重置游戏状态
+            setGridContent([]);
+            setCellMatchClasses([]);
+            setMatchResults([]);
+            setNoMatchLetters([]);
+            setHasFirstInput(false);
+            setIsGameOver(false);
+            setCurrentCell(-1);
+            // 再改变列数
+            setColumns(prevColumns => prevColumns - 1);
+        } else {
+            toast.warning('Minimum columns reached');
+        }
     };
 
     // 增加列
     const handleIncrease = () => {
         if (columns < 8) {
+            // 先重置游戏状态
+            setGridContent([]);
+            setCellMatchClasses([]);
+            setMatchResults([]);
+            setNoMatchLetters([]);
+            setHasFirstInput(false);
+            setIsGameOver(false);
+            setCurrentCell(-1);
+            // 再改变列数
             setColumns(prevColumns => prevColumns + 1);
         } else {
             toast.warning('Maximum columns reached');
@@ -108,28 +179,6 @@ export default function Games() {
         }
         return Math.floor(currentCell / columns);
     }
-
-    const handleReset = () => {
-        // setColumns(columns);
-        setGridContent([]);
-        setCurrentCell(-1);
-        setCellMatchClasses([]);
-        initGrid(rows, columns);
-    };
-
-    // 开始游戏
-    const handleStartGame = () => {
-        setShowControls(false);
-        setShowKeyboard(true);
-        setCurrentCell(0);
-        // setTimer(0);
-        // setIsTimerRunning(true);
-        setGridContent(new Array(totalCells).fill('')); // 确保初始化为空字符串
-        setIsEnterEnabled(false); // 重置 Enter 按钮状态
-        setCellMatchClasses([]);
-        setMatchResults([]);
-        setNoMatchLetters([]);
-    };
 
     // 判断行是否填满
     const isRowFilled = (row: number) => {
@@ -151,23 +200,49 @@ export default function Games() {
     const checkWord = async (word: string) => {
       // console.log(en)
       // TODO 先查表， 验证单词的合法性
-      const isValid = await fetchWords(word);
+        const isValid = await fetchWords(word);
       // TODO 如果是合法的单词， 保存至库中
-      return isValid;
+        return isValid;
     };
 
     // 匹配单词
     const matchWord = (guessedWord: string, targetWord: string) => {
         const matchWords: string[] = [];
-        guessedWord.split('').forEach((letter, index) => {
-          if (targetWord.includes(letter)) {
-            matchWords.push(letter);
-            setCellMatchClasses(prev => [...prev, targetWord[index] === letter ? 'C' : 'P']); // 正确
-          } else {
-            setNoMatchLetters(prev => [...prev, letter]);
-            setCellMatchClasses(prev => [...prev, 'X']);
-          }
-        });
+        const targetLetters = [...targetWord];
+        const guessedLetters = [...guessedWord];
+        const matchStatus = new Array(guessedWord.length).fill('');
+
+        // 第一步：标记完全匹配（绿色）
+        for (let i = 0; i < guessedLetters.length; i++) {
+            if (guessedLetters[i] === targetLetters[i]) {
+                matchStatus[i] = 'C';
+                matchWords.push(guessedLetters[i] || '');
+                targetLetters[i] = '*';  // 标记已使用
+                guessedLetters[i] = '#';  // 标记已匹配
+            }
+        }
+
+        // 第二步：标记部分匹配（黄色）和不匹配（灰色）
+        for (let i = 0; i < guessedLetters.length; i++) {
+            if (guessedLetters[i] !== '#') {  // 跳过已完全匹配的字母
+                const targetIndex = targetLetters.findIndex(letter => 
+                    letter === guessedLetters[i] && letter !== '*'
+                );
+                
+                if (targetIndex !== -1) {
+                    matchStatus[i] = 'P';  // 部分匹配（黄色）
+                    matchWords.push(guessedLetters[i] || '');
+                    targetLetters[targetIndex] = '*';  // 标记该位置已使用
+                } else {
+                    matchStatus[i] = 'X';  // 不匹配（灰色）
+                    if (!matchWords.includes(guessedLetters[i] || '')) {
+                        setNoMatchLetters(prev => [...prev, guessedLetters[i] || '']);
+                    }
+                }
+            }
+        }
+
+        setCellMatchClasses(prev => [...prev, ...matchStatus]);
         return matchWords;
     };
 
@@ -183,7 +258,7 @@ export default function Games() {
         const isCurrentRowFilled = isRowFilled(currentRow);
 
         if (isCurrentRowFilled) {
-            setIsProcessingEnter(true); // 开始处理
+            setIsProcessingEnter(true);
             
             try {
                 const isValid = await checkWord(guessedWord);
@@ -192,10 +267,9 @@ export default function Games() {
                     setMatchResults(result);
                     setFlippingRows(new Set([currentRow]));
 
-                    // 在动画完成后再清除状态
                     setTimeout(() => {
                         setFlippingRows(new Set());
-                        setIsProcessingEnter(false); // 处理完成
+                        setIsProcessingEnter(false);
 
                         if (guessedWord.toUpperCase() === word) {
                             setShowKeyboard(false);
@@ -204,17 +278,22 @@ export default function Games() {
                             setDialogVisible(true);
                             setDialogMessage(getPositiveMessage() || '');
                             setCurrentCell(-1);
+                            setIsGameOver(true);
+                            setShowConfetti(true);  // 触发散花效果
+                            
+                            // 2秒后关闭散花效果
+                            setTimeout(() => {
+                                setShowConfetti(false);
+                            }, 2000);
+                        } else if (currentRow >= rows - 1) {
+                            setShowKeyboard(false);
+                            setShowControls(true);
+                            setDialogTitle('You Lost!');
+                            setDialogVisible(true);
+                            setDialogMessage(getNegativeMessage() || '');
+                            setIsGameOver(true);  // 设置游戏结束状态
                         } else {
-                            // 移动到下一行
-                            if (currentRow < rows - 1) {
-                                setCurrentCell((currentRow + 1) * columns);
-                            } else {
-                                setShowKeyboard(false);
-                                setShowControls(true);
-                                setDialogTitle('You Lost!');
-                                setDialogVisible(true);
-                                setDialogMessage(getNegativeMessage() || '');
-                            }
+                            setCurrentCell((currentRow + 1) * columns);
                         }
                     }, columns * 100);
                 } else {
@@ -231,42 +310,111 @@ export default function Games() {
         }
     };
 
-    const handleKeyPress = (letter: string) => {
+    // 使用 useCallback 优化回调函数
+    const handleKeyPress = useCallback((letter: string) => {
         if (currentCell >= 0 && currentCell < totalCells) {
+            if (!hasFirstInput) {
+                setHasFirstInput(true);
+            }
+
             const currentRow = Math.floor(currentCell / columns);
             const isRowEnd = (currentCell + 1) % columns === 0;
             const newGridContent = [...gridContent];
             
-            // 如果是最后一格且已有内容，不接收新值
             if (isRowEnd && newGridContent[currentCell] !== '') {
                 return;
             }
             
             newGridContent[currentCell] = letter;
-            setGridContent([...newGridContent]);
+            setGridContent(newGridContent);
             
-            // 只有在不是行尾或行尾为空时才移动光标
             if (!isRowEnd) {
                 setCurrentCell(prevCell => prevCell + 1);
             } else if (newGridContent[currentCell] === '') {
-                // 如果是行尾且为空，允许输入
                 setCurrentCell(currentCell);
             } else {
-                // 如果是行尾且已输入，隐藏光标
                 setCurrentCell(-1);
             }
 
-            const isCurrentRowFilled = isRowFilled(currentRow);
-            setIsEnterEnabled(isCurrentRowFilled);
-
-            // 清除当前行的无效状态
+            setIsEnterEnabled(isRowFilled(currentRow));
             setInvalidRows(prev => {
                 const newSet = new Set(prev);
                 newSet.delete(currentRow);
                 return newSet;
             });
         }
-    };
+    }, [currentCell, totalCells, columns, gridContent, hasFirstInput]);
+
+    // 使用 useMemo 缓存计算结果
+    const currentRow = useMemo(() => getCurrentRow(), [currentCell, columns, gridContent]);
+
+    // 使用 useMemo 缓存控制栏组件
+    const controlBar = useMemo(() => (
+        <div className="flex items-center justify-center gap-3 h-10 mb-8">
+            <div className="h-10 flex items-center">
+                <button onClick={handleDecrease} 
+                    className="h-10 w-10 flex items-center justify-center bg-violet-100 text-violet-600 rounded-l-lg hover:bg-violet-200 transition-colors disabled:opacity-50 disabled:hover:bg-violet-100"
+                    disabled={columns <= 3}
+                >
+                    <Minus className="w-4 h-4" />
+                </button>
+                <div className="h-10 min-w-[40px] flex items-center justify-center bg-white border-y border-violet-100 text-violet-700 font-medium">
+                    {columns}
+                </div>
+                <button onClick={handleIncrease} 
+                    className="h-10 w-10 flex items-center justify-center bg-violet-100 text-violet-600 rounded-r-lg hover:bg-violet-200 transition-colors disabled:opacity-50 disabled:hover:bg-violet-100"
+                    disabled={columns >= 8}
+                >
+                    <Plus className="w-4 h-4" />
+                </button>
+            </div>
+
+            {hasFirstInput && (
+                <div className="h-10 flex items-center px-4 bg-white/80 backdrop-blur rounded-lg shadow-sm border border-violet-100">
+                    <UseTimes 
+                        showKeyboard={showKeyboard} 
+                        hasFirstInput={hasFirstInput}
+                        isGameOver={isGameOver}
+                        onTimeChange={setTotalTime} 
+                    />
+                </div>
+            )}
+
+            <button 
+                onClick={handleStartGame}
+                className="h-10 w-10 flex items-center justify-center bg-violet-100 text-violet-600 rounded-lg hover:bg-violet-200 transition-colors group"
+            >
+                <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-300" />
+            </button>
+        </div>
+    ), [columns, hasFirstInput, showKeyboard, isGameOver]);
+
+    // 使用 useCallback 优化事件处理函数
+    const handleKeyDown = useCallback((event: KeyboardEvent) => {
+        if (!showKeyboard) return;
+        
+        const key = event.key;
+        
+        if (key === 'Enter') {
+            event.preventDefault();
+            if (!isProcessingEnter) {
+                handleEnter();
+            }
+            return;
+        }
+        
+        if (currentCell >= 0 && currentCell < totalCells) {
+            if (/^[A-Z]$/.test(key.toUpperCase())) {
+                handleKeyPress(key.toUpperCase());
+            } else if (key === 'Backspace') {
+                event.preventDefault();
+                handleDelete();
+            }
+        } else if (key === 'Backspace' && currentCell === -1) {
+            event.preventDefault();
+            handleDelete();
+        }
+    }, [showKeyboard, currentCell, totalCells, isProcessingEnter]);
 
     // 删除单元格
     const handleDelete = () => {
@@ -323,49 +471,6 @@ export default function Games() {
     };
 
     useEffect(() => {
-      if (columns > 0) {
-        // setTotalCells(columns * rows);
-        // const newGridCol = gridColMaps[columns] || 'grid-cols-3';
-        // setGridCol(newGridCol);
-        // setGridContent(new Array(columns * rows).fill(''));
-        initGrid(rows, columns);
-      }
-    }, [columns]);
-
-
-    // 处理键盘输入
-    const handleKeyDown = (event: KeyboardEvent) => {
-        if (showKeyboard) {
-            const key = event.key;
-            
-            // 处理回车键，需要检查 isProcessingEnter
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                // 如果正在处理 enter，直接返回
-                if (isProcessingEnter) {
-                    return;
-                }
-                handleEnter();
-                return;
-            }
-            
-            // 其他按键操作需要检查 currentCell 是否有效
-            if (currentCell >= 0 && currentCell < totalCells) {
-                if (/^[A-Z]$/.test(key.toUpperCase())) {
-                    handleKeyPress(key.toUpperCase());
-                } else if (event.key === 'Backspace') {
-                    event.preventDefault();
-                    handleDelete();
-                }
-            } else if (event.key === 'Backspace' && currentCell === -1) {
-                // 特殊处理：当光标隐藏时也允许删除操作
-                event.preventDefault();
-                handleDelete();
-            }
-        }
-    };
-
-    useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
         // console.log('add event');
         return () => {
@@ -374,123 +479,103 @@ export default function Games() {
     }, [currentCell, totalCells, isProcessingEnter]); // 添加 isProcessingEnter 到依赖项
 
     return (
-      <>
-        <div className="container mx-auto max-w-screen-md flex flex-1 flex-col items-center justify-center relative">
-          <UseTimes 
-            showKeyboard={showKeyboard} 
-            onTimeChange={(time: number) => { setTotalTime(time); }} 
-          />
-          {
-            gridContent.length > 0 ? (    
-              <div className={`grid ${gridCol} gap-2`}>
-                {gridContent.map((content, index) => {
-                  const row = Math.floor(index / columns);
-                  const col = index % columns;
-                  const isInvalidRow = invalidRows.has(row);
-                  const isFlipping = flippingRows.has(row);
-                  const matchClass = cellMatchClasses[index] ? cellMatchClasses[index] : '';
-                  return (
-                    <div 
-                      key={index} 
-                      className={cn(`
-                        w-14 h-14 
-                        flex items-center justify-center 
-                        text-2xl font-bold 
-                        rounded-md 
-                        transition-all duration-200
-                        ${content ? 'border-2' : 'border border-violet-200/50'}
-                        ${index === currentCell ? 'ring-2 ring-violet-400' : ''}
-                        ${isInvalidRow && content ? 'border-red-400 text-red-500' : 'text-zinc-700'}
-                        ${isFlipping ? 'animate-flip' : ''}`, 
-                        matchClass === 'C' ? 'bg-green-500 text-white border-green-400' : 
-                        matchClass === 'P' ? 'bg-yellow-500 text-white border-yellow-400' : 
-                        matchClass === 'X' ? 'bg-zinc-400 text-white border-zinc-400' : 'bg-white',
-                      )}
-                      style={{
-                        animationDelay: isFlipping ? `${col * 100}ms` : '0ms'
-                      }}
-                    >
-                      {content}
+        <>
+            <ConfettiEffect isActive={showConfetti} />
+            <div className="relative z-0">  {/* 添加相对定位和较低的 z-index */}
+            <div className="container mx-auto max-w-screen-md min-h-[600px] flex flex-col">
+                {/* 游戏区域 - 使用固定高度和padding来保持稳定 */}
+                <div className="flex-1 flex flex-col items-center py-8">
+                {/* 游戏内容区域 - 添加固定高度 */}
+                <div className="h-[600px] flex flex-col items-center">
+                    {gridContent.length > 0 ? (    
+                    <>
+                        {controlBar}
+                        <GameGrid 
+                            gridContent={gridContent}
+                            columns={columns}
+                            gridCol={gridCol}
+                            currentCell={currentCell}
+                            invalidRows={invalidRows}
+                            flippingRows={flippingRows}
+                            cellMatchClasses={cellMatchClasses}
+                        />
+                        {showKeyboard && (
+                        <div className="mt-auto">
+                            <KeyBoard 
+                            onKeyPress={handleKeyPress} 
+                            onDelete={handleDelete} 
+                            onEnter={handleEnter} 
+                            matchedLetters={matchResults} 
+                            isEnterEnabled={isEnterEnabled}
+                            noMatchLetters={noMatchLetters}
+                            />
+                        </div>
+                        )}
+                    </>
+                    ) : (
+                    <div className="flex-1 flex items-center justify-center">
+                        <div className="relative">
+                        <div className="w-12 h-12 border-4 border-violet-200 border-t-violet-500 rounded-full animate-loading"></div>
+                        <span className="absolute top-14 left-1/2 -translate-x-1/2 text-violet-500">Loading...</span>
+                        </div>
                     </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="h-[400px] flex items-center justify-center text-center">
-                <div className="relative">
-                  <div className="w-12 h-12 border-4 border-violet-200 border-t-violet-500 rounded-full animate-loading"></div>
-                  <span className="absolute top-14 left-1/2 -translate-x-1/2 text-violet-500">Loading...</span>
+                    )}
                 </div>
-              </div>
-            )
-          }
-          {showControls && (
-            <div className="mt-5 flex justify-center space-x-4 h-[184px]">
-              <button onClick={handleReset} 
-                className="h-10 px-4 py-2 bg-violet-500 text-white rounded-md hover:bg-violet-600 transition-colors">
-                Reset
-              </button>
-              <button onClick={handleDecrease} 
-                className="h-10 px-2 py-2 bg-violet-500 text-white rounded-md hover:bg-violet-600 transition-colors">
-                <Minus className="w-5 h-5" />
-              </button>
-              <button onClick={handleIncrease} 
-                className="h-10 px-2 py-2 bg-violet-500 text-white rounded-md hover:bg-violet-600 transition-colors">
-                <Plus className="w-5 h-5" />
-              </button>
-              <button onClick={handleStartGame} 
-                className="h-10 px-4 py-2 bg-violet-500 text-white rounded-md hover:bg-violet-600 transition-colors">
-                Start
-              </button>
+                </div>
             </div>
-          )}
-          {showKeyboard && <KeyBoard 
-            onKeyPress={handleKeyPress} 
-            onDelete={handleDelete} 
-            onEnter={handleEnter} 
-            matchedLetters={matchResults} 
-            isEnterEnabled={isEnterEnabled}
-            noMatchLetters={noMatchLetters}
-          />}
-        </div>
+            </div>
 
-        <ResultModal
-          isOpen={dialogVisible}
-          onClose={() => {
-            setDialogVisible(false);
-          }}
-          onNewGame={() => {
-            setDialogVisible(false);
-            handleReset();
-            handleStartGame();
-          }}
-          title={dialogTitle || 'You Won!'}
-          description={dialogMessage}
-          titleClassName="text-center text-2xl border-b-2 border-violet-100 py-2"
-        >
-          <div className="flex flex-col items-center border-b-2 border-violet-100 pb-5">
-            {
-              dialogTitle === 'You Lost!' ? ( 
-                <>
-                  <label className="text-lg leading-6 text-zinc-700 mt-5">The word was</label>
-                  <h1 className="text-4xl font-bold my-5 bg-gradient-to-r from-zinc-800 to-violet-500 bg-clip-text text-transparent">
-                    {word?.toUpperCase()}
-                  </h1>
-                </>
-              ) : (
-                <div className="flex flex-col items-center justify-center">
-                  <PartyPopper className="w-12 h-12 text-violet-500" />
-                  <p className="mt-4 text-zinc-700 text-lg font-medium">Congratulations!</p>
-                  <div className="mt-2 px-4 py-2 bg-violet-50 rounded-lg">
-                    <p className="text-violet-600">
-                      You've guessed the word in <span className="font-semibold">{formatTime(totalTime)}</span>
-                    </p>
-                  </div>
-                </div>
-              )
-            }
-          </div>
-        </ResultModal>
-      </>
+            <ResultModal
+            isOpen={dialogVisible}
+            onClose={() => {
+                setDialogVisible(false);
+                // 清除所有游戏状态
+                setGridContent(new Array(totalCells).fill(''));
+                setCurrentCell(0);
+                setIsEnterEnabled(false);
+                setCellMatchClasses([]);
+                setMatchResults([]);
+                setNoMatchLetters([]);
+                setHasFirstInput(false);
+                setShowKeyboard(true);
+                setIsGameOver(false);
+                setInvalidRows(new Set());
+                setFlippingRows(new Set());
+                setIsProcessingEnter(false);
+                // 获取新单词
+                handleFetchWord(columns);
+            }}
+            onNewGame={() => {
+                setDialogVisible(false);
+                handleStartGame();
+            }}
+            title={dialogTitle || 'You Won!'}
+            description={dialogMessage}
+            titleClassName="text-center text-2xl border-b-2 border-violet-100 py-2"
+            >
+            <div className="flex flex-col items-center border-b-2 border-violet-100 pb-5">
+                {
+                dialogTitle === 'You Lost!' ? ( 
+                    <>
+                    <label className="text-lg leading-6 text-zinc-700 mt-5">The word was</label>
+                    <h1 className="text-4xl font-bold my-5 bg-gradient-to-r from-zinc-800 to-violet-500 bg-clip-text text-transparent">
+                        {word?.toUpperCase()}
+                    </h1>
+                    </>
+                ) : (
+                    <div className="flex flex-col items-center justify-center">
+                    <PartyPopper className="w-12 h-12 text-violet-500" />
+                    <p className="mt-4 text-zinc-700 text-lg font-medium">Congratulations!</p>
+                    <div className="mt-2 px-4 py-2 bg-violet-50 rounded-lg">
+                        <p className="text-violet-600">
+                        You've guessed the word in <span className="font-semibold">{formatTime(totalTime)}</span>
+                        </p>
+                    </div>
+                    </div>
+                )
+                }
+            </div>
+            </ResultModal>
+        </>
     )
 }

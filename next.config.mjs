@@ -2,12 +2,12 @@
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
  * for Docker builds.
  */
-await import("./src/env.js");
+import type { NextConfig } from 'next'
 
-// @ts-check
+// 使用顶层 await，因为 .mjs 文件支持这个特性
+await import("./src/env.js")
 
-/** @type {import('next').NextConfig} */
-export const nextConfig = {
+const nextConfig: NextConfig = {
   reactStrictMode: false,
   async headers() {
     return [
@@ -20,8 +20,8 @@ export const nextConfig = {
           },
         ],
       },
-    ];
+    ]
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig 
