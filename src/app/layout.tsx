@@ -30,19 +30,13 @@ export default function RootLayout({
         <Footer />
         <ScrollToTop />
 
-        {/* Google 广告代码 */}
-        <div className="container mx-auto px-4 my-12">
-          <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></Script>
-          <ins className="adsbygoogle"
-              style={{ display: 'block' }}
-              data-ad-client="ca-pub-1939625526338391"
-              data-ad-slot="f08c47fec0942fa0"
-              data-ad-format="auto"
-              data-full-width-responsive="true"></ins>
-          <Script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-          </Script>
-        </div>
+        {/* AdSense 脚本 - 统一管理 */}
+        <Script 
+          async 
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1939625526338391"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
       </body>
       <Toaster position="top-right" richColors duration={2000} />
       <UseGoogleAnalysic />

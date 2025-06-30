@@ -12,13 +12,7 @@ import Script from 'next/script';
 export default function HomePage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white">
-        {/* AdSense 脚本 */}
-        <Script 
-          async 
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1939625526338391"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        {/* AdSense 脚本已在 layout.tsx 中统一管理 */}
 
         {/* 侧边栏广告 - 固定定位，不影响页面布局 */}
         <SidebarAds />

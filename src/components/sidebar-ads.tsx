@@ -21,29 +21,44 @@ const SidebarAds = memo(function SidebarAds() {
   useEffect(() => {
     if (!isLargeScreen) return;
 
-    const timer = setTimeout(() => {
+    const loadSidebarAds = () => {
       try {
-        if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
-          // 左侧广告
-          ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-          // 右侧广告
-          ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-          
-          setTimeout(() => {
-            const leftAd = document.querySelector('.sidebar-left-ad .adsbygoogle');
-            const rightAd = document.querySelector('.sidebar-right-ad .adsbygoogle');
+        const checkAndLoad = () => {
+          if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
+            // 左侧广告
+            ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+            // 右侧广告
+            ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
             
-            if ((leftAd && leftAd.clientHeight > 0) || (rightAd && rightAd.clientHeight > 0)) {
-              setShowAds(true);
-            }
-          }, 2000);
-        }
+            // 先显示广告位，无论是否有广告内容
+            setShowAds(true);
+            
+            // 检查广告是否加载成功（可选）
+            setTimeout(() => {
+              const leftAd = document.querySelector('.sidebar-left-ad .adsbygoogle');
+              const rightAd = document.querySelector('.sidebar-right-ad .adsbygoogle');
+              
+              if ((leftAd && leftAd.clientHeight > 0) || (rightAd && rightAd.clientHeight > 0)) {
+                console.log('侧边栏广告加载成功');
+              } else {
+                console.log('侧边栏广告暂时无内容，保持占位');
+              }
+            }, 3000);
+          } else {
+            // AdSense脚本还没加载完成，继续等待
+            setTimeout(checkAndLoad, 1000);
+          }
+        };
+
+        setTimeout(checkAndLoad, 1500);
       } catch (err) {
         console.error('Sidebar ads error:', err);
+        // 即使出错也显示占位
+        setShowAds(true);
       }
-    }, 1500);
+    };
 
-    return () => clearTimeout(timer);
+    loadSidebarAds();
   }, [isLargeScreen]);
 
   if (!isLargeScreen || !showAds) {
@@ -63,8 +78,9 @@ const SidebarAds = memo(function SidebarAds() {
               height: '600px'
             }}
             data-ad-client="ca-pub-1939625526338391"
-            data-ad-slot="sidebar-left-slot"
-            data-ad-format="vertical"
+            data-ad-slot="f08c47fec0942fa0"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
           />
         </div>
       </div>
@@ -80,8 +96,9 @@ const SidebarAds = memo(function SidebarAds() {
               height: '600px'
             }}
             data-ad-client="ca-pub-1939625526338391"
-            data-ad-slot="sidebar-right-slot"
-            data-ad-format="vertical"
+            data-ad-slot="f08c47fec0942fa0"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
           />
         </div>
       </div>

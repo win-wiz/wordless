@@ -44,31 +44,40 @@ const AdBanner = memo(function AdBanner({
 
   const loadAd = () => {
     try {
-      if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
-        const timer = setTimeout(() => {
+      // 等待AdSense脚本加载完成
+      const checkAndLoadAd = () => {
+        if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
           const adElement = adRef.current?.querySelector('.adsbygoogle');
           if (adElement && !(adElement as any).dataset.adsbygoogleStatus) {
             ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+            
+            // 设置默认显示状态
+            setShowAd(true);
             
             // 检测广告是否成功加载
             setTimeout(() => {
               const adHeight = adElement.clientHeight;
               if (adHeight > 0) {
                 setAdLoaded(true);
-                setShowAd(true);
               } else {
-                // 广告没有加载成功，隐藏整个组件
-                setShowAd(false);
+                console.log('广告位 ' + slot + ' 暂时无内容，保持占位');
+                // 保持显示，可能稍后会有广告内容
+                setAdLoaded(true);
               }
-            }, 2000);
+            }, 3000);
           }
-        }, 500);
+        } else {
+          // 如果AdSense脚本还没加载完成，等待一段时间再尝试
+          setTimeout(checkAndLoadAd, 1000);
+        }
+      };
 
-        return () => clearTimeout(timer);
-      }
+      setTimeout(checkAndLoadAd, 500);
     } catch (err) {
       console.error('AdSense error:', err);
-      setShowAd(false);
+      // 即使出错也显示占位，避免页面布局问题
+      setShowAd(true);
+      setAdLoaded(true);
     }
   };
 
