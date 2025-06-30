@@ -14,7 +14,7 @@ const AD_CONFIG = {
   left: {
     width: '160px',
     height: '600px',
-    slot: 'ca-pub-1939625526338391',
+    slot: 'left-sidebar-ad', // ✅ 修复：使用正确的Slot ID格式
     type: 'skyscraper', // 摩天大楼
     minScreenWidth: BREAKPOINTS.large, // 1400px以上显示
   },
