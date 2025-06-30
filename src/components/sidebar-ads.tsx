@@ -1,8 +1,9 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useState, useRef } from 'react';
 
 const SidebarAds = memo(function SidebarAds() {
   const [showAds, setShowAds] = useState(false);
   const [isLargeScreen, setIsLargeScreen] = useState(false);
+  const adsInitialized = useRef(false); // 添加初始化状态跟踪
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -19,16 +20,29 @@ const SidebarAds = memo(function SidebarAds() {
   }, []);
 
   useEffect(() => {
-    if (!isLargeScreen) return;
+    if (!isLargeScreen || adsInitialized.current) return; // 如果已初始化则跳过
 
     const loadSidebarAds = () => {
       try {
         const checkAndLoad = () => {
           if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
-            // 左侧广告
-            ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-            // 右侧广告
-            ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+            // 检查广告单元是否已经有内容
+            const leftAdElement = document.querySelector('.sidebar-left-ad .adsbygoogle');
+            const rightAdElement = document.querySelector('.sidebar-right-ad .adsbygoogle');
+            
+            // 只有当广告单元存在且没有子元素时才初始化
+            if (leftAdElement && !leftAdElement.hasChildNodes()) {
+              // 左侧广告
+              ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+            }
+            
+            if (rightAdElement && !rightAdElement.hasChildNodes()) {
+              // 右侧广告
+              ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+            }
+            
+            // 标记为已初始化
+            adsInitialized.current = true;
             
             // 先显示广告位，无论是否有广告内容
             setShowAds(true);
@@ -55,11 +69,19 @@ const SidebarAds = memo(function SidebarAds() {
         console.error('Sidebar ads error:', err);
         // 即使出错也显示占位
         setShowAds(true);
+        adsInitialized.current = true; // 防止重复尝试
       }
     };
 
     loadSidebarAds();
   }, [isLargeScreen]);
+
+  // 组件卸载时重置状态
+  useEffect(() => {
+    return () => {
+      adsInitialized.current = false;
+    };
+  }, []);
 
   if (!isLargeScreen || !showAds) {
     return null;

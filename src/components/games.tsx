@@ -55,6 +55,12 @@ export default function Games() {
 
     const [showConfetti, setShowConfetti] = useState(false);
 
+    // 包装的时间设置函数，用于调试
+    const setTotalTimeWithLog = useCallback((newTime: number) => {
+        console.log('Setting totalTime from', totalTime, 'to', newTime, 'Stack:', new Error().stack?.split('\n')[2]);
+        setTotalTime(newTime);
+    }, [totalTime]);
+
     const handleFetchWord = async (cell: number) => {
       if (isLoading) return;  // 如果正在加载，直接返回
       
@@ -90,7 +96,6 @@ export default function Games() {
         const newGridCol = gridColMaps[columns] || 'grid-cols-3';
         setGridCol(newGridCol);
         setGridContent(new Array(columns * rows).fill(''));
-        setTotalTime(1);
     };
 
     // 重置游戏，需要获取新单词
@@ -100,6 +105,7 @@ export default function Games() {
         setCellMatchClasses([]);
         setMatchResults([]);
         setNoMatchLetters([]);
+        setTotalTimeWithLog(1); // 只在重置游戏时重置时间
         initGrid(rows, columns);
         handleFetchWord(columns);  // 重置时获取新单词
     };
@@ -119,6 +125,7 @@ export default function Games() {
         setInvalidRows(new Set()); // 清除无效行状态
         setFlippingRows(new Set()); // 清除翻转状态
         setIsProcessingEnter(false); // 重置处理状态
+        setTotalTimeWithLog(1); // 只在开始新游戏时重置时间
         
         // 最后获取新单词
         handleFetchWord(columns);
@@ -141,6 +148,7 @@ export default function Games() {
             setHasFirstInput(false);
             setIsGameOver(false);
             setCurrentCell(-1);
+            setTotalTimeWithLog(1); // 改变列数时重置时间
             // 再改变列数
             setColumns(prevColumns => prevColumns - 1);
         } else {
@@ -159,6 +167,7 @@ export default function Games() {
             setHasFirstInput(false);
             setIsGameOver(false);
             setCurrentCell(-1);
+            setTotalTimeWithLog(1); // 改变列数时重置时间
             // 再改变列数
             setColumns(prevColumns => prevColumns + 1);
         } else {
@@ -198,11 +207,26 @@ export default function Games() {
 
     // 检查单词是否有效
     const checkWord = async (word: string) => {
-      // console.log(en)
-      // TODO 先查表， 验证单词的合法性
+      try {
+        // 首先进行基本验证
+        if (!word || word.trim() === '') {
+          console.warn('Empty word provided');
+          return false;
+        }
+        
+        if (!/^[a-zA-Z]+$/.test(word)) {
+          console.warn('Word contains invalid characters');
+          return false;
+        }
+        
+        // 调用API验证
         const isValid = await fetchWords(word);
-      // TODO 如果是合法的单词， 保存至库中
         return isValid;
+      } catch (error) {
+        console.error('Error validating word:', error);
+        // 如果验证失败，返回false而不是抛出错误
+        return false;
+      }
     };
 
     // 匹配单词
@@ -272,6 +296,9 @@ export default function Games() {
                         setIsProcessingEnter(false);
 
                         if (guessedWord.toUpperCase() === word) {
+                            // 游戏胜利时记录当前时间
+                            console.log('Game won! Current totalTime:', totalTime);
+                            
                             setShowKeyboard(false);
                             setShowControls(true);
                             setDialogTitle('You Won!');
@@ -297,13 +324,14 @@ export default function Games() {
                         }
                     }, columns * 100);
                 } else {
-                    toast.error('Word not found');
+                    toast.error(`"${guessedWord.toUpperCase()}" is not a valid word`);
                     setInvalidRows(prev => new Set(prev).add(currentRow));
                     setIsProcessingEnter(false); // 处理完成
                 }
             } catch (error) {
+                console.error('Error during word submission:', error);
                 setIsProcessingEnter(false); // 发生错误时也要重置状态
-                toast.error('An error occurred');
+                toast.error('Network error - please check your connection and try again');
             }
         } else {
             toast.warning('Please fill in the row before submitting');
@@ -375,7 +403,7 @@ export default function Games() {
                         showKeyboard={showKeyboard} 
                         hasFirstInput={hasFirstInput}
                         isGameOver={isGameOver}
-                        onTimeChange={setTotalTime} 
+                        onTimeChange={setTotalTimeWithLog} 
                     />
                 </div>
             )}
@@ -476,7 +504,7 @@ export default function Games() {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [currentCell, totalCells, isProcessingEnter]); // 添加 isProcessingEnter 到依赖项
+    }, [handleKeyDown]); // 使用handleKeyDown作为依赖项
 
     return (
         <>
@@ -570,6 +598,10 @@ export default function Games() {
                         <p className="text-violet-600">
                         You've guessed the word in <span className="font-semibold">{formatTime(totalTime)}</span>
                         </p>
+                        {/* 调试信息 */}
+                        {/* <div className="text-xs text-gray-400 mt-1">
+                            Debug: totalTime = {totalTime}
+                        </div> */}
                     </div>
                     </div>
                 )

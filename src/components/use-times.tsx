@@ -39,21 +39,16 @@ function UseTimes({ showKeyboard, hasFirstInput, isGameOver, onTimeChange }: Use
     onTimeChangeRef.current = onTimeChange
   }, [onTimeChange])
 
-  // 更新时间的函数
+  // 更新时间的函数 - 立即同步到父组件
   const updateTime = useCallback(() => {
     setTime(prevTime => {
       const newTime = prevTime + 1
       timeRef.current = newTime
+      // 立即传递新时间给父组件
+      onTimeChangeRef.current(newTime)
       return newTime
     })
   }, [])
-
-  // 同步到父组件的函数
-  useEffect(() => {
-    if (time !== timeRef.current) {
-      onTimeChangeRef.current(time)
-    }
-  }, [time])
 
   // 处理计时器的启动和停止
   useEffect(() => {
@@ -61,6 +56,10 @@ function UseTimes({ showKeyboard, hasFirstInput, isGameOver, onTimeChange }: Use
       setIsRunning(true)
     } else if (isGameOver || !showKeyboard) {
       setIsRunning(false)
+      // 游戏结束时确保最后的时间传递给父组件
+      if (isGameOver) {
+        onTimeChangeRef.current(timeRef.current)
+      }
     }
   }, [hasFirstInput, showKeyboard, isGameOver])
 
@@ -85,8 +84,15 @@ function UseTimes({ showKeyboard, hasFirstInput, isGameOver, onTimeChange }: Use
       timeRef.current = 1
       setTime(1)
       setIsRunning(false)
+      // 重置时也要通知父组件
+      onTimeChangeRef.current(1)
     }
   }, [hasFirstInput])
+
+  // 组件初始化时确保时间同步
+  useEffect(() => {
+    onTimeChangeRef.current(time)
+  }, [time])
 
   return (
     <div className="flex items-center gap-2 h-full">

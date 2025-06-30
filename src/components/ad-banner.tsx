@@ -16,13 +16,14 @@ const AdBanner = memo(function AdBanner({
   const [isVisible, setIsVisible] = useState(false);
   const adRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const adInitialized = useRef(false); // 添加初始化状态跟踪
 
   useEffect(() => {
     // 使用 Intersection Observer 检测元素是否进入视口
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !isVisible) {
+          if (entry.isIntersecting && !isVisible && !adInitialized.current) {
             setIsVisible(true);
             loadAd();
           }
@@ -42,29 +43,57 @@ const AdBanner = memo(function AdBanner({
     };
   }, [isVisible]);
 
+  // 组件卸载时重置状态
+  useEffect(() => {
+    return () => {
+      adInitialized.current = false;
+    };
+  }, []);
+
   const loadAd = () => {
+    if (adInitialized.current) {
+      console.log('广告已初始化，跳过重复加载');
+      return;
+    }
+
     try {
       // 等待AdSense脚本加载完成
       const checkAndLoadAd = () => {
         if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
           const adElement = adRef.current?.querySelector('.adsbygoogle');
-          if (adElement && !(adElement as any).dataset.adsbygoogleStatus) {
-            ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+          if (adElement) {
+            // 检查多种状态确保没有重复初始化
+            const hasAdContent = adElement.hasChildNodes();
+            const hasDataStatus = (adElement as any).dataset.adsbygoogleStatus;
+            const hasDataAdStatus = (adElement as any).dataset.adStatus;
             
-            // 设置默认显示状态
-            setShowAd(true);
-            
-            // 检测广告是否成功加载
-            setTimeout(() => {
-              const adHeight = adElement.clientHeight;
-              if (adHeight > 0) {
-                setAdLoaded(true);
-              } else {
-                console.log('广告位 ' + slot + ' 暂时无内容，保持占位');
-                // 保持显示，可能稍后会有广告内容
-                setAdLoaded(true);
-              }
-            }, 3000);
+            if (!hasAdContent && !hasDataStatus && !hasDataAdStatus) {
+              ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+              
+              // 标记为已初始化
+              adInitialized.current = true;
+              
+              // 设置默认显示状态
+              setShowAd(true);
+              
+              // 检测广告是否成功加载
+              setTimeout(() => {
+                const adHeight = adElement.clientHeight;
+                if (adHeight > 0) {
+                  setAdLoaded(true);
+                  console.log('广告位 ' + slot + ' 加载成功');
+                } else {
+                  console.log('广告位 ' + slot + ' 暂时无内容，保持占位');
+                  // 保持显示，可能稍后会有广告内容
+                  setAdLoaded(true);
+                }
+              }, 3000);
+            } else {
+              console.log('广告位 ' + slot + ' 已经初始化过了');
+              adInitialized.current = true;
+              setShowAd(true);
+              setAdLoaded(true);
+            }
           }
         } else {
           // 如果AdSense脚本还没加载完成，等待一段时间再尝试
@@ -78,6 +107,7 @@ const AdBanner = memo(function AdBanner({
       // 即使出错也显示占位，避免页面布局问题
       setShowAd(true);
       setAdLoaded(true);
+      adInitialized.current = true; // 防止重复尝试
     }
   };
 
