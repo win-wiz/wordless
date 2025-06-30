@@ -4,8 +4,11 @@ import Image from "next/image";
 import logo from "@/../public/wordless.png";
 import { CircleHelp } from "lucide-react";
 import Link from "next/link";
+// import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
+  const router = useRouter();
   const scrollToHelp = () => {
     // 找到 Help 部分并平滑滚动
     const helpSection = document.getElementById('how-to-play');
@@ -32,11 +35,18 @@ export default function Header() {
             Wordless
           </h1>
         </Link>
-        <div>
+        <div className="flex gap-8 items-center">
           <CircleHelp 
             onClick={scrollToHelp}
             className="w-5 h-5 md:w-6 md:h-6 text-zinc-600 hover:text-violet-500 transition-colors cursor-pointer" 
           />
+
+          {/* <Button 
+            variant="outline"
+            onClick={() => {
+              router.push('/login');
+            }}
+          >Login</Button> */}
         </div>
       </div>
     </header>

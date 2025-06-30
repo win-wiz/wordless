@@ -5,7 +5,7 @@
 import type { NextConfig } from 'next'
 
 // 使用顶层 await，因为 .mjs 文件支持这个特性
-await import("./src/env.js")
+await import("./src/env.mjs")
 
 const nextConfig: NextConfig = {
   reactStrictMode: false,
@@ -24,4 +24,4 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default nextConfig 
+export default nextConfig

@@ -5,7 +5,7 @@
 import type { NextConfig } from 'next'
 
 const initConfig = async (): Promise<NextConfig> => {
-  await import("./src/env.js")
+  await import("./src/env.mjs")
   
   return {
     reactStrictMode: false,
@@ -25,4 +25,4 @@ const initConfig = async (): Promise<NextConfig> => {
   }
 }
 
-export default initConfig() 
+export default initConfig()

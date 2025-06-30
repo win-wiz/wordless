@@ -1,4 +1,5 @@
 import { createEnv } from "@t3-oss/env-nextjs";
+import { NEXT_BODY_SUFFIX } from "next/dist/lib/constants.js";
 import { z } from "zod";
 
 export const env = createEnv({
@@ -17,9 +18,11 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
-    NEXT_PUBLIC_DOUBAO_BASE_URL: z.string().min(1),
-    NEXT_PUBLIC_DOUBAO_OPENAI_API_KEY: z.string().min(1),
-    NEXT_PUBLIC_DOUBAO_LINK_128K_MODEL: z.string().min(1),
+    NEXT_PUBLIC_DOUBAO_BASE_URL: z.string().optional(),
+    NEXT_PUBLIC_DOUBAO_OPENAI_API_KEY: z.string().optional(),
+    NEXT_PUBLIC_DOUBAO_LINK_128K_MODEL: z.string().optional(),
+    NEXT_PUBLIC_SSO_BASE_URL: z.string().optional(),
+    NEXT_PUBLIC_SSO_REDIRECT_URI: z.string().optional(),
   },
 
   /**
@@ -31,6 +34,8 @@ export const env = createEnv({
     NEXT_PUBLIC_DOUBAO_BASE_URL: process.env.NEXT_PUBLIC_DOUBAO_BASE_URL,
     NEXT_PUBLIC_DOUBAO_OPENAI_API_KEY: process.env.NEXT_PUBLIC_DOUBAO_OPENAI_API_KEY,
     NEXT_PUBLIC_DOUBAO_LINK_128K_MODEL: process.env.NEXT_PUBLIC_DOUBAO_LINK_128K_MODEL,
+    NEXT_PUBLIC_SSO_BASE_URL: process.env.NEXT_PUBLIC_SSO_BASE_URL,
+    NEXT_PUBLIC_SSO_REDIRECT_URI: process.env.NEXT_PUBLIC_SSO_REDIRECT_URI,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
