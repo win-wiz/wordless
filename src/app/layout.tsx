@@ -47,6 +47,13 @@ export default function RootLayout({
             });
           `}
         </Script>
+        
+        {/* AMP自动广告标签 - 恢复之前的配置 */}
+        <Script 
+          async 
+          custom-element="amp-auto-ads"
+          src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
+        />
       </body>
       <Toaster position="top-right" richColors duration={2000} />
       <UseGoogleAnalysic />
