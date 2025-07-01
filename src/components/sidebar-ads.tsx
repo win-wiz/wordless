@@ -32,6 +32,7 @@ interface AdUnit {
   element: Element | null;
   loaded: boolean;
   height: number;
+  hasContent: boolean; // 新增：是否有广告内容
 }
 
 const SidebarAds = memo(function SidebarAds() {
@@ -116,13 +117,16 @@ const SidebarAds = memo(function SidebarAds() {
             id: adId,
             element,
             loaded: true,
-            height: 0
+            height: 0,
+            hasContent: false // 初始化为false，等待检测结果
           }
         }));
 
                  // 3秒后检查加载结果
          setTimeout(() => {
            const height = element.clientHeight;
+           const hasContent = height > 0;
+           
            setAdUnits(prev => ({
              ...prev,
              [adId]: {
@@ -130,12 +134,13 @@ const SidebarAds = memo(function SidebarAds() {
                id: adId,
                element,
                loaded: true,
-               height
+               height,
+               hasContent
              }
            }));
            
            setDebugInfo(prev => 
-             prev + ` | ${adId}:${height > 0 ? `✓${height}px` : '✗无内容'}`
+             prev + ` | ${adId}:${hasContent ? `✓${height}px` : '✗无内容'}`
            );
          }, 3000);
 
@@ -228,7 +233,7 @@ const SidebarAds = memo(function SidebarAds() {
   return (
     <>
       {/* 左侧摩天大楼广告 - 1400px以上显示 */}
-      {showLeftAd && leftPosition && (
+      {showLeftAd && leftPosition && (!adUnits.left || adUnits.left.hasContent !== false) && (
         <div 
           className="sidebar-left-ad fixed top-1/2 transform -translate-y-1/2 z-10 transition-all duration-300 ease-in-out"
           style={{ 
@@ -263,7 +268,7 @@ const SidebarAds = memo(function SidebarAds() {
       )}
 
       {/* 右侧矩形广告 - 1200px以上显示 */}
-      {showRightAd && rightPosition && (
+      {showRightAd && rightPosition && (!adUnits.right || adUnits.right.hasContent !== false) && (
         <div 
           className="sidebar-right-ad fixed top-1/2 transform -translate-y-1/2 z-10 transition-all duration-300 ease-in-out"
           style={{ 

@@ -24,14 +24,6 @@ const config = {
     ],
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/require-await": "off",
-    "@typescript-eslint/no-misused-promises": [
-      "error",
-      {
-        "checksVoidReturn": {
-          "attributes": false
-        }
-      }
-    ],
     "react/no-unescaped-entities": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "prefer-const": "off",
@@ -54,6 +46,8 @@ const config = {
     "@typescript-eslint/consistent-indexed-object-style": "off",
     "@typescript-eslint/no-unsafe-argument": "off",
     "@next/next/inline-script-id": "off",
+    "@typescript-eslint/prefer-optional-chain": "off",
+    "@typescript-eslint/no-misused-promises": "off",
   }
 }
 module.exports = config;

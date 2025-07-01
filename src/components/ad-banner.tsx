@@ -14,6 +14,7 @@ const AdBanner = memo(function AdBanner({
   const [adLoaded, setAdLoaded] = useState(false);
   const [showAd, setShowAd] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [hasAdContent, setHasAdContent] = useState(false); // 新增：是否有广告内容
   const [debugInfo, setDebugInfo] = useState(''); // 添加调试信息
   const adRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -83,20 +84,40 @@ const AdBanner = memo(function AdBanner({
               // 检测广告是否成功加载
               setTimeout(() => {
                 const adHeight = adElement.clientHeight;
-                if (adHeight > 0) {
+                const hasContent = adHeight > 0;
+                
+                if (hasContent) {
                   setAdLoaded(true);
+                  setHasAdContent(true);
                   setDebugInfo(`广告加载成功 (高度: ${adHeight}px)`);
                 } else {
-                  setDebugInfo('广告位无内容 - 可能原因: 开发环境/账户审核中/广告填充率/AdBlock拦截');
-                  // 保持显示，可能稍后会有广告内容
-                  setAdLoaded(true);
+                  setDebugInfo('广告位无内容 - 隐藏广告区域');
+                  setHasAdContent(false);
+                  setShowAd(false); // 没有内容时隐藏广告
+                  setAdLoaded(false);
                 }
               }, 3000);
             } else {
               setDebugInfo('广告已经初始化过了');
               adInitialized.current = true;
-              setShowAd(true);
-              setAdLoaded(true);
+              
+              // 检查现有广告是否有内容
+              setTimeout(() => {
+                const adHeight = adElement.clientHeight;
+                const hasContent = adHeight > 0;
+                
+                if (hasContent) {
+                  setShowAd(true);
+                  setAdLoaded(true);
+                  setHasAdContent(true);
+                  setDebugInfo(prev => prev + ` (高度: ${adHeight}px)`);
+                } else {
+                  setDebugInfo(prev => prev + ' - 无内容，隐藏广告区域');
+                  setHasAdContent(false);
+                  setShowAd(false);
+                  setAdLoaded(false);
+                }
+              }, 1000);
             }
           }
         } else {
@@ -117,8 +138,8 @@ const AdBanner = memo(function AdBanner({
     }
   };
 
-  // 如果广告没有加载成功或不需要显示，返回 null
-  if (!showAd && isVisible) {
+  // 如果广告没有内容或不需要显示，返回 null
+  if (!showAd || (isVisible && !hasAdContent && adInitialized.current)) {
     return null;
   }
 

@@ -38,6 +38,7 @@ const MobileAd = memo(function MobileAd({
 }: MobileAdProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [adConfig, setAdConfig] = useState<AdConfig | null>(null);
+  const [hasAdContent, setHasAdContent] = useState(false); // 新增：是否有广告内容
   const [debugInfo, setDebugInfo] = useState('');
   const adRef = useRef<HTMLDivElement>(null);
   const adInitialized = useRef(false);
@@ -94,9 +95,15 @@ const MobileAd = memo(function MobileAd({
               // 检查加载结果
               setTimeout(() => {
                 const height = adElement.clientHeight;
-                setDebugInfo(prev => 
-                  prev + ` | ${height > 0 ? `✓加载成功(${height}px)` : '✗无内容'}`
-                );
+                const hasContent = height > 0;
+                
+                if (hasContent) {
+                  setHasAdContent(true);
+                  setDebugInfo(prev => prev + ` | ✓加载成功(${height}px)`);
+                } else {
+                  setHasAdContent(false);
+                  setDebugInfo(prev => prev + ' | ✗无内容，隐藏广告');
+                }
               }, 2000);
             }
           } else {
@@ -122,7 +129,8 @@ const MobileAd = memo(function MobileAd({
     };
   }, []);
 
-  if (!isVisible || !adConfig) {
+  // 如果不可见、没有广告配置，或者已初始化但没有内容，则隐藏
+  if (!isVisible || !adConfig || (adInitialized.current && !hasAdContent)) {
     return null;
   }
 
