@@ -37,6 +37,16 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
+        
+        {/* AdSense 自动广告初始化 */}
+        <Script id="adsense-auto-ads" strategy="afterInteractive">
+          {`
+            (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-1939625526338391",
+              enable_page_level_ads: true
+            });
+          `}
+        </Script>
       </body>
       <Toaster position="top-right" richColors duration={2000} />
       <UseGoogleAnalysic />

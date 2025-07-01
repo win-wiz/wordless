@@ -5,13 +5,12 @@ import HeroSection from "@/components/hero-section";
 import GameRules from "@/components/game-rules";
 import HowToPlay from "@/components/how-to-play";
 import FAQSection from "@/components/faq-section";
-import AutoAds from "@/components/auto-ads-simple";
+
 
 export default function HomePage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white">
-        {/* 自动广告 - 信任Google智能算法 */}
-        <AutoAds />
+        {/* 自动广告已在layout.tsx中配置 */}
 
         {/* 游戏区域 */}
         <div className="w-full bg-gradient-to-b from-violet-50 via-violet-50/50 to-white py-8 md:py-16 relative game-section">
@@ -34,6 +33,8 @@ export default function HomePage() {
 
         {/* FAQ 部分 */}
         <FAQSection />
+
+
 
       </div>
     )
