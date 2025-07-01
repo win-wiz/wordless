@@ -198,3 +198,48 @@ export function formatTime(seconds: number): string {
 
   return parts.join(':');
 }
+
+// Generate emoji pattern for game results
+export function generateEmojiPattern(
+  gridContent: string[],
+  matchResults: string[],
+  columns: number,
+  targetWord: string,
+  completedRows: number
+): string {
+  if (!targetWord || completedRows === 0) return '';
+  
+  const patterns: string[] = [];
+  
+  for (let row = 0; row < completedRows; row++) {
+    let rowPattern = '';
+    const startIndex = row * columns;
+    
+    for (let col = 0; col < columns; col++) {
+      const cellIndex = startIndex + col;
+      const cellContent = gridContent[cellIndex];
+      const matchResult = matchResults[cellIndex];
+      
+      if (!cellContent) continue;
+      
+      if (matchResult === 'correct') {
+        rowPattern += '🟩'; // Green for correct position
+      } else if (matchResult === 'present') {
+        rowPattern += '🟨'; // Yellow for correct letter, wrong position
+      } else {
+        rowPattern += '⬜'; // White for incorrect letter
+      }
+    }
+    
+    if (rowPattern) {
+      patterns.push(rowPattern);
+    }
+  }
+  
+  return patterns.join('\n');
+}
+
+// Generate quick share text for the game
+export function generateQuickShareText(wordLength: number): string {
+  return `🎯 Challenge yourself with Wordless Game!\n\n🔤 Guess the ${wordLength}-letter word\n⏱️ Beat the clock\n🧠 Test your vocabulary\n\n🔗 Play now: ${typeof window !== 'undefined' ? window.location.origin : ''}\n\n#WordlessGame #WordPuzzle #BrainGame`;
+}

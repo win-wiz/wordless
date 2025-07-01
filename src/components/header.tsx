@@ -2,13 +2,17 @@
 
 import Image from "next/image";
 import logo from "@/../public/wordless.png";
-import { CircleHelp } from "lucide-react";
+import { CircleHelp, Share2 } from "lucide-react";
 import Link from "next/link";
 // import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { ShareDialog } from "./share-dialog";
+import { useState } from "react";
 
 export default function Header() {
   const router = useRouter();
+  const [shareDialogOpen, setShareDialogOpen] = useState(false);
+
   const scrollToHelp = () => {
     // 找到 Help 部分并平滑滚动
     const helpSection = document.getElementById('how-to-play');
@@ -35,7 +39,15 @@ export default function Header() {
             Wordless
           </h1>
         </Link>
-        <div className="flex gap-8 items-center">
+        <div className="flex gap-3 md:gap-4 items-center">
+          <button
+            onClick={() => setShareDialogOpen(true)}
+            className="w-5 h-5 md:w-6 md:h-6 text-zinc-600 hover:text-violet-500 transition-colors cursor-pointer p-0 border-0 bg-transparent"
+            title="Share Game"
+          >
+            <Share2 className="w-full h-full" />
+          </button>
+          
           <CircleHelp 
             onClick={scrollToHelp}
             className="w-5 h-5 md:w-6 md:h-6 text-zinc-600 hover:text-violet-500 transition-colors cursor-pointer" 
@@ -49,6 +61,13 @@ export default function Header() {
           >Login</Button> */}
         </div>
       </div>
+      
+      <ShareDialog 
+        isOpen={shareDialogOpen}
+        onClose={() => setShareDialogOpen(false)}
+        title="Share Wordless Game"
+        description="Challenge your friends with this amazing word puzzle game!"
+      />
     </header>
   );
 }

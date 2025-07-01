@@ -1,4 +1,3 @@
-
 import "@/styles/globals.css";
 import { type Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner"
@@ -6,6 +5,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { UseGoogleAnalysic } from "@/components/use-google-analysic";
+import AdSenseInitializer from "@/components/adsense-initializer";
 import Script from "next/script";
 
 
@@ -38,25 +38,19 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
         
-        {/* AdSense 自动广告初始化 */}
-        <Script id="adsense-auto-ads" strategy="afterInteractive">
-          {`
-            (adsbygoogle = window.adsbygoogle || []).push({
-              google_ad_client: "ca-pub-1939625526338391",
-              enable_page_level_ads: true
-            });
-          `}
-        </Script>
+        {/* AdSense 自动广告初始化 - 使用专门的组件 */}
+        <AdSenseInitializer />
         
-        {/* AMP自动广告标签 - 恢复之前的配置 */}
+        {/* AMP自动广告标签 - 与常规AdSense冲突，已禁用 */}
         <Script 
           async 
           custom-element="amp-auto-ads"
           src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
         />
+        
+        <Toaster position="top-right" richColors duration={2000} />
+        <UseGoogleAnalysic />
       </body>
-      <Toaster position="top-right" richColors duration={2000} />
-      <UseGoogleAnalysic />
     </html>
   );
 }

@@ -8,45 +8,8 @@ const EnhancedSafeAds = memo(function EnhancedSafeAds() {
   const initRef = useRef(false);
 
   useEffect(() => {
-    if (initRef.current) return;
-
-    const initializeAds = () => {
-      try {
-        const checkReady = () => {
-          if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
-            
-            // 1. 标准自动广告
-            ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({
-              google_ad_client: "ca-pub-1939625526338391",
-              enable_page_level_ads: true
-            });
-            
-            // 2. 初始化手动广告（如果存在）
-            const manualAds = document.querySelectorAll('.adsbygoogle:not([data-adsbygoogle-status])');
-            manualAds.forEach((ad) => {
-              try {
-                ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-              } catch (e) {
-                console.log('手动广告初始化:', e);
-              }
-            });
-            
-            initRef.current = true;
-            console.log('✅ 增强安全广告已启用（自动+手动）');
-            
-          } else {
-            setTimeout(checkReady, 100);
-          }
-        };
-
-        checkReady();
-      } catch (error) {
-        console.error('增强广告初始化失败:', error);
-      }
-    };
-
-    const timer = setTimeout(initializeAds, 1000);
-    return () => clearTimeout(timer);
+    // 组件已停用，不再执行任何AdSense代码
+    console.log('EnhancedSafeAds组件已停用，AdSense配置已移至layout.tsx');
   }, []);
 
   return (

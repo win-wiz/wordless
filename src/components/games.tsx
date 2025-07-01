@@ -4,7 +4,7 @@ import KeyBoard from "@/components/key-board";
 import fetchWords, { fetcher } from "@/lib/api";
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
-import { cn, formatTime, generateRandomWords, getNegativeMessage, getPositiveMessage } from "@/lib/utils";
+import { cn, formatTime, generateRandomWords, getNegativeMessage, getPositiveMessage, generateEmojiPattern } from "@/lib/utils";
 import { Minus, PartyPopper, Plus, RefreshCw } from "lucide-react";
 import { ResultModal } from "@/components/result-modal";
 import UseTimes from "@/components/use-times";
@@ -54,6 +54,17 @@ export default function Games() {
     const [isGameOver, setIsGameOver] = useState(false);
 
     const [showConfetti, setShowConfetti] = useState(false);
+
+    // 游戏结果数据用于分享
+    const [gameResultData, setGameResultData] = useState<{
+        isWin: boolean;
+        attempts: number;
+        maxAttempts: number;
+        word: string;
+        totalTime: number;
+        wordLength: number;
+        pattern?: string;
+    } | null>(null);
 
     // 包装的时间设置函数，用于调试
     const setTotalTimeWithLog = useCallback((newTime: number) => {
@@ -299,6 +310,26 @@ export default function Games() {
                             // 游戏胜利时记录当前时间
                             console.log('Game won! Current totalTime:', totalTime);
                             
+                            // 生成分享数据
+                            const completedRows = currentRow + 1;
+                            const emojiPattern = generateEmojiPattern(
+                                gridContent,
+                                [...matchResults, ...result], // 包含当前行的结果
+                                columns,
+                                word,
+                                completedRows
+                            );
+                            
+                            setGameResultData({
+                                isWin: true,
+                                attempts: completedRows,
+                                maxAttempts: rows,
+                                word: word,
+                                totalTime: totalTime,
+                                wordLength: columns,
+                                pattern: emojiPattern
+                            });
+                            
                             setShowKeyboard(false);
                             setShowControls(true);
                             setDialogTitle('You Won!');
@@ -313,6 +344,26 @@ export default function Games() {
                                 setShowConfetti(false);
                             }, 2000);
                         } else if (currentRow >= rows - 1) {
+                            // 游戏失败 - 生成分享数据
+                            const completedRows = rows;
+                            const emojiPattern = generateEmojiPattern(
+                                gridContent,
+                                [...matchResults, ...result], // 包含所有行的结果
+                                columns,
+                                word,
+                                completedRows
+                            );
+                            
+                            setGameResultData({
+                                isWin: false,
+                                attempts: completedRows,
+                                maxAttempts: rows,
+                                word: word,
+                                totalTime: totalTime,
+                                wordLength: columns,
+                                pattern: emojiPattern
+                            });
+                            
                             setShowKeyboard(false);
                             setShowControls(true);
                             setDialogTitle('You Lost!');
@@ -557,6 +608,7 @@ export default function Games() {
             isOpen={dialogVisible}
             onClose={() => {
                 setDialogVisible(false);
+                setGameResultData(null); // 清除分享数据
                 // 清除所有游戏状态
                 setGridContent(new Array(totalCells).fill(''));
                 setCurrentCell(0);
@@ -575,11 +627,13 @@ export default function Games() {
             }}
             onNewGame={() => {
                 setDialogVisible(false);
+                setGameResultData(null); // 清除分享数据
                 handleStartGame();
             }}
             title={dialogTitle || 'You Won!'}
             description={dialogMessage}
             titleClassName="text-center text-2xl border-b-2 border-violet-100 py-2"
+            gameResult={gameResultData || undefined}
             >
             <div className="flex flex-col items-center border-b-2 border-violet-100 pb-5">
                 {
