@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ShareDialog } from "./share-dialog";
 import { useState } from "react";
+import waffleGame from "@/images/waffle-game.jpg";
 
 export default function Header() {
   const router = useRouter();
@@ -38,6 +39,15 @@ export default function Header() {
           <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-zinc-800 to-violet-500 bg-clip-text text-transparent">
             Wordless
           </h1>
+        </Link>
+
+        <Link href="/waffle-game">
+          <Image
+            src={waffleGame}
+            alt="waffle game"
+            width={32}
+            height={32}
+          />
         </Link>
         <div className="flex gap-3 md:gap-4 items-center">
           <button
