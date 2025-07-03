@@ -1,32 +1,50 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { Gamepad2, ChevronDown } from "lucide-react";
+import React from "react";
 
-export function GamesDropdown() {
+const GamesDropdownComponent = () => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // 点击外部关闭下拉
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setOpen(false);
-      }
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setOpen(false);
     }
+  }, []);
+
+  useEffect(() => {
     if (open) {
       document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
     }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [open]);
+  }, [open, handleClickOutside]);
+
+  const handleToggle = useCallback(() => {
+    setOpen((v) => !v);
+  }, []);
+
+  const menu = useMemo(() => (
+    <div className="absolute left-0 mt-2 w-40 bg-white border border-zinc-200 rounded-lg shadow-lg z-20">
+      <ul className="py-2">
+        <li>
+          <a href="/waffle-game" className="block px-4 py-2 hover:bg-zinc-100 text-zinc-700">🧇 Waffle Game</a>
+        </li>
+        {/* 可继续添加更多游戏 */}
+      </ul>
+    </div>
+  ), []);
 
   return (
     <div className="relative" ref={dropdownRef}>
       <button
         className="flex items-center gap-1 px-2 py-1 rounded-md hover:bg-zinc-100 transition relative focus:outline-none"
-        onClick={() => setOpen((v) => !v)}
+        onClick={handleToggle}
+        type="button"
+        aria-haspopup="true"
+        aria-expanded={open}
       >
         <Gamepad2 className="w-5 h-5 text-violet-500" />
         <span className="text-violet-500 font-medium text-lg select-none">Game</span>
@@ -40,19 +58,12 @@ export function GamesDropdown() {
         </span>
       </button>
       {/* 下拉菜单 */}
-      {open && (
-        <div className="absolute left-0 mt-2 w-40 bg-white border border-zinc-200 rounded-lg shadow-lg z-20">
-          <ul className="py-2">
-            <li>
-              <a href="/waffle-game" className="block px-4 py-2 hover:bg-zinc-100 text-zinc-700">🧇 Waffle Game</a>
-            </li>
-            {/* 可继续添加更多游戏 */}
-          </ul>
-        </div>
-      )}
+      {open && menu}
     </div>
   );
-}
+};
+
+export const GamesDropdown = React.memo(GamesDropdownComponent);
 
 <style jsx global>{`
 @keyframes pulse-dot2 {
