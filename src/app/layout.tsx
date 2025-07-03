@@ -10,7 +10,7 @@ import Script from "next/script";
 
 
 export const metadata: Metadata = {
-  title: "Wordless Game - Online Word Puzzle | Play & Master",
+  title: "Unlimited Wordless Online: Guess the Word in 6 Tries!",
   description: "Master Wordless Game - the ultimate word puzzle! Guess words in 6 tries with smart color hints. Play unlimited challenges from 3-8 letters. Free & addictive!",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
   keywords: "Wordless Game, word puzzle, online word game, word guessing, vocabulary challenge, brain teaser",
