@@ -10,10 +10,10 @@ import Script from "next/script";
 
 
 export const metadata: Metadata = {
-  title: "Wordless Game - Free Online Word Puzzle | Guess Words in 6 Tries",
-  description: "Play Wordless Game online for free! Challenge yourself with unlimited word puzzles from 3-8 letters. Master the Wordless Game with smart color hints and improve your vocabulary. Start playing Wordless Game now!",
+  title: "Wordless Game - Online Word Puzzle | Play & Master",
+  description: "Master Wordless Game - the ultimate word puzzle! Guess words in 6 tries with smart color hints. Play unlimited challenges from 3-8 letters. Free & addictive!",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
-  keywords: "Wordless Game, word puzzle, word guessing game, online word game, vocabulary game, wordle alternative, free word game, word challenge, letter guessing, word brain game",
+  keywords: "Wordless Game, word puzzle, online word game, word guessing, vocabulary challenge, brain teaser",
 };
 
 export default function RootLayout({
