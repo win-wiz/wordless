@@ -5,13 +5,13 @@ import logo from "@/../public/wordless.png";
 import { CircleHelp, Share2 } from "lucide-react";
 import Link from "next/link";
 // import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { ShareDialog } from "./share-dialog";
 import { useState } from "react";
-import waffleGame from "@/images/waffle-game.jpg";
+import { GamesDropdown } from "./games-dropdown";
 
 export default function Header() {
-  const router = useRouter();
+  // const router = useRouter();
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
 
   const scrollToHelp = () => {
@@ -41,18 +41,20 @@ export default function Header() {
           </h1>
         </Link>
 
-        <Link href="/waffle-game">
+        {/* <Link href="/waffle-game">
           <Image
             src={waffleGame}
             alt="waffle game"
             width={32}
             height={32}
           />
-        </Link>
+        </Link> */}
         <div className="flex gap-3 md:gap-4 items-center">
+          <GamesDropdown />
+          {/* 更多游戏 */}
           <button
             onClick={() => setShareDialogOpen(true)}
-            className="w-5 h-5 md:w-6 md:h-6 text-zinc-600 hover:text-violet-500 transition-colors cursor-pointer p-0 border-0 bg-transparent"
+            className="w-4 h-4 md:w-5 md:h-5 text-zinc-600 hover:text-violet-500 transition-colors cursor-pointer p-0 border-0 bg-transparent"
             title="Share Game"
           >
             <Share2 className="w-full h-full" />
