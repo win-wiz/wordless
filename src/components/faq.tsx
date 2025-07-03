@@ -5,43 +5,43 @@ export default function FAQ() {
   const arrs: Record<string, React.ReactNode>[] = [
     {
       "question": "How do I know if my Wordless Game guess is correct?",
-      "answer": "After each Wordless Game guess, the letters will change color to give you hints. Green means the letter is correct and in the right spot in Wordless Game, yellow means the letter exists but is in the wrong position in Wordless Game, and gray means the letter isn't in the Wordless Game word at all."
+      "answer": "After each guess, the letters will change color to give you hints. Green means the letter is correct and in the right spot, yellow means the letter exists but is in the wrong position, and gray means the letter isn't in the word at all."
     },
     {
       "question": "Can I play the same Wordless Game word multiple times?",
-      "answer": `Yes! You can play Wordless Game as many times as you want. Use the "Reset" button to start a new Wordless Game with a different word. Each Wordless Game generates a new random word based on your chosen length.`
+      "answer": `Yes! You can play as many times as you want. Use the "Reset" button to start a new game with a different word. Each game generates a new random word based on your chosen length.`
     },
     {
       "question": "How do I adjust the Wordless Game difficulty?",
-      "answer": `Use the "+" and "-" buttons before starting Wordless Game to change the word length from 3 to 8 letters. Longer words generally provide a greater Wordless Game challenge. You can also track your solving time to challenge yourself in Wordless Game.`
+      "answer": `Use the "+" and "-" buttons before starting to change the word length from 3 to 8 letters. Longer words generally provide a greater challenge. You can also track your solving time to challenge yourself further.`
     },
     {
       "question": "What happens if I run out of tries in Wordless Game?",
-      "answer": `If you don't guess the Wordless Game word within 6 attempts, the game ends and reveals the correct word. Don't worry though - you can always start a new Wordless Game and try again with a different word!`
+      "answer": `If you don't guess the word within 6 attempts, the game ends and reveals the correct word. Don't worry though - you can always start a new game and try again with a different word!`
     },
     {
-      "question": "Can I use the keyboard to type my Wordless Game guesses?",
-      "answer": `Yes! You can use either your physical keyboard or the on-screen keyboard to enter letters in Wordless Game. Use Backspace to delete and Enter to submit your Wordless Game guess. The game supports both input methods for your convenience.`
+      "question": "Can I use the keyboard to type my guesses?",
+      "answer": `Yes! You can use either your physical keyboard or the on-screen keyboard to enter letters. Use Backspace to delete and Enter to submit your guess. The game supports both input methods for your convenience.`
     },
     {
       "question": "Are all Wordless Game words in English?",
-      "answer": `Yes, all Wordless Game words are common English words. We've carefully selected words that are familiar and frequently used, making Wordless Game both challenging and educational for English language learners and native speakers alike.`
+      "answer": `Yes, all words are common English words. We've carefully selected words that are familiar and frequently used, making the game both challenging and educational for English language learners and native speakers alike.`
     },
     {
-      "question": "What is the best word to start Wordless Game?",
-      "answer": `At the beginning of Wordless Game, try to use a word without repeating letters and with as many vowels as possible, such as the word "RADIO". However, mathematician Grant Sanderson found that the best starting word for Wordless Game is "CRANE" or "SLOTH", which includes frequently used letters.`
+      "question": "What is the best word to start with?",
+      "answer": `At the beginning, try to use a word without repeating letters and with as many vowels as possible, such as the word "RADIO". However, mathematician Grant Sanderson found that the best starting words are "CRANE" or "SLOTH", which include frequently used letters.`
     },
     {
       "question": "What dictionary does Wordless Game use?",
-      "answer": `In American English, Wordless Game uses a dictionary from the Letterpress word list that includes a list of ~275,000 words. This Wordless Game dictionary is constantly updated with new words based on real feedback from people.`
+      "answer": `In American English, the game uses a dictionary from the Letterpress word list that includes a list of ~275,000 words. This dictionary is constantly updated with new words based on real feedback from people.`
     },
     {
-      "question": "Why did I get a 'Word not found' message in Wordless Game?",
-      "answer": <>This alert message means that the given word was not found in our Wordless Game word bank. Try another word, or if you think the word is correct, <EmailLink>let us know</EmailLink>.</>
+      "question": "Why did I get a 'Word not found' message?",
+      "answer": <>This alert message means that the given word was not found in our word bank. Try another word, or if you think the word is correct, <EmailLink>let us know</EmailLink>.</>
     },
     {
       "question": "The hidden word was incorrect. Can you fix this?",
-      "answer": <>If you think that the hidden word is wrong or incorrect, <EmailLink>let us know</EmailLink>. We will definitely fix this as soon as possible.</>
+      "answer": <>If you think that the hidden word is wrong or incorrect, <EmailLink>let us know</EmailLink>. We will definitely fix this as soon as possible.</>
     }
 
   ]
