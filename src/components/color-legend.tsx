@@ -36,22 +36,22 @@ const ColorLegend = memo(function ColorLegend() {
       color: 'bg-green-500',
       bgColor: 'bg-green-50',
       borderColor: 'border-green-500',
-      title: 'Correct Spot',
-      description: 'Letter is in the right position'
+      title: 'Wordless Game Correct Spot',
+      description: 'Letter is in the right position in Wordless Game'
     },
     {
       color: 'bg-yellow-500',
       bgColor: 'bg-yellow-50',
       borderColor: 'border-yellow-500',
-      title: 'Wrong Spot',
-      description: 'Letter exists but wrong position'
+      title: 'Wordless Game Wrong Spot',
+      description: 'Letter exists but wrong position in Wordless Game'
     },
     {
       color: 'bg-zinc-400',
       bgColor: 'bg-zinc-50',
       borderColor: 'border-zinc-400',
-      title: 'Not Found',
-      description: 'Letter is not in the word'
+      title: 'Wordless Game Not Found',
+      description: 'Letter is not in the Wordless Game word'
     }
   ];
 

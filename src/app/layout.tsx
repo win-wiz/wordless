@@ -10,10 +10,10 @@ import Script from "next/script";
 
 
 export const metadata: Metadata = {
-  title: "Unlimited Wordless Online: Guess the Word in 6 Tries!",
-  description: "Wordless Online: Endless Word Challenges Dive into Wordless, the unlimited word-guessing game. Test your skills with a new word every time, ranging from 3 to 8 letters. Can you solve them all in just 6 tries? Sharpen your vocabulary and have fun with Wordless online.",
+  title: "Wordless Game - Free Online Word Puzzle | Guess Words in 6 Tries",
+  description: "Play Wordless Game online for free! Challenge yourself with unlimited word puzzles from 3-8 letters. Master the Wordless Game with smart color hints and improve your vocabulary. Start playing Wordless Game now!",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
-  keywords: "wordless,wordly, wordle, game, puzzle, word, words, letters, play, online, guess，unlimited",
+  keywords: "Wordless Game, word puzzle, word guessing game, online word game, vocabulary game, wordle alternative, free word game, word challenge, letter guessing, word brain game",
 };
 
 export default function RootLayout({

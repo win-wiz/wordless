@@ -29,8 +29,8 @@ const ExampleRow = memo(function ExampleRow({ description, letters, explanation 
   return (
     <div className="space-y-2">
       <p className="text-sm text-zinc-500">{description}</p>
-      <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-        <div className="flex gap-1 md:gap-2 flex-wrap">
+      <div className="flex items-center gap-8">
+        <div className="flex gap-1 md:gap-2 shrink-0">
           {letters.map((item, index) => (
             <LetterTile key={index} letter={item.letter} color={item.color} />
           ))}
@@ -44,7 +44,7 @@ const ExampleRow = memo(function ExampleRow({ description, letters, explanation 
 const GameExamples = memo(function GameExamples() {
   const examples = [
     {
-      description: 'If the word is "HEART"',
+      description: 'Wordless Game example: If the word is "HEART"',
       letters: [
         { letter: 'H', color: 'green' as const },
         { letter: 'E', color: 'green' as const },
@@ -52,10 +52,10 @@ const GameExamples = memo(function GameExamples() {
         { letter: 'R', color: 'green' as const },
         { letter: 'T', color: 'green' as const }
       ],
-      explanation: 'All letters are correct and in position!'
+      explanation: 'All letters are correct and in position in Wordless Game!'
     },
     {
-      description: 'If you guess "EARTH"',
+      description: 'Wordless Game example: If you guess "EARTH"',
       letters: [
         { letter: 'E', color: 'yellow' as const },
         { letter: 'A', color: 'yellow' as const },
@@ -63,10 +63,10 @@ const GameExamples = memo(function GameExamples() {
         { letter: 'T', color: 'green' as const },
         { letter: 'H', color: 'gray' as const }
       ],
-      explanation: 'Some letters are correct but in wrong positions'
+      explanation: 'Some letters are correct but in wrong positions in Wordless Game'
     },
     {
-      description: 'If you guess "TRAIN"',
+      description: 'Wordless Game example: If you guess "TRAIN"',
       letters: [
         { letter: 'T', color: 'green' as const },
         { letter: 'R', color: 'yellow' as const },
@@ -74,10 +74,10 @@ const GameExamples = memo(function GameExamples() {
         { letter: 'I', color: 'gray' as const },
         { letter: 'N', color: 'gray' as const }
       ],
-      explanation: 'T is correct, R and A exist but in wrong spots'
+      explanation: 'T is correct, R and A exist but in wrong spots in Wordless Game'
     },
     {
-      description: 'If you guess "CLOUD"',
+      description: 'Wordless Game example: If you guess "CLOUD"',
       letters: [
         { letter: 'C', color: 'gray' as const },
         { letter: 'L', color: 'gray' as const },
@@ -85,13 +85,13 @@ const GameExamples = memo(function GameExamples() {
         { letter: 'U', color: 'gray' as const },
         { letter: 'D', color: 'gray' as const }
       ],
-      explanation: 'None of these letters are in the word'
+      explanation: 'None of these letters are in the Wordless Game word'
     }
   ];
 
   return (
     <div className="bg-white/50 rounded-xl p-6 space-y-6">
-      <h3 className="text-lg font-semibold text-zinc-700 mb-4">Examples:</h3>
+      <h3 className="text-lg font-semibold text-zinc-700 mb-4">Wordless Game Examples:</h3>
       {examples.map((example, index) => (
         <ExampleRow
           key={index}

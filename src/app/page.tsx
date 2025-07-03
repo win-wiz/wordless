@@ -13,7 +13,7 @@ export default function HomePage() {
         {/* 自动广告已在layout.tsx中配置 */}
 
         {/* 游戏区域 */}
-        <div className="w-full bg-gradient-to-b from-violet-50 via-violet-50/50 to-white py-8 md:py-16 relative game-section">
+        <div className="w-full bg-gradient-to-b from-violet-50 via-violet-50/50 to-white py-8 md:pt-16 md:pb-32 relative game-section">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.05),transparent)] pointer-events-none"></div>
           <div className="container mx-auto relative px-4">
             <Games />
@@ -24,7 +24,7 @@ export default function HomePage() {
         <HeroSection />
 
         {/* 游戏规则区域 */}
-        <div className="w-full max-w-6xl mx-auto px-4 mb-16">
+        <div className="w-full max-w-6xl mx-auto px-4 pt-10 mb-16">
           <GameRules />
         </div>
 

@@ -28,10 +28,10 @@ const HeroSection = memo(function HeroSection() {
           {/* 主标题和副标题 */}
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 bg-gradient-to-r from-zinc-800 via-violet-600 to-zinc-800 bg-clip-text text-transparent">
-              Wordless Game: Discover the Secret Word
+              Wordless Game: Master the Ultimate Word Puzzle Challenge
             </h2>
             <p className="text-xl md:text-2xl text-zinc-500 max-w-3xl mx-auto">
-              Here's how it works:
+              Experience the most engaging Wordless Game with smart hints and unlimited challenges
             </p>
           </div>
 
