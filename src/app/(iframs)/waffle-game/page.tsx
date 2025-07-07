@@ -44,7 +44,7 @@ export default function WaffleGamePage() {
       </div>
 
       {/* AMP自动广告标签 - 恢复之前的配置 */}
-      <amp-auto-ads type="adsense" data-ad-client="ca-pub-1939625526338391"></amp-auto-ads>
+      {/* <amp-auto-ads type="adsense" data-ad-client="ca-pub-1939625526338391"></amp-auto-ads> */}
     </div>
   );
 }

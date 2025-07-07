@@ -42,11 +42,11 @@ export default function RootLayout({
         <AdSenseInitializer />
         
         {/* AMP自动广告标签 - 与常规AdSense冲突，已禁用 */}
-        <Script 
+        {/* <Script 
           async 
           custom-element="amp-auto-ads"
           src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
-        />
+        /> */}
         
         <Toaster position="top-right" richColors duration={2000} />
         <UseGoogleAnalysic />
