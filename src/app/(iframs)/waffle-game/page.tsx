@@ -4,6 +4,7 @@ import type { GameFrameProps } from '@/components/iframes/components/game-iframe
 // Mock game URL - replace with actual game URL in production
 const MOCK_GAME_URL = "https://waffe.wordless.online/iframes";
 
+
 // 动态导入GameFrame组件
 const DynamicGameFrame = dynamic<GameFrameProps>(() => import('@/components/iframes/components/game-iframe').then(mod => mod.default), {
   ssr: false,

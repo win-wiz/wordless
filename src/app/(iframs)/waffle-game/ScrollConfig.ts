@@ -1,12 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
+import { memo, useEffect } from "react";
 
-export default function IframeLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const ScrollConfig = memo(({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     // 确保在主页面执行滚动
     const timer = setTimeout(() => {
@@ -28,5 +24,9 @@ export default function IframeLayout({
     return () => clearTimeout(timer);
   }, []);
 
-  return <>{children}</>;
-} 
+  return children;
+});
+
+ScrollConfig.displayName = 'ScrollConfig';
+
+export default ScrollConfig;
