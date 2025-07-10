@@ -1,0 +1,58 @@
+# Wordless Game
+
+> Online word puzzle platform featuring multiple word games. Includes the classic Wordless guessing game and innovative Waffle grid game, perfect for vocabulary training and brain exercise for players of all ages.
+
+## Wordless Classic Word Game
+
+- [Main Game Page](https://wordless.online/) - Classic Wordless word guessing challenge
+
+**Keywords**: wordless game, word puzzle, word guessing game, wordle alternative, vocabulary game, english learning, word challenge, online word game, free word puzzle
+
+**Game Description**: 
+Wordless is an online word guessing game inspired by the classic Wordle. Players must guess the hidden English word within 6 attempts. The game supports words from 3-8 letters, offering various difficulty levels for different skill sets.
+
+**How to Play**:
+1. **Choose Difficulty**: Use "+" and "-" buttons to select word length (3-8 letters)
+2. **Start Guessing**: Enter your word guess - each guess must be a valid English word
+3. **Get Feedback**: Adjust your strategy based on color hints
+   - 🟩 **Green**: Letter is correct and in the right position
+   - 🟨 **Yellow**: Letter exists but is in the wrong position
+   - ⬜ **Gray**: Letter is not in the target word
+4. **Complete Challenge**: Win by guessing the correct word within 6 attempts
+5. **Play Again**: Click reset button to start a new challenge
+
+**Game Features**:
+- Variable word length support (3-8 letters)
+- Smart color feedback system for precise hints
+- Real-time timer to track solving speed
+- Responsive design for mobile and desktop play
+- Virtual and physical keyboard support
+- Smooth animations for enhanced gameplay
+
+## Waffle Grid Game
+
+- [Waffle Game Page](https://wordless.online/waffle-game) - Innovative hexagonal grid word puzzle
+
+**Keywords**: waffle game, grid puzzle, crossword game, letter swap, strategy game, word grid, english puzzle, daily word game
+
+**Game Description**:
+Waffle Game is a unique grid-based word puzzle where players swap letter positions to form correct words. The game uses a hexagonal grid layout, requiring players to consider both horizontal and vertical word combinations simultaneously.
+
+**How to Play**:
+1. **Observe Grid**: Game provides a hexagonal grid filled with letters
+2. **Identify Targets**: Form 6 valid English words (3 horizontal + 3 vertical)
+3. **Swap Letters**: Click two letters to exchange their positions
+4. **Plan Strategy**: Consider the impact of each swap on multiple words
+5. **Complete Puzzle**: Turn all words green within 15 swap opportunities
+6. **Get Feedback**: 
+   - 🟩 **Green**: Letter is in the correct position
+   - 🟨 **Yellow**: Letter exists in that row/column but wrong position
+   - ⬜ **Gray**: Letter doesn't belong in that position
+
+**Game Features**:
+- Innovative hexagonal grid design
+- Strategic cross-word challenges
+- 15-swap limit adds difficulty
+- Tests both horizontal and vertical thinking
+- Perfect for logic and reasoning enthusiasts
+- Daily updated new puzzles 
