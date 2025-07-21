@@ -6,7 +6,7 @@ const DifficultyLevels: React.FC = React.memo(() => {
       {
         icon: '🟢',
         title: 'Beginner',
-        description: 'Perfect for newcomers to memory games',
+        description: 'Perfect for newcomers to the game',
         details: [
           '2 pairs (4 cards total)',
           '90 seconds initial time',
@@ -65,7 +65,7 @@ const DifficultyLevels: React.FC = React.memo(() => {
     <div className='py-20 px-6'>
       <div className='max-w-6xl mx-auto'>
         <h2 className='text-4xl font-bold text-slate-800 mb-16 text-center'>
-          📊 Difficulty Levels
+          📊 Difficulty Levels & Challenges
         </h2>
         <div className='grid lg:grid-cols-2 gap-8'>
           {difficultyLevels.map(level => (

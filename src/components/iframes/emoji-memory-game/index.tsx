@@ -93,16 +93,16 @@ interface HelpOverviewProps {
 const HelpOverview = memo(function HelpOverview({ onSectionChange }: HelpOverviewProps) {
   const features = [
     {
-      title: 'Help Center',
-      description: 'Comprehensive guides covering all aspects of the game, from basic gameplay to advanced strategies.',
+      title: 'Emoji Memory Game Help Center',
+      description: 'Comprehensive guides covering all aspects of Emoji Memory Game, from basic gameplay to advanced strategies.',
       icon: BookOpen,
       action: () => onSectionChange('help-center'),
       buttonText: 'Explore Guides',
       color: 'from-purple-500 to-pink-500'
     },
     {
-      title: 'FAQ',
-      description: 'Quick answers to the most frequently asked questions about gameplay, scoring, and technical issues.',
+      title: 'Emoji Memory Game FAQ',
+      description: 'Quick answers to the most frequently asked questions about Emoji Memory Game gameplay, scoring, and technical issues.',
       icon: MessageCircleQuestion,
       action: () => onSectionChange('faq'),
       buttonText: 'Browse FAQ',

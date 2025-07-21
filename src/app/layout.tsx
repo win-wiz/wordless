@@ -10,10 +10,19 @@ import Script from "next/script";
 
 
 export const metadata: Metadata = {
-  title: "Unlimited Wordless Online: Guess the Word in 6 Tries!",
-  description: "Master Wordless Game - the ultimate word puzzle! Guess words in 6 tries with smart color hints. Play unlimited challenges from 3-8 letters. Free & addictive!",
+  title: "Wordless Game - Free Online Word Puzzle & Brain Training Challenge",
+  description: "Play Wordless Game online! Master the ultimate word puzzle with 6 tries to guess hidden words. Wordless Game features 3-8 letter challenges, smart color hints, and unlimited gameplay. Perfect brain training for vocabulary building and cognitive skills.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
-  keywords: "Wordless Game, word puzzle, online word game, word guessing, vocabulary challenge, brain teaser",
+  keywords: "Wordless Game, word puzzle, online word game, word guessing, vocabulary challenge, brain teaser, wordle alternative, word training, cognitive skills, brain exercise, english learning, daily word puzzle, free word game, vocabulary building",
+  creator: "Wordless Game Team",
+  publisher: "Wordless Game",
+  robots: "index, follow",
+  openGraph: {
+    title: "Wordless Game - Free Online Word Puzzle & Brain Training Challenge",
+    description: "Play Wordless Game online! Master the ultimate word puzzle with 6 tries to guess hidden words. Features 3-8 letter challenges and smart color hints.",
+    type: "website",
+    siteName: "Wordless Game"
+  }
 };
 
 export default function RootLayout({

@@ -37,7 +37,7 @@ export default function Header() {
             className="opacity-90 md:w-8 md:h-8" 
           />
           <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-zinc-800 to-violet-500 bg-clip-text text-transparent">
-            Wordless
+            Wordless Game
           </h1>
         </Link>
 
@@ -78,7 +78,7 @@ export default function Header() {
         isOpen={shareDialogOpen}
         onClose={() => setShareDialogOpen(false)}
         title="Share Wordless Game"
-        description="Challenge your friends with this amazing word puzzle game!"
+        description="Challenge your friends with the ultimate Wordless Game experience! Master word puzzles, train your brain, and enjoy unlimited Wordless Game challenges together."
       />
     </header>
   );

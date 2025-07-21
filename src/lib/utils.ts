@@ -241,5 +241,5 @@ export function generateEmojiPattern(
 
 // Generate quick share text for the game
 export function generateQuickShareText(wordLength: number): string {
-  return `🎯 Challenge yourself with Wordless Game!\n\n🔤 Guess the ${wordLength}-letter word\n⏱️ Beat the clock\n🧠 Test your vocabulary\n\n🔗 Play now: ${typeof window !== 'undefined' ? window.location.origin : ''}\n\n#WordlessGame #WordPuzzle #BrainGame`;
+  return `🎯 Master the Ultimate Wordless Game Challenge!\n\n🔤 Guess the ${wordLength}-letter word in 6 tries\n⏱️ Train your brain with smart color hints\n🧠 Unlimited Wordless Game challenges await\n🎮 Perfect for vocabulary building & cognitive training\n\n🔗 Play Wordless Game now: ${typeof window !== 'undefined' ? window.location.origin : ''}\n\n#WordlessGame #WordPuzzle #BrainTraining #VocabularyChallenge`;
 }

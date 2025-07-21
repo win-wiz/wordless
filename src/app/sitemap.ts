@@ -13,6 +13,12 @@ export default function sitemap() {
             priority: 1,
         },
         {
+            url: 'https://wordless.online/emoji-memory-game',
+            lastModified: new Date().toISOString(),
+            changeFrequency: 'daily',
+            priority: 1,
+        },
+        {
             url: 'https://wordless.online/privacy-policy',
             lastModified: new Date().toISOString(),
             changeFrequency: 'weekly',

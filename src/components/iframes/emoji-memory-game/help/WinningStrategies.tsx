@@ -4,8 +4,8 @@ const WinningStrategies: React.FC = React.memo(() => {
   const basicStrategies = useMemo(
     () => [
       'Start with a systematic approach - flip cards row by row or column by column',
-      'Pay close attention to the position of each emoji you reveal',
-      'Try to remember unique emojis you\'ve only seen once',
+      'Pay close attention to the position of each emoji you reveal in the grid',
+      'Try to remember unique emojis you\'ve only seen once during your session',
       'When you see an emoji for the second time, immediately try to recall its first location'
     ],
     []
@@ -58,7 +58,7 @@ const WinningStrategies: React.FC = React.memo(() => {
     <div className='py-20 px-6'>
       <div className='max-w-6xl mx-auto'>
         <h2 className='text-4xl font-bold text-slate-800 mb-16 text-center'>
-          🎯 Winning Strategies & Tips
+          🎯 Emoji Memory Game Winning Strategies & Expert Tips
         </h2>
         
         <div className='mb-16'>
@@ -79,7 +79,7 @@ const WinningStrategies: React.FC = React.memo(() => {
 
         <div className='mb-16'>
           <h3 className='text-2xl font-bold text-slate-800 mb-8 text-center'>
-            🔬 Advanced Memory Techniques
+            🔬 Advanced Techniques
           </h3>
           <div className='space-y-12'>
             {advancedTechniques.map((technique, index) => (
@@ -127,7 +127,7 @@ const WinningStrategies: React.FC = React.memo(() => {
           <p className='text-slate-700 text-lg leading-relaxed text-center'>
             The best players don\'t just rely on memory - they develop systematic approaches
             and stay consistent with their strategies. Practice these techniques regularly,
-            and you\'ll see significant improvement in your performance and enjoyment of the game.
+            and you\'ll see significant improvement in your performance and enjoyment.
           </p>
         </div>
       </div>

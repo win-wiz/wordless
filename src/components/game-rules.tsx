@@ -47,10 +47,11 @@ const ProTips = memo(function ProTips() {
   return (
     <div className="space-y-3 text-zinc-600">
       <ul className="mt-2 space-y-1.5 text-sm list-disc list-inside">
-        <li>Start Wordless Game with words containing common vowels (A, E, I, O)</li>
-        <li>Use common consonants (R, S, T, N) to improve your Wordless Game strategy</li>
-        <li>Avoid repeated letters in your first Wordless Game guess</li>
-        <li>Use previous guesses as clues to master Wordless Game</li>
+        <li>Start Wordless Game with words containing common vowels (A, E, I, O) for maximum information</li>
+        <li>Use common consonants (R, S, T, N) to improve your Wordless Game strategy and success rate</li>
+        <li>Avoid repeated letters in your first Wordless Game guess to gather more clues</li>
+        <li>Use previous Wordless Game guesses as strategic clues to master the word puzzle</li>
+        <li>Practice Wordless Game daily to enhance your vocabulary and cognitive skills</li>
       </ul>
     </div>
   );
@@ -62,15 +63,15 @@ const GameRules = memo(function GameRules() {
       {/* 左侧：游戏规则和颜色提示 */}
       <RuleItem
         icon="🎯"
-        title="Guess a Wordless Game word"
-        description="Choose from 3 to 8 letters in Wordless Game"
+        title="Guess the Wordless Game word"
+        description="Choose from 3 to 8 letter words in Wordless Game for customizable difficulty levels"
       />
       
       {/* 右侧：游戏目标和提示 */}
       <RuleItem
         icon="⚡"
-        title="Wordless Game goal"
-        description="Discover the secret word in just 6 tries with Wordless Game"
+        title="Wordless Game objective"
+        description="Discover the secret word in just 6 tries with Wordless Game's intelligent hint system"
       />
 
       <RuleItem
@@ -88,4 +89,4 @@ const GameRules = memo(function GameRules() {
   );
 });
 
-export default GameRules; 
+export default GameRules;

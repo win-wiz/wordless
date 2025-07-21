@@ -11,13 +11,14 @@ const HelpCenterHeader: React.FC<HelpCenterHeaderProps> = React.memo(({ onClose 
     <div className='py-20 px-6'>
       <div className='max-w-6xl mx-auto text-center'>
         <h1 className='text-6xl font-bold text-slate-800 mb-8'>
-          🧠 Emoji Memory Game Help Center
+          🧠 Emoji Memory Game - Complete Help Center & Strategy Guide
         </h1>
         <div className='w-40 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mb-8'></div>
         <p className='text-2xl text-slate-700 max-w-4xl mx-auto leading-relaxed'>
-          Welcome to the official Emoji Memory Game guide! Master this engaging
-          memory puzzle game where you flip cards to find matching emoji pairs.
-          Learn everything from basic rules to advanced memory strategies.
+          Welcome to the ultimate help center! Master this engaging
+          brain training game where you flip colorful emoji cards to discover matching pairs.
+          Explore comprehensive guides, proven winning strategies, and expert tips to excel at this
+          cognitive-enhancing experience.
         </p>
         {onClose && (
           <Button 

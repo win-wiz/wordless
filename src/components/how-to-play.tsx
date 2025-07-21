@@ -42,7 +42,8 @@ const CallToAction = memo(function CallToAction() {
         Ready to Master Wordless Game?
       </h2>
       <p className="text-lg text-violet-700">
-        Jump in and see how fast you can solve the word puzzle!
+        Jump into Wordless Game and see how fast you can solve the word puzzle challenge! 
+        Start your Wordless Game brain training journey today.
         <span className="inline-block animate-bounce ml-2">🚀</span>
       </p>
     </div>
@@ -59,8 +60,9 @@ const HowToPlay = memo(function HowToPlay() {
         <div>
           <StepSection stepNumber="1">
             <p className="text-lg text-zinc-600 mb-8">
-              Can you crack the hidden word? You've got 6 tries to guess it right! 
-              After each Wordless Game guess, we'll give you smart color hints:
+              Can you crack the hidden word in Wordless Game? You've got 6 tries to guess it right! 
+              After each Wordless Game guess, our intelligent system provides smart color hints to guide your 
+              Wordless Game strategy and improve your vocabulary skills:
             </p>
             <GameExamples />
           </StepSection>
@@ -78,8 +80,9 @@ const HowToPlay = memo(function HowToPlay() {
             title="Level Up Your Game"
           >
             <p className="text-lg text-zinc-600">
-              Use the "+" and "-" buttons to switch between 3-8 letter words. 
-              Whether you're a word puzzle newbie or a vocabulary pro, there's a perfect challenge waiting for you.
+              Wordless Game offers customizable difficulty levels. Use the "+" and "-" buttons to switch between 3-8 letter words. 
+              Whether you're a Wordless Game beginner or a vocabulary expert, there's a perfect Wordless Game challenge 
+              waiting to enhance your cognitive abilities and word recognition skills.
             </p>
           </StepSection>
         </div>
@@ -93,4 +96,4 @@ const HowToPlay = memo(function HowToPlay() {
   );
 });
 
-export default HowToPlay; 
+export default HowToPlay;

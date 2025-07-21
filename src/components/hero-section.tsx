@@ -27,11 +27,13 @@ const HeroSection = memo(function HeroSection() {
         <div className="flex flex-col items-center">
           {/* 主标题和副标题 */}
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 bg-gradient-to-r from-zinc-800 via-violet-600 to-zinc-800 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 bg-gradient-to-r from-zinc-800 via-violet-600 to-zinc-800 bg-clip-text text-transparent">
               Wordless Game: Master the Ultimate Word Puzzle Challenge
-            </h2>
+            </h1>
             <p className="text-xl md:text-2xl text-zinc-500 max-w-3xl mx-auto">
-              Experience the most engaging Wordless Game with smart hints and unlimited challenges
+              Experience the most engaging Wordless Game online! Train your brain with smart color hints, 
+              unlimited Wordless Game challenges, and customizable difficulty levels. Perfect for vocabulary 
+              building and cognitive enhancement through Wordless Game brain training.
             </p>
           </div>
 
@@ -41,13 +43,13 @@ const HeroSection = memo(function HeroSection() {
               onClick={scrollToGame}
               className="px-8 py-3 bg-violet-600 text-white rounded-full hover:bg-violet-700 transition-all hover:scale-105 font-medium text-lg shadow-lg shadow-violet-200"
             >
-              Let's Play!
+              Play Wordless Game Now!
             </button>
             <button 
               onClick={scrollToHowToPlay}
               className="px-8 py-3 bg-white text-violet-600 rounded-full hover:bg-violet-50 transition-all hover:scale-105 font-medium text-lg border-2 border-violet-200"
             >
-              Learn More
+              Learn Wordless Game Rules
             </button>
           </div>
         </div>
@@ -56,4 +58,4 @@ const HeroSection = memo(function HeroSection() {
   );
 });
 
-export default HeroSection; 
+export default HeroSection;

@@ -36,104 +36,104 @@ const FAQ_DATA: FAQItem[] = [
   {
     id: 'what-is-game',
     question: 'What is Emoji Memory Game?',
-    answer: 'Emoji Memory Game is a digital version of the classic memory card game where you flip cards to find matching pairs. Instead of traditional images, we use colorful emojis to make the game more fun and engaging. The goal is to match all pairs within the time limit while using as few moves as possible.',
+    answer: 'Emoji Memory Game is an innovative digital adaptation of the beloved classic memory card game designed for cognitive enhancement. In this advanced Emoji Memory Game, players flip vibrant, colorful emoji cards to discover matching pairs through strategic gameplay. Unlike traditional memory games, this Emoji Memory Game uses expressive, high-quality emojis that create a more engaging and visually stimulating brain training experience. The primary objective in Emoji Memory Game is to match all emoji pairs within the allocated time while minimizing your total moves for optimal Emoji Memory Game performance and cognitive development.',
     category: 'general',
     tags: ['basics', 'overview', 'introduction']
   },
   {
     id: 'how-start-game',
-    question: 'How do I start playing?',
-    answer: 'Simply choose your preferred difficulty level (Beginner, Intermediate, Advanced, or Expert) and click on any card to begin. The timer starts when you make your first move. Try to find matching emoji pairs by flipping two cards at a time.',
+    question: 'How do I start playing Emoji Memory Game?',
+    answer: 'Starting your Emoji Memory Game adventure is simple and intuitive! First, select your preferred difficulty level (Beginner, Intermediate, Advanced, or Expert) to customize your personalized Emoji Memory Game experience. Click any emoji card to begin your Emoji Memory Game session, and the timer automatically starts with your first strategic move. In this engaging Emoji Memory Game, you flip two emoji cards at a time to discover matching pairs and progress through increasingly challenging Emoji Memory Game levels designed to enhance cognitive abilities.',
     category: 'gameplay',
     tags: ['start', 'begin', 'first-time']
   },
   {
     id: 'difficulty-differences',
-    question: 'What are the differences between difficulty levels?',
-    answer: 'Each difficulty level has different starting parameters: Beginner (2 pairs, 90s), Intermediate (4 pairs, 150s), Advanced (8 pairs, 210s), and Expert (10 pairs, 300s). Higher difficulties have more cards but also provide more initial time and bonus time between levels.',
+    question: 'What are the differences between Emoji Memory Game difficulty levels?',
+    answer: 'Emoji Memory Game offers four distinct difficulty levels, each carefully designed to challenge different cognitive skill levels and brain training goals. Beginner Emoji Memory Game starts with 2 emoji pairs and 90 seconds for newcomers. Intermediate Emoji Memory Game features 4 pairs with 150 seconds for developing players. Advanced Emoji Memory Game challenges experienced users with 8 pairs in 210 seconds. Expert Emoji Memory Game presents the ultimate cognitive test with 10 pairs and 300 seconds for master-level players. Higher difficulties in this comprehensive Emoji Memory Game provide additional initial time and enhanced bonus time rewards between challenging levels.',
     category: 'gameplay',
     tags: ['difficulty', 'levels', 'comparison']
   },
   {
     id: 'scoring-system',
-    question: 'How does the scoring system work?',
-    answer: 'Your performance is measured by the number of moves (card flips) you make. Fewer moves indicate better performance. The game also tracks your completion time, which affects bonus time calculations for subsequent levels. There\'s no traditional point system - the challenge is to complete levels efficiently.',
+    question: 'How does the Emoji Memory Game scoring system work?',
+    answer: 'In Emoji Memory Game, your performance is measured by the number of moves (card flips) you make. Fewer moves in Emoji Memory Game indicate superior performance and cognitive efficiency. The Emoji Memory Game also tracks your completion time, which affects bonus time calculations for subsequent levels. Unlike traditional games, Emoji Memory Game focuses on efficiency rather than points - the challenge is to complete Emoji Memory Game levels with optimal move counts.',
     category: 'scoring',
     tags: ['score', 'moves', 'performance']
   },
   {
     id: 'bonus-time-calculation',
-    question: 'How is bonus time calculated?',
-    answer: 'Bonus time is awarded between levels based on your recent performance. Each difficulty has a base bonus time, and the actual bonus is adjusted based on how quickly you completed recent levels. Consistently good performance increases your bonus time, while slower completion may reduce it.',
+    question: 'How is Emoji Memory Game bonus time calculated?',
+    answer: 'Emoji Memory Game bonus time is awarded between levels based on your recent performance efficiency. Each difficulty has a base bonus time allocation, and the actual bonus is dynamically adjusted based on how quickly you completed recent levels. Consistently excellent performance increases your bonus time rewards, while slower completion may reduce future time bonuses.',
     category: 'scoring',
     tags: ['bonus', 'time', 'calculation', 'performance']
   },
   {
     id: 'game-controls',
-    question: 'What are the game controls?',
-    answer: 'The game is controlled entirely with mouse clicks or touch taps. Click on cards to flip them, use the restart button to reset the current game, and select difficulty levels from the top controls. The game automatically progresses to the next level when you complete all pairs.',
+    question: 'What are the Emoji Memory Game controls?',
+    answer: 'Emoji Memory Game is controlled entirely with intuitive mouse clicks or touch taps for seamless gameplay. Click on emoji cards to flip them in your session, use the restart button to reset your current game, and select difficulty levels from the top controls. The game automatically progresses to the next level when you successfully complete all emoji pairs.',
     category: 'gameplay',
     tags: ['controls', 'mouse', 'touch', 'interface']
   },
   {
     id: 'timer-behavior',
-    question: 'When does the timer start and stop?',
+    question: 'When does the Emoji Memory Game timer start and stop?',
     answer: 'The timer starts when you flip your first card and continues until you complete the level, run out of time, or restart the game. The timer pauses during level transition dialogs and when the game is not active. Each level has its own time limit plus any bonus time earned.',
     category: 'gameplay',
     tags: ['timer', 'time', 'countdown']
   },
   {
     id: 'level-progression',
-    question: 'How do levels progress?',
+    question: 'How do Emoji Memory Game levels progress?',
     answer: 'Each level increases the number of card pairs you need to match. The progression follows a sequence: 2, 3, 4, 5, 6, 8, 9, 10, 12, 15 pairs, and then continues adding 3 pairs per level. Higher levels become increasingly challenging as more cards are added to the grid.',
     category: 'gameplay',
     tags: ['levels', 'progression', 'difficulty']
   },
   {
     id: 'game-over-conditions',
-    question: 'When does the game end?',
+    question: 'When does the Emoji Memory Game end?',
     answer: 'The game ends when your timer reaches zero before you complete all pairs. You can then choose to restart from level 1 or continue practicing. There\'s no limit to how many levels you can complete - the game continues indefinitely as long as you have time remaining.',
     category: 'gameplay',
     tags: ['game-over', 'end', 'restart']
   },
   {
     id: 'browser-compatibility',
-    question: 'Which browsers are supported?',
-    answer: 'The game works on all modern web browsers including Chrome, Firefox, Safari, and Edge. It\'s also optimized for mobile devices and tablets. For the best experience, we recommend using the latest version of your preferred browser.',
+    question: 'Which browsers support Emoji Memory Game?',
+    answer: 'The Emoji Memory Game works on all modern web browsers including Chrome, Firefox, Safari, and Edge. It\'s also optimized for mobile devices and tablets. For the best Emoji Memory Game experience, we recommend using the latest version of your preferred browser.',
     category: 'technical',
     tags: ['browser', 'compatibility', 'mobile']
   },
   {
     id: 'mobile-experience',
-    question: 'Can I play on mobile devices?',
-    answer: 'Yes! The game is fully responsive and optimized for mobile phones and tablets. Touch controls work seamlessly, and the layout automatically adjusts to your screen size. The game experience is identical across all devices.',
+    question: 'Can I play Emoji Memory Game on mobile devices?',
+    answer: 'Yes! The game is fully responsive and optimized for mobile phones and tablets. Touch controls work seamlessly, and the layout automatically adjusts to your screen size. The gaming experience is identical across all devices.',
     category: 'technical',
     tags: ['mobile', 'tablet', 'responsive', 'touch']
   },
   {
     id: 'data-storage',
-    question: 'Does the game save my progress?',
+    question: 'Does the Emoji Memory Game save my progress?',
     answer: 'The game runs entirely in your browser session and doesn\'t permanently save progress between visits. Each time you start, you begin fresh. This ensures privacy and allows multiple people to play on the same device without interference.',
     category: 'technical',
     tags: ['save', 'progress', 'data', 'privacy']
   },
   {
     id: 'performance-tips',
-    question: 'How can I improve my performance?',
-    answer: 'Practice systematic card flipping (like going row by row), focus on remembering positions of unique emojis, and try to match pairs for emojis you\'ve seen multiple times. Start with easier difficulties to build your memory skills before advancing to harder levels.',
+    question: 'How can I improve my Emoji Memory Game performance?',
+    answer: 'Mastering Emoji Memory Game requires strategic thinking, consistent practice, and dedicated brain training techniques. Use systematic card flipping patterns (row-by-row approach) in your daily sessions for optimal results. Focus on memorizing unique emoji positions and prioritize matching pairs for emojis you\'ve encountered multiple times during gameplay. Begin with easier difficulties to develop foundational memory skills, then gradually advance to more challenging levels as your cognitive abilities strengthen through regular practice and mental training exercises.',
     category: 'general',
     tags: ['tips', 'strategy', 'improvement', 'memory']
   },
   {
     id: 'sound-effects',
-    question: 'Can I control sound effects?',
+    question: 'Can I control Emoji Memory Game sound effects?',
     answer: 'The game includes sound effects for card flips, matches, and game events. Sound controls depend on your browser\'s audio settings. You can mute the tab or adjust your device\'s volume to control the audio experience.',
     category: 'technical',
     tags: ['sound', 'audio', 'effects', 'volume']
   },
   {
     id: 'accessibility',
-    question: 'Is the game accessible?',
+    question: 'Is the Emoji Memory Game accessible?',
     answer: 'The game is designed with accessibility in mind, featuring high contrast colors, clear visual indicators, and keyboard-friendly navigation. The emoji cards are large enough for easy interaction, and the interface works well with screen readers.',
     category: 'technical',
     tags: ['accessibility', 'screen-reader', 'contrast']
@@ -269,11 +269,12 @@ export const FAQ = memo(function FAQ({ className, onClose }: FAQProps) {
           <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 text-white shadow-lg">
             <MessageCircleQuestion className="w-8 h-8" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Emoji Memory Game FAQ - Complete Guide & Expert Answers</h1>
         </div>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Find quick answers to common questions about Emoji Memory Game. 
-          Can't find what you're looking for? Check out our Help Center!
+          Discover comprehensive answers to the most common Emoji Memory Game questions and challenges. 
+          Master advanced Emoji Memory Game strategies, understand complex scoring systems, and optimize your entire Emoji Memory Game experience. 
+          Need additional Emoji Memory Game help? Explore our complete Emoji Memory Game Help Center with expert tutorials!
         </p>
         {onClose && (
           <Button 
@@ -344,10 +345,11 @@ export const FAQ = memo(function FAQ({ className, onClose }: FAQProps) {
       <div className="mt-12 text-center">
         <div className="p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-100">
           <Clock className="w-8 h-8 text-blue-600 mx-auto mb-3" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Still Have Questions?</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Still Have Emoji Memory Game Questions or Need Expert Help?</h3>
           <p className="text-gray-600 text-sm">
-            These FAQs cover the most common questions about Emoji Memory Game. 
-            For more detailed information, visit our comprehensive Help Center.
+            These comprehensive Emoji Memory Game FAQs address the most frequently asked questions about this brain training game. 
+            For detailed Emoji Memory Game guides, advanced cognitive strategies, and complete Emoji Memory Game tutorials, 
+            explore our extensive Emoji Memory Game Help Center featuring expert tips, winning techniques, and professional gameplay insights.
           </p>
         </div>
       </div>
