@@ -1,6 +1,6 @@
 
 import { type Metadata } from 'next';
-import ScrollConfig from './ScrollConfig';
+import ScrollConfig from '@/app/(iframs)/ScrollConfig';
 
 export const metadata: Metadata = {
   title: 'Waffle Game - Online Word Puzzle with AI Hints',

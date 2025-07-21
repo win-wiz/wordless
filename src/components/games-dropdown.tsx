@@ -27,10 +27,13 @@ const GamesDropdownComponent = () => {
   }, []);
 
   const menu = useMemo(() => (
-    <div className="absolute left-0 mt-2 w-40 bg-white border border-zinc-200 rounded-lg shadow-lg z-20">
+    <div className="absolute left-0 mt-2 w-[240px] bg-white border border-zinc-200 rounded-lg shadow-lg z-20">
       <ul className="py-2">
         <li>
           <a href="/waffle-game" className="block px-4 py-2 hover:bg-zinc-100 text-zinc-700">🧇 Waffle Game</a>
+        </li>
+        <li>
+          <a href="/emoji-memory-game" className="block px-4 py-2 hover:bg-zinc-100 text-zinc-700">🧠 Emoji Memory Game</a>
         </li>
         {/* 可继续添加更多游戏 */}
       </ul>
