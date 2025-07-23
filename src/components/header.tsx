@@ -37,7 +37,7 @@ export default function Header() {
             className="opacity-90 md:w-8 md:h-8" 
           />
           <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-zinc-800 to-violet-500 bg-clip-text text-transparent">
-            Wordless Game
+            Wordless
           </h1>
         </Link>
 

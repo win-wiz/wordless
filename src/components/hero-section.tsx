@@ -27,9 +27,9 @@ const HeroSection = memo(function HeroSection() {
         <div className="flex flex-col items-center">
           {/* 主标题和副标题 */}
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 bg-gradient-to-r from-zinc-800 via-violet-600 to-zinc-800 bg-clip-text text-transparent">
+            <b className="inline-block text-4xl md:text-6xl lg:text-7xl font-black mb-10 bg-gradient-to-r from-zinc-800 via-violet-600 to-zinc-800 bg-clip-text text-transparent">
               Wordless Game: Master the Ultimate Word Puzzle Challenge
-            </h1>
+            </b>
             <p className="text-xl md:text-2xl text-zinc-500 max-w-3xl mx-auto">
               Experience the most engaging Wordless Game online! Train your brain with smart color hints, 
               unlimited Wordless Game challenges, and customizable difficulty levels. Perfect for vocabulary 

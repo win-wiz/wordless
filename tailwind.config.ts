@@ -26,12 +26,17 @@ export default {
         ripple: {
           '0%': { transform: 'scale(0)', opacity: '0.5' },
           '100%': { transform: 'scale(4)', opacity: '0' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
         }
   		},
   		animation: {
   			flip: 'flip 0.6s ease-in-out',
         loading: 'loading 1s linear infinite',
         ripple: 'ripple 0.6s linear',
+        fadeIn: 'fadeIn 0.5s ease-in-out',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

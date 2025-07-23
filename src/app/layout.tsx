@@ -10,16 +10,16 @@ import Script from "next/script";
 
 
 export const metadata: Metadata = {
-  title: "Wordless Game - Free Online Word Puzzle & Brain Training Challenge",
-  description: "Play Wordless Game online! Master the ultimate word puzzle with 6 tries to guess hidden words. Wordless Game features 3-8 letter challenges, smart color hints, and unlimited gameplay. Perfect brain training for vocabulary building and cognitive skills.",
+  title: "Wordless Game - Free Word Puzzle & Brain Training Online",
+  description: "Play Wordless Game free! Challenge yourself with our addictive word puzzle featuring 6 attempts, smart hints, and 3-8 letter words. Perfect for vocabulary building.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
   keywords: "Wordless Game, word puzzle, online word game, word guessing, vocabulary challenge, brain teaser, wordle alternative, word training, cognitive skills, brain exercise, english learning, daily word puzzle, free word game, vocabulary building",
   creator: "Wordless Game Team",
   publisher: "Wordless Game",
   robots: "index, follow",
   openGraph: {
-    title: "Wordless Game - Free Online Word Puzzle & Brain Training Challenge",
-    description: "Play Wordless Game online! Master the ultimate word puzzle with 6 tries to guess hidden words. Features 3-8 letter challenges and smart color hints.",
+    title: "Wordless Game - Free Word Puzzle & Brain Training Online",
+    description: "Play Wordless Game free! Challenge yourself with our addictive word puzzle featuring 6 attempts, smart hints, and 3-8 letter words.",
     type: "website",
     siteName: "Wordless Game"
   }

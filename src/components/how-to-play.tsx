@@ -39,11 +39,11 @@ const CallToAction = memo(function CallToAction() {
   return (
     <div className="text-center py-6 md:py-8 bg-violet-50 rounded-2xl mx-4 animate-float">
       <h2 className="text-2xl font-bold text-violet-900 mb-2">
-        Ready to Master Wordless Game?
+        Ready to Master the Challenge?
       </h2>
       <p className="text-lg text-violet-700">
-        Jump into Wordless Game and see how fast you can solve the word puzzle challenge! 
-        Start your Wordless Game brain training journey today.
+        Jump into Wordless Game and see how fast you can solve the word puzzle! 
+        Start your brain training journey today.
         <span className="inline-block animate-bounce ml-2">🚀</span>
       </p>
     </div>
@@ -53,16 +53,16 @@ const CallToAction = memo(function CallToAction() {
 const HowToPlay = memo(function HowToPlay() {
   return (
     <div id="how-to-play" className="max-w-4xl mx-auto px-4 py-12 md:py-20 animate-scale-in">
-      <SectionHeader title="How to Play Wordless Game - Master the Word Puzzle" />
+      <SectionHeader title="How to Play - Master the Word Puzzle" />
       
       <div className="flex flex-col gap-16">
         {/* Step 1: Main Instructions */}
         <div>
           <StepSection stepNumber="1">
             <p className="text-lg text-zinc-600 mb-8">
-              Can you crack the hidden word in Wordless Game? You've got 6 tries to guess it right! 
-              After each Wordless Game guess, our intelligent system provides smart color hints to guide your 
-              Wordless Game strategy and improve your vocabulary skills:
+              Can you crack the hidden word? You've got 6 tries to guess it right! 
+              After each guess, our intelligent system provides smart color hints to guide your 
+              strategy and improve your vocabulary skills:
             </p>
             <GameExamples />
           </StepSection>
@@ -77,11 +77,11 @@ const HowToPlay = memo(function HowToPlay() {
         <div>
           <StepSection 
             stepNumber="2" 
-            title="Level Up Your Game"
+            title="Choose Your Challenge Level"
           >
             <p className="text-lg text-zinc-600">
               Wordless Game offers customizable difficulty levels. Use the "+" and "-" buttons to switch between 3-8 letter words. 
-              Whether you're a Wordless Game beginner or a vocabulary expert, there's a perfect Wordless Game challenge 
+              Whether you're a beginner or a vocabulary expert, there's a perfect challenge 
               waiting to enhance your cognitive abilities and word recognition skills.
             </p>
           </StepSection>

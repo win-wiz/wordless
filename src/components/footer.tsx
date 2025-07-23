@@ -24,11 +24,10 @@ export default function Footer() {
           {/* Logo and Description */}
           <div className="text-center">
             <h2 className="text-xl font-bold bg-gradient-to-r from-zinc-800 to-violet-500 bg-clip-text text-transparent mb-2">
-              Wordless Game
+              Wordless
             </h2>
             <p className="text-zinc-500 text-sm max-w-md">
-              Master the ultimate Wordless Game experience! Challenge your brain with engaging word puzzles, 
-              smart color hints, and unlimited Wordless Game challenges. Perfect for vocabulary building and cognitive training.
+              A fun and challenging word guessing game to test your vocabulary and deduction skills.
             </p>
           </div>
 
@@ -39,7 +38,7 @@ export default function Footer() {
               onClick={handleHowToPlayClick}
               className="text-zinc-600 hover:text-violet-500 transition-colors"
             >
-              How to Play Wordless Game
+              How to Play Wordless
             </Link>
             <Link href="/privacy-policy" className="text-zinc-600 hover:text-violet-500 transition-colors">
               Privacy Policy

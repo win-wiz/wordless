@@ -35,6 +35,9 @@ const GamesDropdownComponent = () => {
         <li>
           <a href="/emoji-memory-game" className="block px-4 py-2 hover:bg-zinc-100 text-zinc-700">🧠 Emoji Memory Game</a>
         </li>
+        <li>
+          <a href="/emoji-kitchen-game" className="block px-4 py-2 hover:bg-zinc-100 text-zinc-700">👨‍🍳 Emoji Kitchen Game</a>
+        </li>
         {/* 可继续添加更多游戏 */}
       </ul>
     </div>
@@ -50,7 +53,7 @@ const GamesDropdownComponent = () => {
         aria-expanded={open}
       >
         <Gamepad2 className="w-5 h-5 text-violet-500" />
-        <span className="text-violet-500 font-medium text-lg select-none">Game</span>
+        <span className="text-violet-500 font-medium text-lg select-none ml-1">More Games</span>
         <ChevronDown className="w-4 h-4 text-violet-400 ml-1" />
         {/* 红点 */}
         <span className="absolute -top-1.5 -right-1 w-4 h-4 flex items-center justify-center">
