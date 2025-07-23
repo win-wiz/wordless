@@ -48,6 +48,7 @@ const config = {
     "@next/next/inline-script-id": "off",
     "@typescript-eslint/prefer-optional-chain": "off",
     "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/no-inferrable-types": "off"
   }
 }
 module.exports = config;
