@@ -53,6 +53,9 @@ export default function Footer() {
             <Link href="https://emojis.click/en" target="_blank" className="text-zinc-600 hover:text-violet-500 transition-colors">
               EmojiClick
             </Link>
+            <Link href="https://sutom.fun" target="_blank" className="text-zinc-600 hover:text-violet-500 transition-colors">
+              Sutom
+            </Link>
           </div>
 
           {/* Social Links */}
