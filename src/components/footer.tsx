@@ -50,6 +50,9 @@ export default function Footer() {
 
           <div className="flex flex-wrap justify-center gap-6 text-sm">
             Friends: 
+            <Link href="https://newsinsimple.com" target="_blank" className="text-zinc-600 hover:text-violet-500 transition-colors">
+              NewsInSimple
+            </Link>
             <Link href="https://emojis.click/en" target="_blank" className="text-zinc-600 hover:text-violet-500 transition-colors">
               EmojiClick
             </Link>
