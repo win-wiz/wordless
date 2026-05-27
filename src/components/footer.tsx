@@ -62,6 +62,27 @@ export default function Footer() {
             <Link href="https://timeguessr.online" target="_blank" className="text-zinc-600 hover:text-violet-500 transition-colors">
               TimeGuessr
             </Link>
+            <Link href="https://8value.online" target="_blank" className="text-zinc-600 hover:text-violet-500 transition-colors">
+              8Value
+            </Link>
+            <Link href="https://newemojis.online" target="_blank" className="text-zinc-600 hover:text-violet-500 transition-colors">
+              NewEmojis
+            </Link>
+            <Link href="https://pokemonteambuilders.online" target="_blank" className="text-zinc-600 hover:text-violet-500 transition-colors">
+              PokemonTeamBuilder
+            </Link>
+            <Link href="https://sandboxels.online" target="_blank" className="text-zinc-600 hover:text-violet-500 transition-colors">
+              Sandboxels
+            </Link>
+            <Link href="https://digibouquet.online" target="_blank" className="text-zinc-600 hover:text-violet-500 transition-colors">
+              Digibouquet
+            </Link>
+            <Link href="https://2048cupcake.online/" target="_blank" className="text-zinc-600 hover:text-violet-500 transition-colors">
+              2048Cupcake
+            </Link>
+            <Link href="https://minutecryptic.online/" target="_blank" className="text-zinc-600 hover:text-violet-500 transition-colors">
+              MinuteCryptic
+            </Link>
           </div>
 
           {/* Social Links */}
