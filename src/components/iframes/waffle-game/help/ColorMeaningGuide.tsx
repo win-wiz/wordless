@@ -1,82 +1,5 @@
 import React, { useMemo } from 'react';
-
-interface WaffleTileProps {
-  letter?: string;
-  color?: 'green' | 'yellow' | 'white' | 'gray';
-  isEmpty?: boolean;
-  className?: string;
-  isIntersection?: boolean;
-}
-
-const WaffleTile: React.FC<WaffleTileProps> = React.memo(
-  ({
-    letter,
-    color = 'white',
-    isEmpty = false,
-    className = '',
-    isIntersection = false
-  }) => {
-    const colorClasses = useMemo(
-      () => ({
-        green: 'text-white border-none shadow-md',
-        yellow: 'text-white border-none shadow-md',
-        white: 'bg-slate-200 text-slate-700 border-2 border-slate-400',
-        gray: 'text-white border-none shadow-md'
-      }),
-      []
-    );
-
-    const computedClasses = useMemo(() => {
-      if (isEmpty) {
-        return `w-12 h-12 ${className}`;
-      }
-
-      const baseClasses = className || 'w-12 h-12';
-      const intersectionClasses = isIntersection
-        ? 'ring-4 ring-blue-500 ring-offset-2 shadow-lg'
-        : 'shadow-md';
-
-      return `${baseClasses} flex items-center justify-center font-bold text-lg rounded-lg ${intersectionClasses} ${colorClasses[color]}`;
-    }, [className, isIntersection, color, isEmpty, colorClasses]);
-
-    const getCustomStyle = () => {
-      if (color === 'green') {
-        return {
-          background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
-          border: '2px solid #10B981',
-          color: '#ffffff'
-        };
-      }
-      if (color === 'yellow') {
-        return {
-          background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
-          border: '2px solid #F59E0B',
-          color: '#ffffff'
-        };
-      }
-      if (color === 'gray') {
-        return {
-          background: 'linear-gradient(135deg, #94A3B8 0%, #64748B 100%)',
-          border: '2px solid #94A3B8',
-          color: '#ffffff'
-        };
-      }
-      return {};
-    };
-
-    if (isEmpty) {
-      return <div className={computedClasses} />;
-    }
-
-    return (
-      <div className={computedClasses} style={getCustomStyle()}>
-        {letter}
-      </div>
-    );
-  }
-);
-
-WaffleTile.displayName = 'WaffleTile';
+import WaffleDisplayTile from '@/components/iframes/waffle-game/waffle-display-tile';
 
 // Horizontal word example component
 const HorizontalWordExample: React.FC<{
@@ -90,7 +13,7 @@ const HorizontalWordExample: React.FC<{
   const renderedTiles = useMemo(
     () =>
       letters.map((item, index) => (
-        <WaffleTile
+        <WaffleDisplayTile
           key={index}
           letter={item.letter}
           color={item.color}
@@ -123,7 +46,7 @@ const VerticalWordExample: React.FC<{
   const renderedTiles = useMemo(
     () =>
       letters.map((item, index) => (
-        <WaffleTile
+        <WaffleDisplayTile
           key={index}
           letter={item.letter}
           color={item.color}
@@ -171,7 +94,7 @@ const CrosswordExample: React.FC<{
       () => (
         <div className='flex flex-col items-center'>
           {/* Top letter */}
-          <WaffleTile
+          <WaffleDisplayTile
             letter={verticalLetters?.[0]?.letter}
             color={verticalLetters?.[0]?.color}
             className='w-12 h-12 text-base mb-2'
@@ -179,18 +102,18 @@ const CrosswordExample: React.FC<{
 
           {/* Horizontal row */}
           <div className='flex gap-2 items-center'>
-            <WaffleTile
+            <WaffleDisplayTile
               letter={horizontalLetters?.[0]?.letter}
               color={horizontalLetters?.[0]?.color}
               className='w-12 h-12 text-base'
             />
-            <WaffleTile
+            <WaffleDisplayTile
               letter={centerLetter}
               color={centerColor}
               isIntersection={true}
               className='w-12 h-12 text-base'
             />
-            <WaffleTile
+            <WaffleDisplayTile
               letter={horizontalLetters?.[1]?.letter}
               color={horizontalLetters?.[1]?.color}
               className='w-12 h-12 text-base'
@@ -198,7 +121,7 @@ const CrosswordExample: React.FC<{
           </div>
 
           {/* Bottom letter */}
-          <WaffleTile
+          <WaffleDisplayTile
             letter={verticalLetters?.[1]?.letter}
             color={verticalLetters?.[1]?.color}
             className='w-12 h-12 text-base mt-2'
@@ -252,7 +175,7 @@ const ColorMeaningGuide: React.FC = React.memo(() => {
         {/* Green - Correct Position */}
         <div className='mb-16'>
           <div className='flex items-center justify-center gap-8 mb-10'>
-            <WaffleTile
+            <WaffleDisplayTile
               letter='O'
               color='green'
               className='w-16 h-16 text-xl'
@@ -350,7 +273,7 @@ const ColorMeaningGuide: React.FC = React.memo(() => {
         {/* Yellow - Wrong Position */}
         <div className='mb-16'>
           <div className='flex items-center justify-center gap-8 mb-10'>
-            <WaffleTile
+            <WaffleDisplayTile
               letter='R'
               color='yellow'
               className='w-16 h-16 text-xl'
@@ -448,7 +371,7 @@ const ColorMeaningGuide: React.FC = React.memo(() => {
         {/* Gray - Not in Word */}
         <div className='mb-16'>
           <div className='flex items-center justify-center gap-8 mb-10'>
-            <WaffleTile letter='X' color='gray' className='w-16 h-16 text-xl' />
+            <WaffleDisplayTile letter='X' color='gray' className='w-16 h-16 text-xl' />
             <div className='text-center'>
               <h3 className='text-3xl font-bold text-gray-700 mb-2'>
                 ⚫ Gray Letters: Wrong Letter Choice

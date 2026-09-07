@@ -30,13 +30,32 @@ export default {
         fadeIn: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
-        }
+                        },
+                        shake: {
+                                '0%, 100%': { transform: 'translateX(0)' },
+                                '20%': { transform: 'translateX(-4px)' },
+                                '40%': { transform: 'translateX(4px)' },
+                                '60%': { transform: 'translateX(-3px)' },
+                                '80%': { transform: 'translateX(3px)' }
+                        },
+                        cellPop: {
+                                '0%': { transform: 'scale(0.96)' },
+                                '55%': { transform: 'scale(1.04)' },
+                                '100%': { transform: 'scale(1)' }
+                        },
+                        cellDelete: {
+                                '0%': { transform: 'scale(1)', opacity: '1' },
+                                '100%': { transform: 'scale(0.92)', opacity: '0.35' }
+                        }
   		},
   		animation: {
   			flip: 'flip 0.6s ease-in-out',
         loading: 'loading 1s linear infinite',
         ripple: 'ripple 0.6s linear',
         fadeIn: 'fadeIn 0.5s ease-in-out',
+                        shake: 'shake 0.35s ease-in-out',
+                        cellPop: 'cellPop 0.18s ease-out',
+                        cellDelete: 'cellDelete 0.16s ease-out',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

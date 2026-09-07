@@ -1,47 +1,24 @@
 import dynamic from "next/dynamic";
-import type { GameFrameProps } from '@/components/iframes/components/game-iframe';
+import HelpCenter from "@/components/iframes/waffle-game/help-center";
 
-// Mock game URL - replace with actual game URL in production
-const MOCK_GAME_URL = "https://waffe.wordless.online/iframes";
-
-
-// 动态导入GameFrame组件
-const DynamicGameFrame = dynamic<GameFrameProps>(() => import('@/components/iframes/components/game-iframe').then(mod => mod.default), {
+const DynamicWaffleClient = dynamic(() => import("@/components/iframes/waffle-game/waffle-client"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-screen flex items-center justify-center bg-gray-50">
-      <div className="animate-pulse">
-        <div className="w-16 h-16 border-4 border-gray-200 rounded-full" />
-      </div>
+    <div className="flex min-h-[480px] items-center justify-center rounded-3xl border border-zinc-200 bg-zinc-50">
+      <div className="h-16 w-16 animate-pulse rounded-full border-4 border-zinc-200" />
     </div>
-  )
-});
-
-// 动态导入非关键组件以减少初始包大小
-const DynamicHelpCenter = dynamic(() => import('@/components/iframes/waffle-game/help-center'), {
-  ssr: false,
-  loading: () => <div className='h-32 animate-pulse bg-gray-100 rounded-lg' />
-});
-
-const DynamicFAQ = dynamic(() => import('@/components/iframes/waffle-game/faq'), {
-  ssr: false,
-  loading: () => <div className='h-32 animate-pulse bg-gray-100 rounded-lg' />
+  ),
 });
 
 export default function WaffleGamePage() {
   return (
     <div className="flex flex-col w-full">
-      {/* 游戏区域 - 使用动态导入的GameFrame组件 */}
-      <DynamicGameFrame src={MOCK_GAME_URL} title="Waffle Game" />
+      <div className="mx-auto w-full max-w-6xl px-4 py-8">
+        <DynamicWaffleClient />
+      </div>
 
-      {/* 帮助文档区域 */}
-      <div className="w-full max-w-4xl mx-auto px-4 py-8">
-         {/* 帮助中心区域 - 使用动态导入 */}
-        <DynamicHelpCenter />
-
-        {/* FAQ区域 - 使用动态导入 */}
-        <DynamicFAQ />
-        
+      <div className="mx-auto w-full max-w-6xl px-4 py-8">
+        <HelpCenter />
       </div>
 
       {/* AMP自动广告标签 - 恢复之前的配置 */}

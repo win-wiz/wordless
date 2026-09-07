@@ -1,5 +1,4 @@
 import { createEnv } from "@t3-oss/env-nextjs";
-import { NEXT_BODY_SUFFIX } from "next/dist/lib/constants.js";
 import { z } from "zod";
 
 export const env = createEnv({
@@ -8,7 +7,12 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    NODE_ENV: z.enum(["development", "test", "production"])
+    NODE_ENV: z.enum(["development", "test", "production"]),
+    AUTH_SECRET: z.string().optional(),
+    AUTH_GOOGLE_ID: z.string().optional(),
+    AUTH_GOOGLE_SECRET: z.string().optional(),
+    AUTH_GITHUB_ID: z.string().optional(),
+    AUTH_GITHUB_SECRET: z.string().optional(),
   },
 
   /**
@@ -21,8 +25,6 @@ export const env = createEnv({
     NEXT_PUBLIC_DOUBAO_BASE_URL: z.string().optional(),
     NEXT_PUBLIC_DOUBAO_OPENAI_API_KEY: z.string().optional(),
     NEXT_PUBLIC_DOUBAO_LINK_128K_MODEL: z.string().optional(),
-    NEXT_PUBLIC_SSO_BASE_URL: z.string().optional(),
-    NEXT_PUBLIC_SSO_REDIRECT_URI: z.string().optional(),
   },
 
   /**
@@ -31,11 +33,14 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    AUTH_SECRET: process.env.AUTH_SECRET,
+    AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
+    AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
+    AUTH_GITHUB_ID: process.env.AUTH_GITHUB_ID,
+    AUTH_GITHUB_SECRET: process.env.AUTH_GITHUB_SECRET,
     NEXT_PUBLIC_DOUBAO_BASE_URL: process.env.NEXT_PUBLIC_DOUBAO_BASE_URL,
     NEXT_PUBLIC_DOUBAO_OPENAI_API_KEY: process.env.NEXT_PUBLIC_DOUBAO_OPENAI_API_KEY,
     NEXT_PUBLIC_DOUBAO_LINK_128K_MODEL: process.env.NEXT_PUBLIC_DOUBAO_LINK_128K_MODEL,
-    NEXT_PUBLIC_SSO_BASE_URL: process.env.NEXT_PUBLIC_SSO_BASE_URL,
-    NEXT_PUBLIC_SSO_REDIRECT_URI: process.env.NEXT_PUBLIC_SSO_REDIRECT_URI,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

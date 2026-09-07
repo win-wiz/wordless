@@ -1,62 +1,61 @@
 import React from 'react';
 
-// Static content extracted for performance optimization
 const BASIC_STRATEGIES = [
-  'Master Waffle Game intersections for efficient solving',
-  'Keep green letters fixed in Waffle Game puzzles',
-  'Strategically reposition yellow letters in Waffle Game',
-  'Begin with high-confidence words in Waffle Game'
+  'Start with the intersections because they affect two words at once.',
+  'Leave green letters where they are.',
+  'Use yellow letters to test likely positions before making late moves.',
+  'Look for the word that feels most obvious, then let that clue help the rest.'
 ] as const;
 
 const ADVANCED_TIPS = [
-  'Learn common English patterns for faster Waffle Game solving',
-  'Consider letter frequency in Waffle Game words',
-  'Analyze the entire Waffle Game grid layout holistically',
-  'Build a mental library of common five-letter words'
+  'Look for common endings and letter pairs like -ER, -ED, or TH.',
+  'If one swap helps two words, it is usually worth trying first.',
+  'Step back and reread the whole board when you feel stuck.',
+  'The last few moves are easier once the pattern starts to click.'
 ] as const;
 
 const STEP_CONTENT = [
   {
-    title: 'Step 1: Waffle Game Analysis',
+    title: 'Step 1: Find Your Anchors',
     items: [
-      'Locate all green letters in the Waffle Game grid',
-      'Map potential positions for yellow letters',
-      'Identify intersection requirements',
-      'Spot familiar word patterns in Waffle Game'
+      'Find the green letters that are already locked in.',
+      'Check which intersections already give you strong clues.',
+      'Notice any common word endings or familiar patterns.',
+      'Pick one area of the board that already looks close.'
     ]
   },
   {
-    title: 'Step 2: Waffle Game Strategy',
+    title: 'Step 2: Work the Best Clues',
     items: [
-      'Focus on solving intersection points first',
-      'Begin with most confident word combinations',
-      'Consider multiple word relationships',
-      'Plan moves to stay within the 15-swap limit'
+      'Start with the swap that improves the most information.',
+      'Use intersections to guide both across and down words.',
+      'Avoid random swaps once the board starts making sense.',
+      'Keep an eye on your remaining moves.'
     ]
   },
   {
-    title: 'Step 3: Execute Waffle Game Moves',
+    title: 'Step 3: Clean Up the Board',
     items: [
-      'Make deliberate, thoughtful letter swaps',
-      'Evaluate board state after each move',
-      'Maintain correct letter positions',
-      'Keep a comprehensive view of the puzzle'
+      'Recheck the colors after every move.',
+      'Leave correct letters in place.',
+      'Use the last few swaps to tidy up loose letters.',
+      'If something feels off, zoom back out and look at the full grid again.'
     ]
   }
 ] as const;
 
 const COMMON_MISTAKES = [
-  'Disturbing green letters in Waffle Game',
-  'Neglecting intersection requirements',
-  'Focusing on single words instead of the full Waffle Game grid',
-  'Making hasty swaps without proper planning'
+  'Moving a green letter too early.',
+  'Forgetting that an intersection has to satisfy two words.',
+  'Tunnel-visioning on one word and ignoring the rest of the grid.',
+  'Making quick swaps without learning anything from the last move.'
 ] as const;
 
 const AVOIDANCE_METHODS = [
-  'Plan each Waffle Game move carefully',
-  'Verify intersection letter compatibility',
-  'Maintain overall puzzle awareness',
-  'Use swap attempts strategically'
+  'Pause for a second before every swap.',
+  'Check whether a move helps both an across word and a down word.',
+  'Keep scanning the whole board instead of one line at a time.',
+  'Treat every move like a clue, not just a guess.'
 ] as const;
 
 const StrategyTips: React.FC = React.memo(() => {
@@ -64,13 +63,13 @@ const StrategyTips: React.FC = React.memo(() => {
     <div className='py-16 px-6'>
       <div className='max-w-6xl mx-auto'>
         <h2 className='text-4xl font-bold text-slate-800 mb-16 text-center'>
-          💡 Advanced Waffle Game Strategies
+          Strategy Tips
         </h2>
 
         <div className='grid lg:grid-cols-2 gap-16 mb-12'>
           <div className='space-y-8'>
             <h3 className='text-2xl font-bold text-slate-800 mb-8'>
-              🎯 Essential Waffle Game Tactics
+              What Usually Works
             </h3>
             <ul className='space-y-6 text-slate-700 text-lg'>
               {BASIC_STRATEGIES.map((strategy, index) => (
@@ -83,7 +82,7 @@ const StrategyTips: React.FC = React.memo(() => {
           </div>
           <div className='space-y-8'>
             <h3 className='text-2xl font-bold text-slate-800 mb-8'>
-              ⭐ Pro Waffle Game Tips
+              Extra Tips Once You Get Comfortable
             </h3>
             <ul className='space-y-6 text-slate-700 text-lg'>
               {ADVANCED_TIPS.map((tip, index) => (
@@ -98,7 +97,7 @@ const StrategyTips: React.FC = React.memo(() => {
 
         <div className='mb-12 pt-8 border-t border-slate-300'>
           <h3 className='text-2xl font-bold text-slate-800 mb-12 text-center'>
-            🧠 Master Waffle Game: Step-by-Step Guide
+            A Simple Solving Flow
           </h3>
           <div className='grid lg:grid-cols-3 gap-12'>
             {STEP_CONTENT.map((step, stepIndex) => (
@@ -124,12 +123,12 @@ const StrategyTips: React.FC = React.memo(() => {
 
         <div className='pt-8 border-t border-slate-300'>
           <h3 className='text-2xl font-bold text-slate-800 mb-12 text-center'>
-            ⚠️ Common Pitfalls & Avoidance Methods
+            Common Pitfalls
           </h3>
           <div className='grid lg:grid-cols-2 gap-12'>
             <div className='space-y-6'>
               <h4 className='text-xl font-bold text-slate-700 mb-6'>
-                Common Mistakes:
+                Mistakes to Watch For
               </h4>
               <ul className='space-y-4 text-slate-600 text-lg'>
                 {COMMON_MISTAKES.map((mistake, index) => (
@@ -142,7 +141,7 @@ const StrategyTips: React.FC = React.memo(() => {
             </div>
             <div className='space-y-6'>
               <h4 className='text-xl font-bold text-slate-700 mb-6'>
-                Avoidance Methods:
+                How to Avoid Them
               </h4>
               <ul className='space-y-4 text-slate-600 text-lg'>
                 {AVOIDANCE_METHODS.map((method, index) => (

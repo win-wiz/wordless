@@ -14,14 +14,14 @@ interface UseTimesProps {
 
 // 创建记忆化的时钟图标组件
 const ClockIcon = memo(() => (
-  <Clock className="w-4 h-4 text-violet-500" />
+  <Clock className="h-4 w-4 text-violet-500" />
 ));
 
 ClockIcon.displayName = 'ClockIcon';
 
 // 创建记忆化的时间显示组件
 const TimeDisplay = memo(({ time }: { time: number }) => (
-  <span className="text-violet-700 font-medium min-w-[48px] text-center">
+  <span className="min-w-[52px] text-center font-mono text-sm font-semibold tabular-nums text-violet-700">
     {formatTime(time)}
   </span>
 ));
@@ -29,9 +29,9 @@ const TimeDisplay = memo(({ time }: { time: number }) => (
 TimeDisplay.displayName = 'TimeDisplay';
 
 function UseTimes({ showKeyboard, hasFirstInput, isGameOver, onTimeChange }: UseTimesProps) {
-  const [time, setTime] = useState(1)
+  const [time, setTime] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
-  const timeRef = useRef(1)
+  const timeRef = useRef(0)
   const onTimeChangeRef = useRef(onTimeChange)
 
   // 更新 ref
@@ -81,11 +81,11 @@ function UseTimes({ showKeyboard, hasFirstInput, isGameOver, onTimeChange }: Use
   // 重置游戏时重置计时器
   useEffect(() => {
     if (!hasFirstInput) {
-      timeRef.current = 1
-      setTime(1)
+      timeRef.current = 0
+      setTime(0)
       setIsRunning(false)
       // 重置时也要通知父组件
-      onTimeChangeRef.current(1)
+      onTimeChangeRef.current(0)
     }
   }, [hasFirstInput])
 
@@ -95,7 +95,7 @@ function UseTimes({ showKeyboard, hasFirstInput, isGameOver, onTimeChange }: Use
   }, [time])
 
   return (
-    <div className="flex items-center gap-2 h-full">
+    <div className="flex h-full items-center gap-2">
       <ClockIcon />
       <TimeDisplay time={time} />
     </div>

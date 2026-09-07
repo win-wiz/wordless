@@ -4,15 +4,24 @@ const HelpCenterHeader: React.FC = React.memo(() => {
   return (
     <div className='py-20 px-6'>
       <div className='max-w-6xl mx-auto text-center'>
-        <b className='inline-block text-6xl font-bold text-slate-800 mb-10'>
-          🎮 Waffle Game Help Center
-        </b>
+        <p className='mb-4 text-sm font-semibold uppercase tracking-[0.32em] text-slate-500'>
+          Daily Puzzle + Unlimited Mode
+        </p>
+        <h1
+          id='help-center-title'
+          className='mb-8 text-5xl font-bold text-slate-800 sm:text-6xl'
+        >
+          Play Waffle Game Online
+        </h1>
         <div className='w-40 h-1 bg-gradient-to-r from-blue-500 to-slate-600 mx-auto mb-8'></div>
         <p className='text-2xl text-slate-700 max-w-4xl mx-auto leading-relaxed'>
-          Welcome to the official Waffle Game guide! Master this unique word
-          puzzle game where you swap letters strategically to create 6 perfect
-          words in a 5×5 grid. Learn everything about Waffle Game, from basic
-          rules to advanced strategies.
+          Swap letters, solve 6 connected words, and finish the board in 15
+          moves.
+        </p>
+        <p className='mt-6 max-w-3xl mx-auto text-lg leading-relaxed text-slate-600'>
+          Start with today&apos;s Waffle if you want one fresh challenge a day,
+          or jump into unlimited mode when you just want to keep playing right
+          in your browser.
         </p>
       </div>
     </div>

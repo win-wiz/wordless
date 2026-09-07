@@ -52,7 +52,10 @@ const CallToAction = memo(function CallToAction() {
 
 const HowToPlay = memo(function HowToPlay() {
   return (
-    <div id="how-to-play" className="max-w-4xl mx-auto px-4 py-12 md:py-20 animate-scale-in">
+    <div
+      id="how-to-play"
+      className="mx-auto max-w-4xl scroll-mt-24 px-4 py-12 animate-scale-in md:scroll-mt-28 md:py-20"
+    >
       <SectionHeader title="How to Play - Master the Word Puzzle" />
       
       <div className="flex flex-col gap-16">

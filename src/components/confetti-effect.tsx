@@ -12,6 +12,10 @@ export default function ConfettiEffect({ isActive }: ConfettiEffectProps) {
 
   useEffect(() => {
     if (isActive && !isPlaying) {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+      }
+
       setIsPlaying(true);
       const duration = 3 * 1000;
       const animationEnd = Date.now() + duration;

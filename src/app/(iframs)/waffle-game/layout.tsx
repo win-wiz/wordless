@@ -3,14 +3,21 @@ import { type Metadata } from 'next';
 import ScrollConfig from '@/app/(iframs)/ScrollConfig';
 
 export const metadata: Metadata = {
-  title: 'Waffle Game - Online Word Puzzle with AI Hints',
+  title: 'Waffle Game - Play Daily Waffle Online Free | Wordless',
   description:
-    'Play Waffle Game online free! Solve word puzzles in 15 moves with AI hints. Master this engaging brain game with custom themes and daily challenges.',
+    'Play Waffle Game online for free. Solve 6 connected five-letter words in 15 swaps. Play the daily puzzle or keep going in unlimited mode, right in your browser.',
   keywords:
-    'waffle game, word puzzle, online game, AI hints, brain games, word challenge, puzzle game, free games',
-  creator: 'Waffle Game',
-  publisher: 'Waffle Game Platform',
+    'waffle game, play waffle game online, daily waffle, waffle unlimited, word puzzle game, five-letter word game',
+  creator: 'Wordless Game Team',
+  publisher: 'Wordless Game',
   robots: 'index, follow',
+  openGraph: {
+    title: 'Waffle Game - Play Daily Waffle Online Free | Wordless',
+    description:
+      'Play Waffle Game online for free. Solve 6 connected five-letter words in 15 swaps. Play the daily puzzle or keep going in unlimited mode, right in your browser.',
+    type: 'website',
+    siteName: 'Wordless Game',
+  },
 };
 
 export default function IframeLayout({

@@ -2,69 +2,93 @@
 
 import { useEffect } from 'react';
 
-// 扩展 Window 接口
+type AdSensePageLevelConfig = {
+  enable_page_level_ads: boolean;
+  google_ad_client: string;
+};
+
+type AdSenseQueue = {
+  push: (config: AdSensePageLevelConfig) => unknown;
+};
+
 declare global {
   interface Window {
-    adsbygoogle: any[];
+    adsbygoogle?: AdSenseQueue;
     adsbygoogle_page_level_initialized?: boolean;
   }
 }
 
+const ADSENSE_CLIENT = 'ca-pub-1939625526338391';
+const ADSENSE_SCRIPT_ID = 'wordless-adsense-script';
+
 export default function AdSenseInitializer() {
   useEffect(() => {
-    // 确保只在客户端执行
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') {
+      return;
+    }
 
-    // 多重防重复检查
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return;
+    }
+
+    let cancelled = false;
+    let retryTimer: ReturnType<typeof setTimeout> | null = null;
+    let scriptElement = document.getElementById(ADSENSE_SCRIPT_ID) as HTMLScriptElement | null;
+
     const initializeAdSense = () => {
+      if (cancelled || window.adsbygoogle_page_level_initialized) {
+        return;
+      }
+
       try {
-        // 检查全局标记
-        if (window.adsbygoogle_page_level_initialized) {
-          console.log('AdSense 页面级广告已经初始化过，跳过');
-          return;
-        }
-
-        // 检查 adsbygoogle 是否存在
         const adsbygoogle = window.adsbygoogle;
-        if (!adsbygoogle) {
-          console.log('AdSense 脚本未加载，延迟初始化');
-          setTimeout(initializeAdSense, 100);
+
+        if (!adsbygoogle || typeof adsbygoogle.push !== 'function') {
+          retryTimer = setTimeout(initializeAdSense, 100);
           return;
         }
 
-        // 检查数组中是否已有页面级广告配置
-        const hasPageLevelAds = adsbygoogle.some((item: any) => 
-          item && typeof item === 'object' && item.enable_page_level_ads
-        );
-
-        if (hasPageLevelAds) {
-          console.log('AdSense 页面级广告已存在，跳过初始化');
-          return;
-        }
-
-        // 设置全局标记
-        window.adsbygoogle_page_level_initialized = true;
-
-        // 初始化页面级广告
         adsbygoogle.push({
-          google_ad_client: "ca-pub-1939625526338391",
-          enable_page_level_ads: true
+          google_ad_client: ADSENSE_CLIENT,
+          enable_page_level_ads: true,
         });
-
-        console.log('AdSense 页面级广告已成功初始化');
+        window.adsbygoogle_page_level_initialized = true;
       } catch (error) {
-        console.error('AdSense 初始化错误:', error);
+        console.error('Failed to initialize AdSense:', error);
       }
     };
 
-    // 延迟执行，确保 AdSense 脚本已加载
-    const timer = setTimeout(initializeAdSense, 500);
-
-    // 清理函数
-    return () => {
-      clearTimeout(timer);
+    const handleScriptLoad = () => {
+      retryTimer = setTimeout(initializeAdSense, 100);
     };
-  }, []); // 空依赖数组，确保只执行一次
 
-  return null; // 不渲染任何内容
+    if (!scriptElement) {
+      scriptElement = document.createElement('script');
+      scriptElement.id = ADSENSE_SCRIPT_ID;
+      scriptElement.async = true;
+      scriptElement.crossOrigin = 'anonymous';
+      scriptElement.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
+      document.head.appendChild(scriptElement);
+    }
+
+    scriptElement.addEventListener('load', handleScriptLoad);
+
+    if (scriptElement.dataset.loaded === 'true') {
+      handleScriptLoad();
+    } else {
+      scriptElement.addEventListener('load', () => {
+        scriptElement!.dataset.loaded = 'true';
+      }, { once: true });
+    }
+
+    return () => {
+      cancelled = true;
+      if (retryTimer) {
+        clearTimeout(retryTimer);
+      }
+      scriptElement?.removeEventListener('load', handleScriptLoad);
+    };
+  }, []);
+
+  return null;
 } 

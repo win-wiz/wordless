@@ -1,77 +1,5 @@
 import React, { useMemo } from 'react';
-
-interface WaffleTileProps {
-  letter?: string;
-  color?: 'green' | 'yellow' | 'white' | 'gray';
-  isEmpty?: boolean;
-  className?: string;
-  isIntersection?: boolean;
-}
-
-const WaffleTile: React.FC<WaffleTileProps> = React.memo(
-  ({
-    letter,
-    color = 'white',
-    isEmpty = false,
-    className = '',
-    isIntersection = false
-  }) => {
-    const colorClasses = useMemo(
-      () => ({
-        green: 'text-white border-none shadow-md',
-        yellow: 'text-white border-none shadow-md',
-        white: 'bg-slate-200 text-slate-700 border-2 border-slate-400',
-        gray: 'text-white border-none shadow-md'
-      }),
-      []
-    );
-
-    const getCustomStyle = () => {
-      if (color === 'green') {
-        return {
-          background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
-          border: '2px solid #10B981',
-          color: '#ffffff'
-        };
-      }
-      if (color === 'yellow') {
-        return {
-          background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
-          border: '2px solid #F59E0B',
-          color: '#ffffff'
-        };
-      }
-      if (color === 'gray') {
-        return {
-          background: 'linear-gradient(135deg, #94A3B8 0%, #64748B 100%)',
-          border: '2px solid #94A3B8',
-          color: '#ffffff'
-        };
-      }
-      return {};
-    };
-
-    if (isEmpty) {
-      return <div className={`w-12 h-12 ${className}`} />;
-    }
-
-    const baseClasses = className || 'w-12 h-12';
-    const intersectionClasses = isIntersection
-      ? 'ring-4 ring-blue-500 ring-offset-2 shadow-lg'
-      : 'shadow-md';
-
-    return (
-      <div
-        className={`${baseClasses} flex items-center justify-center font-bold text-lg rounded-lg ${intersectionClasses} ${colorClasses[color]}`}
-        style={getCustomStyle()}
-      >
-        {letter}
-      </div>
-    );
-  }
-);
-
-WaffleTile.displayName = 'WaffleTile';
+import WaffleDisplayTile from '@/components/iframes/waffle-game/waffle-display-tile';
 
 const WaffleGrid = React.memo(() => {
   const gridData = useMemo(
@@ -108,7 +36,11 @@ const WaffleGrid = React.memo(() => {
   return (
     <div className='grid grid-cols-5 gap-2 w-fit mx-auto relative'>
       {gridData.map((tile, index) => (
-        <WaffleTile key={index} color={tile.color} isEmpty={tile.isEmpty} />
+        <WaffleDisplayTile
+          key={index}
+          color={tile.color}
+          isEmpty={tile.isEmpty}
+        />
       ))}
     </div>
   );

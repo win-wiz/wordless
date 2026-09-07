@@ -73,3 +73,48 @@
 .animate-pulse-dot2 {
   animation: pulse-dot2 1.8s infinite cubic-bezier(0.4,0,0.6,1);
 }
+
+@keyframes waffle-tile-select {
+  0% { transform: scale(1); }
+  55% { transform: scale(1.08); }
+  100% { transform: scale(1.03); }
+}
+
+@keyframes waffle-tile-flash {
+  0% {
+    transform: scale(0.94);
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.28);
+  }
+  60% {
+    transform: scale(1.06);
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+@keyframes waffle-solved-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.18);
+  }
+  50% {
+    box-shadow: 0 18px 38px -22px rgba(16, 185, 129, 0.32);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.08);
+  }
+}
+
+.animate-waffle-select {
+  animation: waffle-tile-select 180ms ease-out forwards;
+}
+
+.animate-waffle-flash {
+  animation: waffle-tile-flash 520ms ease-out;
+}
+
+.animate-waffle-solved {
+  animation: waffle-solved-glow 900ms ease-out;
+}

@@ -1,81 +1,295 @@
-const API_URL = "https://api.datamuse.com/words?sp=";
+import type {
+  DailyChallengeCommunityStats,
+  DailyChallengeRecord,
+  DailyChallengeProgressResponse,
+  DailyChallengeSession,
+  SaveDailyChallengeRecordPayload,
+  SaveDailyChallengeRecordResponse,
+} from "@/types/auth";
+import type {
+  SaveWaffleDailyProgressPayload,
+  SaveWaffleDailyProgressResponse,
+  WaffleDailyProgressResponse,
+} from "@/types/waffle";
+import type { EvaluatedLetterState } from "@/lib/game-state";
+import {
+  LEXICON_PROFILE_KEYS,
+  type LexiconProfileKey,
+} from "@/lib/lexicon-profile-keys";
 
-const apiEndpoint = (word: string) => `${API_URL}${word}`;
+const VALIDATE_WORD_TIMEOUT_MS = 5000;
+const MIN_WORD_LENGTH = 3;
+const MAX_WORD_LENGTH = 8;
 
-// 添加超时函数
-const timeoutPromise = (ms: number) => {
-  return new Promise((_, reject) => 
+const timeoutPromise = (ms: number) =>
+  new Promise((_, reject) =>
     setTimeout(() => reject(new Error('Request timeout')), ms)
   );
-};
 
-const fetchWords = async (word: string): Promise<boolean> => {
-  if (!word || word.trim() === '') {
-    console.warn('Empty word provided to fetchWords');
+export const validateWord = async (
+  word: string,
+  expectedLength: number,
+  profile: LexiconProfileKey = LEXICON_PROFILE_KEYS.UNLIMITED_GUESS,
+  options?: {
+    challengeDate?: string;
+    challengeVersion?: string;
+  },
+): Promise<boolean> => {
+  const normalizedWord = word.trim().toLowerCase();
+
+  if (!normalizedWord) {
     return false;
+  }
+
+  if (!/^[a-z]+$/i.test(normalizedWord)) {
+    return false;
+  }
+
+  if (
+    expectedLength < MIN_WORD_LENGTH ||
+    expectedLength > MAX_WORD_LENGTH ||
+    normalizedWord.length !== expectedLength
+  ) {
+    return false;
+  }
+
+  const searchParams = new URLSearchParams({
+    word: normalizedWord,
+    length: String(expectedLength),
+    profile,
+  });
+
+  if (options?.challengeDate) {
+    searchParams.set("challengeDate", options.challengeDate);
+  }
+
+  if (options?.challengeVersion) {
+    searchParams.set("challengeVersion", options.challengeVersion);
   }
 
   try {
-    // 使用Promise.race实现超时控制（5秒超时）
-    const fetchPromise = fetch(apiEndpoint(word.toLowerCase()));
-    const response = await Promise.race([
-      fetchPromise,
-      timeoutPromise(5000)
-    ]) as Response;
+    const response = (await Promise.race([
+      fetch(`/api/validate-word?${searchParams.toString()}`),
+      timeoutPromise(VALIDATE_WORD_TIMEOUT_MS),
+    ])) as Response;
 
-    // 检查响应状态
+    if (response.status === 400) {
+      return false;
+    }
+
     if (!response.ok) {
-      console.warn(`API response not OK: ${response.status} ${response.statusText}`);
-      // API失败时，对于常见单词返回true（备用验证）
-      return isCommonWord(word);
+      throw new Error(`Validate word failed: ${response.status} ${response.statusText}`);
     }
 
-    const data = await response.json();
-    
-    // 检查返回数据的格式
-    if (!Array.isArray(data)) {
-      console.warn('API returned invalid data format');
-      return isCommonWord(word);
-    }
-
-    return data.length > 0;
-    
+    const data = (await response.json()) as { valid?: boolean };
+    return data.valid === true;
   } catch (error) {
-    console.error('fetchWords error:', error);
-    
-    // 网络错误时使用备用验证
-    return isCommonWord(word);
+    console.error("validateWord error:", error);
+    throw error;
   }
 };
 
-// 备用验证：检查是否为常见单词模式
-const isCommonWord = (word: string): boolean => {
-  if (!word || word.length < 3 || word.length > 8) {
-    return false;
-  }
-
-  // 检查是否只包含字母
-  if (!/^[a-zA-Z]+$/.test(word)) {
-    return false;
-  }
-
-  // 基本的英语单词模式检查
-  const commonPatterns = [
-    /^[aeiou]/i,  // 元音开头
-    /[aeiou]/i,   // 包含元音
-    /^(th|sh|ch|wh|st|sp|sc|sm|sn|sw|tr|dr|br|gr|fr|pr|cr|bl|cl|fl|gl|pl|sl)/i, // 常见开头
-  ];
-
-  // 至少匹配一个常见模式
-  const hasCommonPattern = commonPatterns.some(pattern => pattern.test(word));
-  
-  if (!hasCommonPattern) {
-    console.warn(`Word "${word}" doesn't match common English patterns`);
-    return false;
-  }
-
-  return true;  // 在网络问题时对符合基本模式的单词返回true
+export type DailyWordResponse = {
+  challengeToken: string;
+  mode: "daily";
+  date: string;
+  wordLength: number;
+  difficulty: "easy" | "medium" | "hard";
+  sequence: number;
+  timezone: string;
+  version: string;
 };
+
+export type UnlimitedWordResponse = {
+  mode: "unlimited";
+  word: string;
+  wordLength: number;
+  difficulty: "easy" | "medium" | "hard";
+};
+
+export type SubmitDailyGuessPayload = {
+  challengeDate: string;
+  challengeToken?: string;
+  challengeVersion?: string;
+  guess: string;
+  progressToken?: string;
+  totalTime: number;
+  timezone?: string;
+};
+
+export type SubmitDailyGuessResponse = {
+  authenticated: boolean;
+  completionToken?: string | null;
+  valid: boolean;
+  guess: string;
+  progressToken?: string | null;
+  rowResult?: EvaluatedLetterState[];
+  isWin?: boolean;
+  solutionWord?: string;
+  reason?: string;
+  session?: DailyChallengeSession | null;
+  record?: DailyChallengeRecord | null;
+  recordSynced?: boolean;
+  communityStats?: DailyChallengeCommunityStats | null;
+};
+
+export const fetchDailyWord = async (date?: string): Promise<DailyWordResponse> => {
+  const searchParams = new URLSearchParams();
+
+  if (date) {
+    searchParams.set("date", date);
+  }
+
+  const query = searchParams.toString();
+  const response = await fetch(`/api/daily-word${query ? `?${query}` : ""}`);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch daily word: ${response.status}`);
+  }
+
+  return response.json() as Promise<DailyWordResponse>;
+};
+
+export const fetchUnlimitedWord = async (
+  wordLength: number,
+): Promise<UnlimitedWordResponse> => {
+  const searchParams = new URLSearchParams({
+    length: String(wordLength),
+  });
+  const response = await fetch(`/api/unlimited-word?${searchParams.toString()}`, {
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch unlimited word: ${response.status}`);
+  }
+
+  return response.json() as Promise<UnlimitedWordResponse>;
+};
+
+export async function submitDailyGuess(
+  payload: SubmitDailyGuessPayload,
+) {
+  const response = await fetch("/api/daily-guess", {
+    method: "POST",
+    headers: new Headers({
+      "Content-Type": "application/json",
+    }),
+    body: JSON.stringify(payload),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Daily guess submission failed");
+  }
+
+  return data as SubmitDailyGuessResponse;
+}
+
+export async function fetchAuthSession() {
+  const response = await fetch("/api/auth/session", {
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch auth session: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function fetchDailyChallengeRecord(
+  date?: string,
+  options?: { timezone?: string; version?: string },
+) {
+  const searchParams = new URLSearchParams();
+
+  if (date) {
+    searchParams.set("date", date);
+  }
+
+  if (options?.version) {
+    searchParams.set("version", options.version);
+  }
+
+  if (options?.timezone) {
+    searchParams.set("timezone", options.timezone);
+  }
+
+  const query = searchParams.toString();
+  const response = await fetch(
+    `/api/daily-challenge-record${query ? `?${query}` : ""}`,
+    {
+      cache: "no-store",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch daily challenge record: ${response.status}`);
+  }
+
+  return response.json() as Promise<DailyChallengeProgressResponse>;
+}
+
+export async function saveDailyChallengeRecord(
+  payload: SaveDailyChallengeRecordPayload,
+) {
+  const response = await fetch("/api/daily-challenge-record", {
+    method: "POST",
+    headers: new Headers({
+      "Content-Type": "application/json",
+    }),
+    body: JSON.stringify(payload),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Save daily challenge record failed");
+  }
+
+  return data as SaveDailyChallengeRecordResponse;
+}
+
+export async function fetchWaffleDailyProgress(date?: string) {
+  const searchParams = new URLSearchParams();
+
+  if (date) {
+    searchParams.set("date", date);
+  }
+
+  const query = searchParams.toString();
+  const response = await fetch(`/api/waffle/progress${query ? `?${query}` : ""}`, {
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch waffle daily progress: ${response.status}`);
+  }
+
+  return response.json() as Promise<WaffleDailyProgressResponse>;
+}
+
+export async function saveWaffleDailyProgress(
+  payload: SaveWaffleDailyProgressPayload,
+) {
+  const response = await fetch("/api/waffle/progress", {
+    method: "POST",
+    headers: new Headers({
+      "Content-Type": "application/json",
+    }),
+    body: JSON.stringify(payload),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Save waffle daily progress failed");
+  }
+
+  return data as SaveWaffleDailyProgressResponse;
+}
 
 export const fetcher = (...args: [RequestInfo, RequestInit?]) => 
   fetch(...args).then((res) => {
@@ -85,4 +299,4 @@ export const fetcher = (...args: [RequestInfo, RequestInit?]) =>
     return res.json();
   });
 
-export default fetchWords;
+export default validateWord;

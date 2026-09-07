@@ -1,12 +1,13 @@
 import "@/styles/globals.css";
 import { type Metadata } from "next";
+import { Suspense } from "react";
 import { Toaster } from "@/components/ui/sonner"
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { UseGoogleAnalysic } from "@/components/use-google-analysic";
 import AdSenseInitializer from "@/components/adsense-initializer";
-import Script from "next/script";
+import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
 
 
 export const metadata: Metadata = {
@@ -28,29 +29,25 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const shouldLoadAds = process.env.NODE_ENV === "production";
+
   return (
     <html lang="en">
       <head>
         <meta name="google-adsense-account" content="ca-pub-1939625526338391" />
       </head>
       <body className={`bg-zinc-50`}>
-        <Header />
-        {children}
-        <Footer />
-        <ScrollToTop />
-
-        {/* AdSense 脚本 - 统一管理 */}
-        <Script 
-          async 
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1939625526338391"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        <AuthSessionProvider>
+            <Suspense fallback={<div className="sticky top-0 z-30 h-[73px] w-full border-b border-violet-100/80 bg-white/90 backdrop-blur-xl" />}>
+              <Header />
+            </Suspense>
+          {children}
+          <Footer />
+          <ScrollToTop />
+        </AuthSessionProvider>
+        {shouldLoadAds ? <AdSenseInitializer /> : null}
         
-        {/* AdSense 自动广告初始化 - 使用专门的组件 */}
-        <AdSenseInitializer />
-        
-        {/* AMP自动广告标签 - 与常规AdSense冲突，已禁用 */}
+        {/* AMP auto-ads tag. Disabled because it conflicts with standard AdSense. */}
         {/* <Script 
           async 
           custom-element="amp-auto-ads"

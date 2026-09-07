@@ -3,20 +3,20 @@ import React, { useMemo } from 'react';
 const GameIntroduction: React.FC = React.memo(() => {
   const gameFeatures = useMemo(
     () => [
-      'Create 3 horizontal + 3 vertical words in Waffle Game',
-      'Strategic letter placement at intersections',
-      'Solve puzzles with just 15 smart swaps',
-      'Color-coded feedback guides your moves'
+      'Solve 3 across and 3 down five-letter words',
+      'Use the intersections to figure out the board',
+      'Finish the puzzle in 15 swaps',
+      'Use color feedback to guide every move'
     ],
     []
   );
 
-  const targetAudience = useMemo(
+  const playModes = useMemo(
     () => [
-      'Word puzzle enthusiasts seeking a fresh challenge',
-      'Strategic thinkers who love language games',
-      'English vocabulary builders and learners',
-      'Players who enjoy daily brain training'
+      'Daily mode gives you one new puzzle every day',
+      'Unlimited mode lets you load a new board any time',
+      'Works smoothly on desktop, tablet, and mobile',
+      'No download needed, just open and play in your browser'
     ],
     []
   );
@@ -25,20 +25,23 @@ const GameIntroduction: React.FC = React.memo(() => {
     <div className='py-20 px-6'>
       <div className='max-w-6xl mx-auto'>
         <h2 className='text-4xl font-bold text-slate-800 mb-12 text-center'>
-          🎮 What is Waffle Game?
+          What Is Waffle?
         </h2>
         <div className='grid lg:grid-cols-2 gap-16'>
           <div className='space-y-8'>
             <p className='text-slate-700 text-xl leading-relaxed'>
-              Waffle Game is an innovative word puzzle that combines the best
-              elements of crosswords and word-swapping games. In each Waffle
-              Game puzzle, you'll discover a unique 5×5 grid where your goal is
-              to create six perfect five-letter words through strategic letter
-              swaps.
+              Waffle is a word puzzle where every move matters. Your goal is to
+              rearrange the letters on a cross-shaped 5x5 grid and complete 6
+              connected five-letter words.
+            </p>
+            <p className='text-slate-600 text-lg leading-relaxed'>
+              It feels a bit like a mix of Wordle and a word grid puzzle. The
+              letters are already on the board, so the challenge is not guessing
+              new letters. It&apos;s figuring out the smartest swaps.
             </p>
             <div className='space-y-6'>
               <h4 className='text-2xl font-bold text-slate-800 mb-4'>
-                Unique Waffle Game Features:
+                Why Players Like It
               </h4>
               <ul className='space-y-4 text-slate-700 text-lg'>
                 {gameFeatures.map((feature, index) => (
@@ -53,27 +56,26 @@ const GameIntroduction: React.FC = React.memo(() => {
           <div className='space-y-8'>
             <div className='space-y-6'>
               <h4 className='text-2xl font-bold text-slate-800 mb-4'>
-                Who Will Love Waffle Game?
+                Ways to Play
               </h4>
               <div className='space-y-4 text-slate-700 text-lg'>
-                {targetAudience.map((audience, index) => (
+                {playModes.map((mode, index) => (
                   <p key={index} className='flex items-center gap-3'>
                     <span className='text-blue-600 text-xl'>✅</span>
-                    {audience}
+                    {mode}
                   </p>
                 ))}
               </div>
             </div>
             <div className='mt-8 pt-8 border-t border-slate-200'>
               <h4 className='text-xl font-bold text-slate-800 mb-4'>
-                💡 Getting Started with Waffle Game
+                Getting Started
               </h4>
               <p className='text-slate-700 text-lg leading-relaxed'>
-                New to Waffle Game? Don't worry! The color-coded feedback system
-                makes it easy to learn and enjoy. Start with understanding the
-                basics: green tiles are correct, yellow need moving, and gray
-                need replacing. With each puzzle you solve, you'll discover new
-                Waffle Game strategies and improve your word skills.
+                New to Waffle? Start with the green letters, pay attention to
+                the intersections, and use the yellow tiles to work out where a
+                letter really belongs. Once the board starts opening up, the
+                last few swaps usually come together fast.
               </p>
             </div>
           </div>
