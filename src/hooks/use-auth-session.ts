@@ -20,6 +20,7 @@ export function useAuthSession() {
     ...swr,
     user: swr.data?.user ?? null,
     isAuthenticated: swr.data?.authenticated === true,
+    isLoading: swr.isLoading,
   };
 }
 

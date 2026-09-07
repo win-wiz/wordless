@@ -1,8 +1,9 @@
 "use client";
 
 import { LoaderCircle, Sparkles } from "lucide-react";
-import Link from "next/link";
 import type { ReactNode } from "react";
+
+import { useAuthDialog } from "@/components/auth/auth-dialog-provider";
 
 function StatsPanelShell({
   children,
@@ -44,6 +45,8 @@ export function DailyStatsLoadingState({ label }: { label: string }) {
 }
 
 export function DailyStatsSignInState() {
+  const { openLoginDialog } = useAuthDialog();
+
   return (
     <StatsPanelShell>
       <div className="flex items-start justify-between gap-6">
@@ -63,54 +66,13 @@ export function DailyStatsSignInState() {
         </div>
       </div>
 
-      <Link
-        href={{
-          pathname: "/login",
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-          query: { redirect: "/stats" },
-        }}
+      <button
+        type="button"
+        onClick={() => openLoginDialog({ redirect: "/stats" })}
         className="mt-8 inline-flex rounded-full bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet-700"
       >
         Sign in to continue
-      </Link>
+      </button>
     </StatsPanelShell>
   );
 }

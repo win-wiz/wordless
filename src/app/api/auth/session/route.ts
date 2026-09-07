@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
     user: {
       email: identity.email,
       displayName: identity.displayName,
+      image: authSession.session?.user?.image ?? null,
     },
   }), authSession.invalidAuthSessionCookieNames);
 }

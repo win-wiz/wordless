@@ -1,11 +1,11 @@
 'use client';
 
-import Link from "next/link";
 import { LoaderCircle, LogIn, LogOut, UserRound } from "lucide-react";
-import { toast } from "sonner";
-import { useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
+import { useAuthDialog } from "@/components/auth/auth-dialog-provider";
 import { NavIconButton } from "@/components/nav-icon-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,15 +30,44 @@ interface UserMenuProps {
 export function UserMenu({ compact = false }: UserMenuProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { openLoginDialog } = useAuthDialog();
   const { isLoading, user, isAuthenticated } = useAuthSession();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const closeTimerRef = useRef<number | null>(null);
   const redirect = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ""}`;
+
+  const clearCloseTimer = () => {
+    if (closeTimerRef.current !== null) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  };
+
+  const openHoverMenu = () => {
+    clearCloseTimer();
+    setIsMenuOpen(true);
+  };
+
+  const scheduleCloseMenu = () => {
+    clearCloseTimer();
+    closeTimerRef.current = window.setTimeout(() => {
+      setIsMenuOpen(false);
+    }, 120);
+  };
+
+  useEffect(() => {
+    return () => {
+      clearCloseTimer();
+    };
+  }, []);
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
 
     try {
       await logoutAndRefreshSession();
+      setIsMenuOpen(false);
       toast.success("You're signed out.");
     } catch (error) {
       console.error("logout error:", error);
@@ -48,92 +77,88 @@ export function UserMenu({ compact = false }: UserMenuProps) {
     }
   };
 
-  if (isLoading) {
-    if (compact) {
-      return (
-        <NavIconButton
-          aria-busy="true"
-          disabled
-          label="Loading"
-          icon={<LoaderCircle className="h-4 w-4 animate-spin" />}
-          className="h-9 w-9"
-        />
-      );
-    }
+  const triggerSizeClassName = compact ? "h-9 w-9" : "h-10 w-10";
 
+  if (isLoading) {
     return (
-      <div className="flex h-10 items-center rounded-full border border-violet-100 bg-white px-4 text-sm text-zinc-500">
-        <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-        Loading
-      </div>
+      <NavIconButton
+        aria-busy="true"
+        disabled
+        label="Loading"
+        icon={<LoaderCircle className="h-4 w-4 animate-spin" />}
+        className={triggerSizeClassName}
+      />
     );
   }
 
   if (!isAuthenticated || !user) {
-    if (compact) {
-      return (
-        <Button
-          asChild
-          size="icon"
-          className="h-9 w-9 rounded-full bg-violet-600 text-white hover:bg-violet-700"
-        >
-          <Link
-            aria-label="Login"
-            href={{
-              pathname: "/login",
-              query: { redirect },
-            }}
-          >
-            <LogIn className="h-4 w-4" />
-          </Link>
-        </Button>
-      );
-    }
-
     return (
       <Button
-        asChild
-        className="h-10 rounded-full bg-violet-600 px-4 text-sm font-semibold text-white hover:bg-violet-700"
+        type="button"
+        size="icon"
+        aria-label="Login"
+        onClick={() => openLoginDialog({ redirect })}
+        className={cn(
+          "rounded-full bg-violet-600 text-white hover:bg-violet-700",
+          triggerSizeClassName,
+        )}
       >
-        <Link
-          href={{
-            pathname: "/login",
-            query: { redirect },
-          }}
-        >
-          Login
-        </Link>
+        <LogIn className="h-4 w-4" />
       </Button>
     );
   }
 
   const avatarLetter = getAvatarLetter(user.displayName || user.email);
+  const avatarLabel = user.displayName || user.email;
+  const renderAvatar = (sizeClassName: string) => {
+    if (user.image) {
+      return (
+        <span
+          aria-hidden="true"
+          className={`block ${sizeClassName} rounded-full bg-cover bg-center bg-no-repeat`}
+          style={{ backgroundImage: `url("${user.image}")` }}
+        />
+      );
+    }
+
+    if (avatarLetter) {
+      return avatarLetter;
+    }
+
+    return <UserRound className="h-4 w-4" />;
+  };
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false} open={isMenuOpen} onOpenChange={setIsMenuOpen}>
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          aria-label={user.displayName || user.email}
+          aria-label={avatarLabel}
+          onMouseEnter={openHoverMenu}
+          onMouseLeave={scheduleCloseMenu}
           className={cn(
-            "flex items-center justify-center rounded-full border border-violet-100 bg-white text-xs font-semibold text-violet-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-violet-200 hover:bg-violet-50 hover:text-violet-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:ring-offset-2",
-            compact ? "h-9 w-9" : "h-10 w-10"
+            "flex items-center justify-center overflow-hidden rounded-full border border-violet-100 bg-white text-xs font-semibold text-violet-700 shadow-sm transition-colors duration-200 hover:border-violet-200 hover:bg-violet-50 hover:text-violet-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:ring-offset-2",
+            triggerSizeClassName
           )}
         >
-          {avatarLetter ? avatarLetter : <UserRound className="h-4 w-4" />}
+          {renderAvatar("h-full w-full")}
         </button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
         align="end"
+        sideOffset={0}
+        onMouseEnter={openHoverMenu}
+        onMouseLeave={scheduleCloseMenu}
         className="w-64 rounded-2xl border-violet-100 p-2 shadow-[0_18px_50px_rgba(139,92,246,0.14)]"
       >
         <DropdownMenuLabel className="px-3 py-2.5">
           <div className="flex items-start gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-violet-100 text-sm font-semibold text-violet-700">
-              {avatarLetter ? avatarLetter : <UserRound className="h-4 w-4" />}
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-violet-100 text-sm font-semibold text-violet-700">
+              {renderAvatar("h-10 w-10")}
             </div>
             <div className="min-w-0 space-y-0.5">
+
               <p className="truncate text-sm font-semibold text-zinc-900">
                 {user.displayName}
               </p>

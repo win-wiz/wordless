@@ -25,6 +25,7 @@ const RECOVERABLE_AUTH_SESSION_ERROR_MESSAGES = [
 
 type AuthenticatedProfile = {
   email?: string | null;
+  image?: string | null;
   name?: string | null;
   provider?: string;
   providerAccountId?: string;
@@ -414,56 +415,6 @@ function collectAuthSessionCookieNames(request?: NextRequest) {
     : [...AUTH_SESSION_COOKIE_NAMES];
 }
 
-function getAuthSessionCookieValue(request?: NextRequest) {
-  if (!request) {
-    return null;
-  }
-
-  for (const cookieName of AUTH_SESSION_COOKIE_NAMES) {
-    const directCookieValue = request.cookies.get(cookieName)?.value?.trim();
-
-    if (directCookieValue) {
-      return directCookieValue;
-    }
-
-    const chunkedCookieValue = request.cookies
-      .getAll()
-      .filter(({ name }) => name.startsWith(`${cookieName}.`))
-      .map(({ name, value }) => {
-        const chunkIndex = Number.parseInt(name.slice(cookieName.length + 1), 10);
-
-        return {
-          chunkIndex,
-          value: value.trim(),
-        };
-      })
-      .filter(
-        ({ chunkIndex, value }) => Number.isInteger(chunkIndex) && value.length > 0,
-      )
-      .sort((left, right) => left.chunkIndex - right.chunkIndex)
-      .map(({ value }) => value)
-      .join("");
-
-    if (chunkedCookieValue) {
-      return chunkedCookieValue;
-    }
-  }
-
-  return null;
-}
-
-function looksLikeCompactJwe(token: string) {
-  const segments = token.split(".");
-
-  if (segments.length !== 5) {
-    return false;
-  }
-
-  return segments.every(
-    (segment) => segment.length > 0 && /^[A-Za-z0-9_-]+$/.test(segment),
-  );
-}
-
 function isRecoverableAuthSessionError(error: unknown) {
   let current: unknown = error;
 
@@ -516,15 +467,6 @@ export async function getAuthSessionFromRequest(
     return {
       session: null,
       invalidAuthSessionCookieNames: [],
-    };
-  }
-
-  const authSessionCookieValue = getAuthSessionCookieValue(request);
-
-  if (authSessionCookieValue && !looksLikeCompactJwe(authSessionCookieValue)) {
-    return {
-      session: null,
-      invalidAuthSessionCookieNames: collectAuthSessionCookieNames(request),
     };
   }
 

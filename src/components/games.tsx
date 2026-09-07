@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import type { RuntimeGameModeConfig } from "@/server/game-modes";
-import Link from "next/link";
 import {
   AlertCircle,
   CheckCircle2,
@@ -12,6 +11,7 @@ import {
   XCircle,
 } from "lucide-react";
 
+import { useAuthDialog } from "@/components/auth/auth-dialog-provider";
 import ConfettiEffect from "@/components/confetti-effect";
 import { GameGrid } from "@/components/game-grid";
 import { GameToolbar } from "@/components/game-toolbar";
@@ -80,6 +80,8 @@ function DailyCompletedStatePanel({
   onRetry: ReturnType<typeof useWordlessGame>['retryPendingDailyRecordSave'];
   saveState: ReturnType<typeof useWordlessGame>['dailyRecordSaveState'];
 }) {
+  const { openLoginDialog } = useAuthDialog();
+
   if (!gameResult) {
     return null;
   }
@@ -252,17 +254,13 @@ function DailyCompletedStatePanel({
                 View
               </button>
               {saveState === "requires-auth" && (
-                <Link
-                  href={{
-                    pathname: "/login",
-                    query: {
-                      redirect: "/?mode=daily",
-                    },
-                  }}
+                <button
+                  type="button"
+                  onClick={() => openLoginDialog({ redirect: "/?mode=daily" })}
                   className="col-span-2 inline-flex h-11 w-full items-center justify-center rounded-full border border-amber-200 bg-amber-500 px-5 text-sm font-semibold text-white transition-colors hover:bg-amber-600 sm:w-auto"
                 >
                   Sign in
-                </Link>
+                </button>
               )}
               {saveState === "error" && canRetry && (
                 <button

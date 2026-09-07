@@ -10,6 +10,7 @@ export type AuthUser = {
 export type AuthSessionUser = {
   email: string;
   displayName: string;
+  image?: string | null;
   id?: string;
   createdAt?: string;
 };

@@ -8,6 +8,7 @@ import { ScrollToTop } from "@/components/scroll-to-top";
 import { UseGoogleAnalysic } from "@/components/use-google-analysic";
 import AdSenseInitializer from "@/components/adsense-initializer";
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
+import { AuthDialogProvider } from "@/components/auth/auth-dialog-provider";
 
 
 export const metadata: Metadata = {
@@ -38,12 +39,14 @@ export default function RootLayout({
       </head>
       <body className={`bg-zinc-50`}>
         <AuthSessionProvider>
+          <AuthDialogProvider>
             <Suspense fallback={<div className="sticky top-0 z-30 h-[73px] w-full border-b border-violet-100/80 bg-white/90 backdrop-blur-xl" />}>
               <Header />
             </Suspense>
-          {children}
-          <Footer />
-          <ScrollToTop />
+            {children}
+            <Footer />
+            <ScrollToTop />
+          </AuthDialogProvider>
         </AuthSessionProvider>
         {shouldLoadAds ? <AdSenseInitializer /> : null}
         
