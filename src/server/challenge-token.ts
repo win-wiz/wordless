@@ -1,11 +1,10 @@
-import { createCipheriv, createDecipheriv, createHash, randomBytes } from "node:crypto";
+import { decryptJson, encryptJson } from "@/server/edge-crypto";
 
 const CHALLENGE_TOKEN_VERSION = "v1";
 const PROGRESS_TOKEN_VERSION = "v1";
 const COMPLETION_TOKEN_VERSION = "v1";
 const CHALLENGE_TOKEN_TTL_MS = 48 * 60 * 60 * 1000;
 const COMPLETION_TOKEN_TTL_MS = 48 * 60 * 60 * 1000;
-const IV_BYTE_LENGTH = 12;
 
 type DailyChallengeTokenPayload = {
   answerWord: string;
@@ -54,75 +53,28 @@ function getChallengeTokenSecret() {
   return secret;
 }
 
-function getChallengeTokenKey() {
-  return createHash("sha256").update(getChallengeTokenSecret()).digest();
+async function encryptPayload(version: string, payload: object) {
+  return encryptJson(version, payload, getChallengeTokenSecret());
 }
 
-function encodeBase64Url(value: Buffer) {
-  return value.toString("base64url");
-}
-
-function decodeBase64Url(value: string) {
-  return Buffer.from(value, "base64url");
-}
-
-function encryptPayload(version: string, payload: object) {
-  const iv = randomBytes(IV_BYTE_LENGTH);
-  const cipher = createCipheriv("aes-256-gcm", getChallengeTokenKey(), iv);
-  const encrypted = Buffer.concat([
-    cipher.update(JSON.stringify(payload), "utf8"),
-    cipher.final(),
-  ]);
-  const authTag = cipher.getAuthTag();
-
-  return [
-    version,
-    encodeBase64Url(iv),
-    encodeBase64Url(authTag),
-    encodeBase64Url(encrypted),
-  ].join(".");
-}
-
-function decryptPayload<T extends { expiresAt: number; version: string }>(
+async function decryptPayload<T extends { expiresAt: number; version: string }>(
   token: string,
   expectedVersion: string,
-): T {
-  const [tokenVersion, ivPart, authTagPart, encryptedPart] = token.split(".");
+): Promise<T> {
+  const payload = await decryptJson<T>(
+    token,
+    expectedVersion,
+    getChallengeTokenSecret(),
+  );
 
-  if (
-    tokenVersion !== expectedVersion ||
-    !ivPart ||
-    !authTagPart ||
-    !encryptedPart
-  ) {
-    throw new Error("Invalid daily challenge token format.");
+  if (payload.version !== expectedVersion || payload.expiresAt <= Date.now()) {
+    throw new Error("Invalid daily challenge token payload.");
   }
 
-  try {
-    const decipher = createDecipheriv(
-      "aes-256-gcm",
-      getChallengeTokenKey(),
-      decodeBase64Url(ivPart),
-    );
-    decipher.setAuthTag(decodeBase64Url(authTagPart));
-
-    const decrypted = Buffer.concat([
-      decipher.update(decodeBase64Url(encryptedPart)),
-      decipher.final(),
-    ]);
-    const payload = JSON.parse(decrypted.toString("utf8")) as T;
-
-    if (payload.version !== expectedVersion || payload.expiresAt <= Date.now()) {
-      throw new Error("Invalid daily challenge token payload.");
-    }
-
-    return payload;
-  } catch {
-    throw new Error("Daily challenge token verification failed.");
-  }
+  return payload;
 }
 
-export function issueDailyChallengeToken(input: {
+export async function issueDailyChallengeToken(input: {
   answerWord: string;
   challengeDate: string;
   challengeSequence: number;
@@ -144,8 +96,8 @@ export function issueDailyChallengeToken(input: {
   return encryptPayload(CHALLENGE_TOKEN_VERSION, payload);
 }
 
-export function verifyDailyChallengeToken(token: string) {
-  const payload = decryptPayload<DailyChallengeTokenPayload>(
+export async function verifyDailyChallengeToken(token: string) {
+  const payload = await decryptPayload<DailyChallengeTokenPayload>(
     token,
     CHALLENGE_TOKEN_VERSION,
   );
@@ -164,7 +116,7 @@ export function verifyDailyChallengeToken(token: string) {
   return payload;
 }
 
-export function issueDailyChallengeProgressToken(input: {
+export async function issueDailyChallengeProgressToken(input: {
   attemptCount: number;
   challengeDate: string;
   challengeSequence: number;
@@ -188,8 +140,8 @@ export function issueDailyChallengeProgressToken(input: {
   return encryptPayload(PROGRESS_TOKEN_VERSION, payload);
 }
 
-export function verifyDailyChallengeProgressToken(token: string) {
-  const payload = decryptPayload<DailyChallengeProgressTokenPayload>(
+export async function verifyDailyChallengeProgressToken(token: string) {
+  const payload = await decryptPayload<DailyChallengeProgressTokenPayload>(
     token,
     PROGRESS_TOKEN_VERSION,
   );
@@ -209,7 +161,7 @@ export function verifyDailyChallengeProgressToken(token: string) {
   return payload;
 }
 
-export function issueDailyChallengeCompletionToken(input: {
+export async function issueDailyChallengeCompletionToken(input: {
   answerWord: string;
   attempts: number;
   challengeDate: string;
@@ -237,8 +189,8 @@ export function issueDailyChallengeCompletionToken(input: {
   return encryptPayload(COMPLETION_TOKEN_VERSION, payload);
 }
 
-export function verifyDailyChallengeCompletionToken(token: string) {
-  const payload = decryptPayload<DailyChallengeCompletionTokenPayload>(
+export async function verifyDailyChallengeCompletionToken(token: string) {
+  const payload = await decryptPayload<DailyChallengeCompletionTokenPayload>(
     token,
     COMPLETION_TOKEN_VERSION,
   );

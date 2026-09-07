@@ -5,7 +5,7 @@ import { getGameModeConfig, isEnabledWordLength } from "@/server/game-modes";
 import { getRandomEligibleLexiconProfileWord } from "@/server/lexicon-profiles";
 import { createTursoClient } from "@/server/turso";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 const MIN_WORD_LENGTH = 3;
 const MAX_WORD_LENGTH = 8;

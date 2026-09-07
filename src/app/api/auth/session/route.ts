@@ -6,7 +6,7 @@ import {
   resolveAuthSessionIdentity,
 } from "@/server/auth";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
   const authSession = await getAuthSessionFromRequest(request);

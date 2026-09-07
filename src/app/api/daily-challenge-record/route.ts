@@ -21,7 +21,7 @@ import {
 } from "@/server/daily-challenge-records";
 import { createRequestTimingLogger } from "@/server/request-timing";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 const MAX_DAILY_ATTEMPTS = 6;
 
 const payloadSchema = z.object({
@@ -150,7 +150,7 @@ export async function POST(request: NextRequest) {
       payloadSchema.parse(await request.json())
     );
     const completionChallenge = await timing.timeStep("verify_completion_token", () =>
-      Promise.resolve(verifyDailyChallengeCompletionToken(payload.completionToken))
+      verifyDailyChallengeCompletionToken(payload.completionToken)
     );
     const resolvedDailyScheduleVersion = completionChallenge.challengeVersion;
     const resolvedTimezone = completionChallenge.timezone;

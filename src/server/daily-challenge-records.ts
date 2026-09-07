@@ -1,9 +1,9 @@
 import type { Client } from "@libsql/client";
-import { randomBytes } from "node:crypto";
 
 import {
   getDateKeyForTimezone,
 } from "@/server/daily-schedule";
+import { randomHex } from "@/server/edge-crypto";
 import type {
   DailyChallengeCommunityStats,
   DailyChallengeHistoryEntry,
@@ -275,7 +275,7 @@ function choosePreferredRecord(
     return {
       record: {
         ...incoming,
-        id: randomBytes(16).toString("hex"),
+        id: randomHex(16),
         isWin: existing.isWin,
         attempts: existing.attempts,
         maxAttempts: existing.maxAttempts,
@@ -299,7 +299,7 @@ function choosePreferredRecord(
     return {
       record: {
         ...incoming,
-        id: randomBytes(16).toString("hex"),
+        id: randomHex(16),
         isWin: existing.isWin,
         attempts: existing.attempts,
         maxAttempts: existing.maxAttempts,
@@ -330,7 +330,7 @@ function choosePreferredRecord(
     return {
       record: {
         ...incoming,
-        id: randomBytes(16).toString("hex"),
+        id: randomHex(16),
         isWin: existing.isWin,
         attempts: existing.attempts,
         maxAttempts: existing.maxAttempts,
@@ -456,7 +456,7 @@ async function upsertDailyChallengeSession(
         updated_at = excluded.updated_at
     `,
     args: [
-      randomBytes(16).toString("hex"),
+      randomHex(16),
       input.userId,
       input.challengeDate,
       input.challengeVersion,
@@ -708,7 +708,7 @@ export async function saveFreshDailyChallengeRecord(
 ) {
   const now = new Date().toISOString();
   const persisted: PersistedRecord = {
-    id: randomBytes(16).toString("hex"),
+    id: randomHex(16),
     ...input,
     completedAt: now,
     updatedAt: now,
@@ -779,7 +779,7 @@ export async function saveDailyChallengeRecord(client: Client, input: RecordInpu
   );
   const now = new Date().toISOString();
   const incomingRecord: PersistedRecord = {
-    id: randomBytes(16).toString("hex"),
+    id: randomHex(16),
     ...input,
     completedAt: now,
     updatedAt: now,

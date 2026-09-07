@@ -10,7 +10,7 @@ import {
   WAFFLE_DAILY_TIMEZONE,
 } from "@/server/waffle-puzzles";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 

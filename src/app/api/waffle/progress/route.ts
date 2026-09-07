@@ -24,7 +24,7 @@ import {
   WAFFLE_TILE_COUNT,
 } from "@/lib/waffle-game";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const payloadSchema = z.object({

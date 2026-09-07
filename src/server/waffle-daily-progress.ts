@@ -1,6 +1,6 @@
 import type { Client } from "@libsql/client";
-import { randomBytes } from "node:crypto";
 
+import { randomHex } from "@/server/edge-crypto";
 import type {
   WaffleDailyCommunityStats,
   WaffleDailyHistoryEntry,
@@ -201,7 +201,7 @@ function choosePreferredWaffleRecord(
       record: {
         ...incoming,
         completedAt: existing.completedAt,
-        id: randomBytes(16).toString("hex"),
+        id: randomHex(16),
         isWin: existing.isWin,
         stars: existing.stars,
         swapsUsed: existing.swapsUsed,
@@ -224,7 +224,7 @@ function choosePreferredWaffleRecord(
       record: {
         ...incoming,
         completedAt: existing.completedAt,
-        id: randomBytes(16).toString("hex"),
+        id: randomHex(16),
         isWin: existing.isWin,
         stars: existing.stars,
         swapsUsed: existing.swapsUsed,
@@ -247,7 +247,7 @@ function choosePreferredWaffleRecord(
       record: {
         ...incoming,
         completedAt: existing.completedAt,
-        id: randomBytes(16).toString("hex"),
+        id: randomHex(16),
         isWin: existing.isWin,
         stars: existing.stars,
         swapsUsed: existing.swapsUsed,
@@ -528,7 +528,7 @@ export async function upsertWaffleDailySession(
         updated_at = excluded.updated_at
     `,
     args: [
-      randomBytes(16).toString("hex"),
+      randomHex(16),
       input.userId,
       input.challengeDate,
       input.challengeVersion,
@@ -562,7 +562,7 @@ export async function saveWaffleDailyRecord(
   const incoming: PersistedWaffleRecord = {
     ...input,
     completedAt: now,
-    id: randomBytes(16).toString("hex"),
+    id: randomHex(16),
     updatedAt: now,
   };
   const selection = choosePreferredWaffleRecord(existing, incoming);

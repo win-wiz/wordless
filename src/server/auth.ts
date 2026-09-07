@@ -1,8 +1,8 @@
 import type { Client } from "@libsql/client";
-import { createHash, randomBytes, randomUUID } from "node:crypto";
 import type { NextRequest, NextResponse } from "next/server";
 
 import { auth } from "@/auth";
+import { randomHex, randomUuid, sha256Hex } from "@/server/edge-crypto";
 import type { AuthUser } from "@/types/auth";
 
 const VISITOR_SESSION_COOKIE_NAME = "wordless_visitor_session";
@@ -59,13 +59,13 @@ function normalizeDisplayName(user: AuthenticatedProfile) {
 function buildFallbackEmail(user: AuthenticatedProfile) {
   const provider = user.provider?.trim().toLowerCase() || "oauth";
   const providerAccountId =
-    user.providerAccountId?.trim().toLowerCase() || randomUUID();
+    user.providerAccountId?.trim().toLowerCase() || randomUuid();
   const localPart = `${provider}-${providerAccountId}`
     .replace(/[^a-z0-9._-]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 64);
 
-  return `${localPart || randomUUID()}@users.wordless.local`;
+  return `${localPart || randomUuid()}@users.wordless.local`;
 }
 
 export function resolveAuthSessionIdentity(
@@ -109,16 +109,17 @@ function buildVisitorSessionExpiry() {
 }
 
 function hashSessionToken(token: string) {
-  return createHash("sha256").update(token).digest("hex");
+  return sha256Hex(token);
 }
 
 async function createVisitorUser(client: Client) {
-  const userId = randomUUID();
-  const sessionId = randomUUID();
-  const sessionToken = randomBytes(32).toString("hex");
+  const userId = randomUuid();
+  const sessionId = randomUuid();
+  const sessionToken = randomHex(32);
   const expiresAt = buildVisitorSessionExpiry();
   const createdAt = new Date().toISOString();
   const email = buildVisitorEmail(userId);
+  const sessionTokenHash = await hashSessionToken(sessionToken);
 
   await client.batch(
     [
@@ -154,7 +155,7 @@ async function createVisitorUser(client: Client) {
         args: [
           sessionId,
           userId,
-          hashSessionToken(sessionToken),
+          sessionTokenHash,
           expiresAt,
         ],
       },
@@ -178,6 +179,7 @@ async function getVisitorUserBySessionToken(
   client: Client,
   token: string,
 ) {
+  const sessionTokenHash = await hashSessionToken(token);
   const result = await client.execute({
     sql: `
       SELECT
@@ -194,7 +196,7 @@ async function getVisitorUserBySessionToken(
         AND vs.expires_at > ?
       LIMIT 1
     `,
-    args: [hashSessionToken(token), new Date().toISOString()],
+    args: [sessionTokenHash, new Date().toISOString()],
   });
 
   const row = result.rows[0];
@@ -311,7 +313,7 @@ async function syncAuthAccount(
         updated_at = CURRENT_TIMESTAMP
     `,
     args: [
-      randomUUID(),
+      randomUuid(),
       userId,
       user.provider,
       user.providerAccountId,
@@ -323,7 +325,7 @@ async function syncAuthAccount(
 async function syncOAuthUser(client: Client, user: AuthenticatedProfile) {
   const normalizedEmail = user.email?.trim().toLowerCase() || buildFallbackEmail(user);
   const displayName = normalizeDisplayName(user);
-  const localUserId = (await getLocalUserIdForProfile(client, user)) || randomUUID();
+  const localUserId = (await getLocalUserIdForProfile(client, user)) || randomUuid();
 
   await client.execute({
     sql: `

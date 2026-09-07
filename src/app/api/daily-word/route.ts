@@ -10,7 +10,7 @@ import {
 import { issueDailyChallengeToken } from "@/server/challenge-token";
 import { createTursoClient } from "@/server/turso";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({
-      challengeToken: issueDailyChallengeToken({
+      challengeToken: await issueDailyChallengeToken({
         answerWord: dailyEntry.word,
         challengeDate: dailyEntry.date,
         challengeSequence: dailyEntry.sequence,

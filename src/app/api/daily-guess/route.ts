@@ -22,7 +22,7 @@ import {
 import { createRequestTimingLogger } from "@/server/request-timing";
 import { createTursoClient } from "@/server/turso";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 const MAX_DAILY_ATTEMPTS = 6;
 
 const payloadSchema = z.object({
@@ -58,12 +58,12 @@ export async function POST(request: NextRequest) {
     );
     const progressChallenge = payload.progressToken
       ? await timing.timeStep("verify_progress_token", () =>
-        Promise.resolve(verifyDailyChallengeProgressToken(payload.progressToken!))
+        verifyDailyChallengeProgressToken(payload.progressToken!)
       )
       : null;
     const tokenChallenge = payload.challengeToken
       ? await timing.timeStep("verify_challenge_token", () =>
-        Promise.resolve(verifyDailyChallengeToken(payload.challengeToken!))
+        verifyDailyChallengeToken(payload.challengeToken!)
       )
       : null;
     let dailyScheduleVersion =
@@ -198,7 +198,7 @@ export async function POST(request: NextRequest) {
         completionToken: null,
         valid: true,
         guess: formattedGuess,
-        progressToken: issueDailyChallengeProgressToken({
+        progressToken: await issueDailyChallengeProgressToken({
           attemptCount: attemptNumber,
           challengeDate: payload.challengeDate,
           challengeSequence: scheduleEntry.sequence,
@@ -218,7 +218,7 @@ export async function POST(request: NextRequest) {
 
     return respondJson({
       authenticated: false,
-      completionToken: issueDailyChallengeCompletionToken({
+      completionToken: await issueDailyChallengeCompletionToken({
         answerWord: solutionWord,
         attempts: attemptNumber,
         challengeDate: payload.challengeDate,

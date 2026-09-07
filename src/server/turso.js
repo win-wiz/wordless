@@ -1,6 +1,5 @@
 // @ts-nocheck
 import { createClient } from "@libsql/client";
-import path from "node:path";
 
 function resolveLocalDbUrl() {
   if (process.env.WORDLESS_LOCAL_DB_URL) {
@@ -12,11 +11,7 @@ function resolveLocalDbUrl() {
   }
 
   const configuredPath = process.env.WORDLESS_LOCAL_DB_PATH || "db/wordless-local.db";
-  const resolvedPath = path.isAbsolute(configuredPath)
-    ? configuredPath
-    : path.join(process.cwd(), configuredPath);
-
-  return `file:${resolvedPath}`;
+  return configuredPath.startsWith("file:") ? configuredPath : `file:${configuredPath}`;
 }
 
 export function createTursoClient() {

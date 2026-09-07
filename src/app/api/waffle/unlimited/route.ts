@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { createTursoClient } from "@/server/turso";
 import { assertValidWafflePayload, getRandomWafflePuzzle } from "@/server/waffle-puzzles";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 export async function GET() {
   const client = createTursoClient();

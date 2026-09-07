@@ -8,7 +8,7 @@ import {
 } from "@/server/lexicon-profiles";
 import { createTursoClient } from "@/server/turso";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 const WORD_PATTERN = /^[a-zA-Z]+$/;
 const MIN_WORD_LENGTH = 3;
