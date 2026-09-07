@@ -489,7 +489,11 @@ export function useWordlessGame({
       record: DailyChallengeRecord | null,
       communityStats: DailyChallengeCommunityStats | null,
       progressToken?: string | null,
+        options?: {
+          showResultDialog?: boolean;
+        },
     ) => {
+        const showResultDialog = options?.showResultDialog ?? false;
       const nextGridContent = createEmptyGrid(totalCells);
       let nextCellStates = createEmptyCellStates(totalCells);
       let nextKeyboardLetterStates: KeyboardLetterStateMap = {};
@@ -527,16 +531,20 @@ export function useWordlessGame({
 
       if (session.completed) {
         const solutionWord = record?.answerWord ?? session.solutionWord ?? '';
+          const dialogTitle = session.isWin ? 'You Won!' : 'You Lost!';
+          const dialogMessage = session.isWin
+            ? getPositiveMessage() || ''
+            : getNegativeMessage() || '';
 
         setWord(solutionWord);
         setCurrentCell(-1);
         setShowKeyboard(false);
         setIsGameOver(true);
-        setDialogVisible(true);
-        setDialogTitle(session.isWin ? 'You Won!' : 'You Lost!');
-        setDialogMessage(
-          session.isWin ? getPositiveMessage() || '' : getNegativeMessage() || ''
-        );
+          if (showResultDialog) {
+            setDialogVisible(true);
+          }
+          setDialogTitle(dialogTitle);
+          setDialogMessage(dialogMessage);
         setGameResultData({
           isWin: session.isWin === true,
           attempts: session.attemptCount,
@@ -649,6 +657,8 @@ export function useWordlessGame({
                 },
             refreshedProgress.record,
             refreshedProgress.communityStats,
+              undefined,
+              { showResultDialog: false },
           );
         } else {
           setDailyRecordSaveState('saved');
@@ -778,6 +788,8 @@ export function useWordlessGame({
                 },
             progress.record,
             progress.communityStats,
+              undefined,
+              { showResultDialog: false },
           );
           return;
         }
@@ -809,6 +821,7 @@ export function useWordlessGame({
             null,
             progress.communityStats,
             localSnapshot.progressToken,
+              { showResultDialog: false },
           );
 
           if (localSnapshot.completed && localSnapshot.completionToken) {
@@ -827,6 +840,8 @@ export function useWordlessGame({
             progress.session,
             progress.record,
             progress.communityStats,
+              undefined,
+              { showResultDialog: false },
           );
           return;
         }

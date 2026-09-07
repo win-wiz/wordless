@@ -329,6 +329,7 @@ export default function Games({
                     onStartGame={game.handleStartGame}
                     onTimeChange={game.handleTotalTimeChange}
                     showKeyboard={game.showKeyboard}
+                      totalTime={game.totalTime}
                   />
                   <div className="relative flex flex-col items-center">
                     {showDailyCompletedPanel ? (

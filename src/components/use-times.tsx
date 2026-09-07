@@ -6,6 +6,7 @@ import { Clock } from "lucide-react"
 import { memo } from "react"
 
 interface UseTimesProps {
+  currentTime?: number
   showKeyboard: boolean
   hasFirstInput: boolean
   isGameOver: boolean
@@ -28,7 +29,13 @@ const TimeDisplay = memo(({ time }: { time: number }) => (
 
 TimeDisplay.displayName = 'TimeDisplay';
 
-function UseTimes({ showKeyboard, hasFirstInput, isGameOver, onTimeChange }: UseTimesProps) {
+function UseTimes({
+  currentTime,
+  showKeyboard,
+  hasFirstInput,
+  isGameOver,
+  onTimeChange,
+}: UseTimesProps) {
   const [time, setTime] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
   const timeRef = useRef(0)
@@ -38,6 +45,15 @@ function UseTimes({ showKeyboard, hasFirstInput, isGameOver, onTimeChange }: Use
   useEffect(() => {
     onTimeChangeRef.current = onTimeChange
   }, [onTimeChange])
+
+  useEffect(() => {
+    if (typeof currentTime !== "number" || Number.isNaN(currentTime)) {
+      return
+    }
+
+    timeRef.current = currentTime
+    setTime(currentTime)
+  }, [currentTime])
 
   // 更新时间的函数 - 立即同步到父组件
   const updateTime = useCallback(() => {
@@ -89,7 +105,7 @@ function UseTimes({ showKeyboard, hasFirstInput, isGameOver, onTimeChange }: Use
     }
   }, [hasFirstInput])
 
-  // 组件初始化时确保时间同步
+    // 组件初始化时确保时间同步
   useEffect(() => {
     onTimeChangeRef.current(time)
   }, [time])

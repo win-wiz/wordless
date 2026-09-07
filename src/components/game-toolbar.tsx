@@ -26,6 +26,7 @@ interface GameToolbarProps {
   onStartGame: () => void;
   onTimeChange: (time: number) => void;
   showKeyboard: boolean;
+  totalTime: number;
 }
 
 export function GameToolbar({
@@ -41,6 +42,7 @@ export function GameToolbar({
   onStartGame,
   onTimeChange,
   showKeyboard,
+  totalTime,
 }: GameToolbarProps) {
   const fallbackDate = formatLocalDate();
   const challengeDate = dailyChallenge?.date ?? fallbackDate;
@@ -88,6 +90,7 @@ export function GameToolbar({
         <div className="flex h-12 items-center gap-2 rounded-full border border-violet-100/80 bg-white/90 px-3 shadow-[0_10px_30px_rgba(139,92,246,0.08)] backdrop-blur">
             <div className="flex min-w-[96px] items-center justify-center px-1 text-sm font-semibold text-violet-700">
             <UseTimes
+                currentTime={totalTime}
               showKeyboard={showKeyboard}
               hasFirstInput={hasFirstInput}
               isGameOver={isGameOver}
