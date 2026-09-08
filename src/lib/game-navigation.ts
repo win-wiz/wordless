@@ -5,7 +5,6 @@ export type GameNavigationSource = "local" | "embedded";
 export type GameNavigationIcon =
   | "sparkles"
   | "waffle"
-  | "memory"
   | "kitchen"
   | "stack";
 
@@ -53,17 +52,6 @@ export const GAME_NAVIGATION_ITEMS: readonly GameNavigationItem[] = [
     icon: "stack",
     modeSupport: "none",
     includeInMobileSidebar: false,
-    includeInMoreGames: true,
-  },
-  {
-    id: "emoji-memory",
-    title: "Emoji Memory Game",
-    shortTitle: "Emoji Memory",
-    href: "/emoji-memory-game",
-    source: "embedded",
-    icon: "memory",
-    modeSupport: "none",
-    includeInMobileSidebar: true,
     includeInMoreGames: true,
   },
   {

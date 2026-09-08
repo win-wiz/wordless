@@ -6,7 +6,6 @@ import logo from "@/../public/wordless.png";
 import {
   ArrowUpRight,
   BarChart3,
-  Brain,
   ChefHat,
   CircleHelp,
   Gamepad2,
@@ -55,8 +54,6 @@ function renderGameIcon(icon: GameNavigationItem["icon"]) {
       return <Sparkles className="h-4 w-4" />;
     case "waffle":
       return <Gamepad2 className="h-4 w-4" />;
-    case "memory":
-      return <Brain className="h-4 w-4" />;
     case "kitchen":
       return <ChefHat className="h-4 w-4" />;
     case "stack":
@@ -81,19 +78,6 @@ export default function Header() {
     MODE_PARAM_VALUES.has(searchParams.get('mode') ?? "") ? 'unlimited' : 'daily';
   const showsWaffleStatsEntry = isWafflePage && activeMode === "daily";
   const isWaffleStatsPanelOpen = searchParams.get("panel") === "stats";
-  const shouldShowModeSwitch = isHomePage || isWafflePage;
-  const modeSwitcherItems = [
-    {
-      icon: <Sparkles className="h-4 w-4" />,
-      label: isWafflePage ? "Daily" : "Daily challenge",
-      value: "daily" as const,
-    },
-    {
-      icon: <Infinity className="h-4 w-4" />,
-      label: "Unlimited",
-      value: "unlimited" as const,
-    },
-  ] as const;
 
   const updateCurrentRouteParams = (updater: (params: URLSearchParams) => void) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -148,18 +132,6 @@ export default function Header() {
   const handleOpenWaffleStats = () => {
     updateCurrentRouteParams((params) => {
       params.set("panel", "stats");
-    });
-  };
-
-  const handleModeChange = (nextMode: HeaderGameMode) => {
-    updateCurrentRouteParams((params) => {
-      if (nextMode === "daily") {
-        params.delete("mode");
-      } else {
-        params.set("mode", "unlimited");
-      }
-
-      params.delete("panel");
     });
   };
 
@@ -418,16 +390,6 @@ export default function Header() {
 
             <UserMenu compact />
           </div>
-            {shouldShowModeSwitch ? (
-              <div className="hidden flex-1 justify-center md:flex">
-                <GameModeSwitcher
-                  activeValue={activeMode}
-                  onValueChange={handleModeChange}
-                  items={modeSwitcherItems}
-                  className="w-full max-w-[320px]"
-                />
-              </div>
-            ) : null}
           <div className="hidden items-center justify-end gap-2 md:flex">
             {showsStatsEntry && (
               <DailyStatsPanel />
@@ -461,27 +423,6 @@ export default function Header() {
             <UserMenu />
           </div>
         </div>
-
-        {shouldShowModeSwitch ? (
-          <div className="md:hidden">
-            <GameModeSwitcher
-              activeValue={activeMode}
-              onValueChange={handleModeChange}
-              items={[
-                {
-                  icon: <Sparkles className="h-4 w-4" />,
-                  label: "Daily",
-                  value: "daily",
-                },
-                {
-                  icon: <Infinity className="h-4 w-4" />,
-                  label: "Unlimited",
-                  value: "unlimited",
-                },
-              ]}
-            />
-          </div>
-        ) : null}
       </div>
       
       <ShareDialog 

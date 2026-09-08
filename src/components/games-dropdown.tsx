@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Brain, ChefHat, ChevronDown, Gamepad2, Layers3, Sparkles } from "lucide-react";
+import { ChefHat, ChevronDown, Gamepad2, Layers3, Sparkles } from "lucide-react";
 
 import { GAME_NAVIGATION_ITEMS, getGameHref } from "@/lib/game-navigation";
 import type { GameNavigationItem, HeaderGameMode } from "@/lib/game-navigation";
@@ -13,8 +13,6 @@ function renderGameIcon(icon: GameNavigationItem["icon"]) {
       return <Sparkles className="h-4 w-4" />;
     case "waffle":
       return <Gamepad2 className="h-4 w-4" />;
-    case "memory":
-      return <Brain className="h-4 w-4" />;
     case "kitchen":
       return <ChefHat className="h-4 w-4" />;
     case "stack":
