@@ -1,6 +1,6 @@
 "use client";
 
-import WaffleDailyStatsPanel from "@/components/iframes/waffle-game/waffle-daily-stats-panel";
+import WaffleDailyStatsPanel from "@/components/waffle-game/waffle-daily-stats-panel";
 import { BarChart3 } from "lucide-react";
 import {
   Dialog,

@@ -1,5 +1,6 @@
-import { CalendarDays, Minus, Plus, RefreshCw } from "lucide-react";
+import { CalendarDays, Clock3, Minus, Plus, RefreshCw } from "lucide-react";
 
+import { GameInfoPill } from "@/components/game-info-pill";
 import UseTimes from "@/components/use-times";
 import type { DailyWordResponse } from "@/lib/api";
 import type { GameMode } from "@/hooks/use-wordless-game";
@@ -77,37 +78,43 @@ export function GameToolbar({
         )}
 
         {gameMode === 'daily' && (
-          <div className="flex h-12 items-center gap-2 rounded-full border border-violet-100/80 bg-white/90 px-4 shadow-[0_10px_30px_rgba(139,92,246,0.08)] backdrop-blur">
-            <div className="flex items-center gap-2 text-zinc-500">
-              <CalendarDays className="h-4 w-4 text-violet-400" />
-              <span className="text-sm font-semibold text-zinc-700">
-                {challengeDate}
-              </span>
-            </div>
-          </div>
+          <GameInfoPill
+            icon={<CalendarDays className="h-4 w-4" />}
+            label="Challenge date"
+            value={challengeDate}
+            valueClassName="text-sm text-zinc-700"
+            className="h-12 border-violet-100/80 bg-white/90 shadow-[0_10px_30px_rgba(139,92,246,0.08)]"
+          />
         )}
 
-        <div className="flex h-12 items-center gap-2 rounded-full border border-violet-100/80 bg-white/90 px-3 shadow-[0_10px_30px_rgba(139,92,246,0.08)] backdrop-blur">
-            <div className="flex min-w-[96px] items-center justify-center px-1 text-sm font-semibold text-violet-700">
-            <UseTimes
+        <div className="flex items-center gap-2">
+          <GameInfoPill
+            icon={<Clock3 className="h-4 w-4" />}
+            label="Elapsed time"
+            value={
+              <UseTimes
                 currentTime={totalTime}
-              showKeyboard={showKeyboard}
-              hasFirstInput={hasFirstInput}
-              isGameOver={isGameOver}
-              onTimeChange={onTimeChange}
-            />
-            </div>
+                showKeyboard={showKeyboard}
+                hasFirstInput={hasFirstInput}
+                isGameOver={isGameOver}
+                onTimeChange={onTimeChange}
+                showIcon={false}
+              />
+            }
+            valueClassName="min-w-[96px] justify-center px-1 text-sm text-violet-700"
+            className="h-12 border-violet-100/80 bg-white/90 shadow-[0_10px_30px_rgba(139,92,246,0.08)]"
+          />
 
           {gameMode === 'unlimited' && (
             <button
               onClick={onStartGame}
               aria-label="Start new game"
-              className="group flex h-9 w-9 items-center justify-center rounded-full text-violet-600 transition-all hover:bg-violet-50"
+              className="group flex h-12 w-12 items-center justify-center rounded-full border border-violet-100/80 bg-white/90 text-violet-600 shadow-[0_10px_30px_rgba(139,92,246,0.08)] transition-all hover:bg-violet-50"
             >
               <RefreshCw className="h-4 w-4 transition-transform duration-300 group-hover:rotate-180" />
             </button>
           )}
-          </div>
+        </div>
       </div>
     </div>
   );

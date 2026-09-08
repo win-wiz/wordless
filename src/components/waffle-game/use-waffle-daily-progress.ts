@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
 
-import { restoreProgressFromResponse } from "@/components/iframes/waffle-game/waffle-client-helpers";
+import { restoreProgressFromResponse } from "@/components/waffle-game/waffle-client-helpers";
 import type {
   WaffleApiResponse,
   WaffleMode,
-} from "@/components/iframes/waffle-game/waffle-client-types";
+} from "@/components/waffle-game/waffle-client-types";
 import {
   fetchWaffleDailyProgress,
   saveWaffleDailyProgress,

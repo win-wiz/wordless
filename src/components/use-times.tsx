@@ -11,6 +11,7 @@ interface UseTimesProps {
   hasFirstInput: boolean
   isGameOver: boolean
   onTimeChange: (time: number) => void
+  showIcon?: boolean
 }
 
 // 创建记忆化的时钟图标组件
@@ -35,6 +36,7 @@ function UseTimes({
   hasFirstInput,
   isGameOver,
   onTimeChange,
+  showIcon = true,
 }: UseTimesProps) {
   const [time, setTime] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
@@ -112,7 +114,7 @@ function UseTimes({
 
   return (
     <div className="flex h-full items-center gap-2">
-      <ClockIcon />
+      {showIcon ? <ClockIcon /> : null}
       <TimeDisplay time={time} />
     </div>
   )

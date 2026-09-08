@@ -4,7 +4,7 @@ import type { WaffleDailyCommunityStats, WaffleDailyProgressResponse } from "@/t
 import type {
   WaffleApiResponse,
   WafflePlayableCellView,
-} from "@/components/iframes/waffle-game/waffle-client-types";
+} from "@/components/waffle-game/waffle-client-types";
 
 const PLAYABLE_CELLS = getPlayableCells();
 

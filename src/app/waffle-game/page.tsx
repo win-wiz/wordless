@@ -1,13 +1,10 @@
 import dynamic from "next/dynamic";
-import HelpCenter from "@/components/iframes/waffle-game/help-center";
+import HelpCenter from "@/components/waffle-game/help-center";
+import WaffleLoadingSkeleton from "@/components/waffle-game/waffle-loading-skeleton";
 
-const DynamicWaffleClient = dynamic(() => import("@/components/iframes/waffle-game/waffle-client"), {
+const DynamicWaffleClient = dynamic(() => import("@/components/waffle-game/waffle-client"), {
   ssr: false,
-  loading: () => (
-    <div className="flex min-h-[480px] items-center justify-center rounded-3xl border border-zinc-200 bg-zinc-50">
-      <div className="h-16 w-16 animate-pulse rounded-full border-4 border-zinc-200" />
-    </div>
-  ),
+  loading: () => <WaffleLoadingSkeleton standalone />,
 });
 
 export default function WaffleGamePage() {

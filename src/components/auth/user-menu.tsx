@@ -85,7 +85,7 @@ export function UserMenu({ compact = false }: UserMenuProps) {
         aria-busy="true"
         disabled
         label="Loading"
-        icon={<LoaderCircle className="h-4 w-4 animate-spin" />}
+        icon={<LoaderCircle className="h-[18px] w-[18px] animate-spin" />}
         className={triggerSizeClassName}
       />
     );
@@ -103,7 +103,7 @@ export function UserMenu({ compact = false }: UserMenuProps) {
           triggerSizeClassName,
         )}
       >
-        <LogIn className="h-4 w-4" />
+        <LogIn className="h-[18px] w-[18px]" />
       </Button>
     );
   }
@@ -125,7 +125,7 @@ export function UserMenu({ compact = false }: UserMenuProps) {
       return avatarLetter;
     }
 
-    return <UserRound className="h-4 w-4" />;
+    return <UserRound className="h-[18px] w-[18px]" />;
   };
 
   return (
@@ -137,7 +137,7 @@ export function UserMenu({ compact = false }: UserMenuProps) {
           onMouseEnter={openHoverMenu}
           onMouseLeave={scheduleCloseMenu}
           className={cn(
-            "flex items-center justify-center overflow-hidden rounded-full border border-violet-100 bg-white text-xs font-semibold text-violet-700 shadow-sm transition-colors duration-200 hover:border-violet-200 hover:bg-violet-50 hover:text-violet-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:ring-offset-2",
+            "flex items-center justify-center overflow-hidden rounded-full bg-transparent text-xs font-semibold text-violet-700 transition-colors duration-200 hover:bg-violet-50 hover:text-violet-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/30 focus-visible:ring-offset-2",
             triggerSizeClassName
           )}
         >

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import WaffleDisplayTile from '@/components/iframes/waffle-game/waffle-display-tile';
+import WaffleDisplayTile from '@/components/waffle-game/waffle-display-tile';
 
 const WaffleGrid = React.memo(() => {
   const gridData = useMemo(

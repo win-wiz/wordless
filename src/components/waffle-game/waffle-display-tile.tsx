@@ -1,6 +1,6 @@
 import React from "react";
 
-import { getWaffleTileStyle, type WaffleDisplayTileColor } from "@/components/iframes/waffle-game/waffle-tile-theme";
+import { getWaffleTileStyle, type WaffleDisplayTileColor } from "@/components/waffle-game/waffle-tile-theme";
 import { cn } from "@/lib/utils";
 
 type WaffleDisplayTileProps = {

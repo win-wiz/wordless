@@ -1,35 +1,36 @@
 "use client";
 
-import { RotateCcw, Undo2 } from "lucide-react";
+import { ArrowLeftRight, CalendarDays, RotateCcw, Sparkles, Undo2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 import ConfettiEffect from "@/components/confetti-effect";
-import WaffleResultPrompt from "@/components/iframes/waffle-game/waffle-result-prompt";
-import WaffleStatsDialog from "@/components/iframes/waffle-game/waffle-stats-dialog";
+import WaffleResultPrompt from "@/components/waffle-game/waffle-result-prompt";
+import WaffleStatsDialog from "@/components/waffle-game/waffle-stats-dialog";
 import {
   buildDailyShareText,
   buildWaffleSharePreviewCard,
   buildWaffleShareSummary,
-} from "@/components/iframes/waffle-game/waffle-client-share";
+} from "@/components/waffle-game/waffle-client-share";
 import {
   buildBoardCells,
   getChangedIndices,
-} from "@/components/iframes/waffle-game/waffle-client-helpers";
+} from "@/components/waffle-game/waffle-client-helpers";
 import type {
   SwapAnimation,
   WaffleApiResponse,
   WaffleMode,
   WaffleMoveSnapshot,
   WaffleShareSnapshot,
-} from "@/components/iframes/waffle-game/waffle-client-types";
+} from "@/components/waffle-game/waffle-client-types";
 import {
   ActionButton,
   InfoToolbarPill,
   WaffleGameBoard,
-} from "@/components/iframes/waffle-game/waffle-game-ui";
-import { useWaffleDailyProgress } from "@/components/iframes/waffle-game/use-waffle-daily-progress";
+} from "@/components/waffle-game/waffle-game-ui";
+import WaffleLoadingSkeleton from "@/components/waffle-game/waffle-loading-skeleton";
+import { useWaffleDailyProgress } from "@/components/waffle-game/use-waffle-daily-progress";
 import { ShareDialog } from "@/components/share-dialog";
 import { cn } from "@/lib/utils";
 import {
@@ -483,10 +484,18 @@ export default function WaffleClient() {
             <div className="mb-8 flex w-full justify-center">
               <div className="flex w-full max-w-[760px] flex-wrap items-center justify-center gap-3">
                 <InfoToolbarPill
+                  icon={
+                    mode === "daily" ? (
+                      <CalendarDays className="h-4 w-4" />
+                    ) : (
+                      <Sparkles className="h-4 w-4" />
+                    )
+                  }
                   label={mode === "daily" ? "Date" : "Difficulty"}
                   value={mode === "daily" ? (puzzle?.date ?? "--") : (puzzle?.difficulty ?? "--")}
                 />
                 <InfoToolbarPill
+                  icon={<ArrowLeftRight className="h-4 w-4" />}
                   label="Moves"
                   value={puzzle ? `${remainingSwaps}/${puzzle.maxSwaps}` : "--"}
                 />
@@ -503,14 +512,7 @@ export default function WaffleClient() {
             </div>
 
             {loading ? (
-              <div className="flex flex-1 items-center justify-center">
-                <div className="relative">
-                  <div className="h-14 w-14 animate-loading rounded-full border-4 border-slate-200 border-t-blue-500" />
-                  <span className="absolute left-1/2 top-14 -translate-x-1/2 text-slate-500">
-                    Loading...
-                  </span>
-                </div>
-              </div>
+              <WaffleLoadingSkeleton mode={mode} />
             ) : error ? (
               <div className="flex min-h-[420px] w-full max-w-[760px] items-center justify-center rounded-3xl border border-rose-200 bg-rose-50 px-6 text-center text-sm text-rose-700">
                 {error}

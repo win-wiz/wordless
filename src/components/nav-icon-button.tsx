@@ -22,11 +22,11 @@ export const NavIconButton = forwardRef<HTMLButtonElement, NavIconButtonProps>(
           data-active={active}
           disabled={disabled}
           className={cn(
-            "flex h-10 w-10 items-center justify-center rounded-full border border-violet-100 bg-white text-zinc-600 shadow-sm transition-all duration-200",
-            "hover:-translate-y-0.5 hover:border-violet-200 hover:bg-violet-50 hover:text-violet-600",
+            "flex h-10 w-10 items-center justify-center rounded-full bg-transparent text-zinc-500 transition-colors duration-200",
+            "hover:bg-violet-50 hover:text-violet-700",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300 focus-visible:ring-offset-2",
-            "data-[active=true]:border-violet-200 data-[active=true]:bg-violet-50 data-[active=true]:text-violet-600",
-            "disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:border-violet-100 disabled:hover:bg-white disabled:hover:text-zinc-600",
+            "data-[active=true]:bg-violet-100 data-[active=true]:text-violet-700",
+            "disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent disabled:hover:text-zinc-500",
             className,
           )}
           {...props}

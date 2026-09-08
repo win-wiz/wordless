@@ -1,6 +1,7 @@
 "use client";
 
-import { getWaffleTileStyle } from "@/components/iframes/waffle-game/waffle-tile-theme";
+import { GameInfoPill } from "@/components/game-info-pill";
+import { getWaffleTileStyle } from "@/components/waffle-game/waffle-tile-theme";
 import { cn } from "@/lib/utils";
 import type { WaffleTileState } from "@/lib/waffle-game";
 import { memo, useMemo, type MutableRefObject, type ReactNode } from "react";
@@ -8,7 +9,7 @@ import { memo, useMemo, type MutableRefObject, type ReactNode } from "react";
 import type {
   SwapAnimation,
   WafflePlayableCellView,
-} from "@/components/iframes/waffle-game/waffle-client-types";
+} from "@/components/waffle-game/waffle-client-types";
 
 function getTileStatePalette(state: WaffleTileState) {
   if (state === "green") {
@@ -207,11 +208,4 @@ export function ActionButton({
   );
 }
 
-export function InfoToolbarPill({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex h-14 items-center gap-2 rounded-full border border-slate-200 bg-white px-5 shadow-[0_10px_24px_rgba(15,23,42,0.06)] backdrop-blur">
-      <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">{label}</span>
-      <span className="text-base font-semibold text-slate-700">{value}</span>
-    </div>
-  );
-}
+export { GameInfoPill as InfoToolbarPill };

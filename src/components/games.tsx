@@ -18,6 +18,7 @@ import { GameToolbar } from "@/components/game-toolbar";
 import KeyBoard from "@/components/key-board";
 import { ResultModal } from "@/components/result-modal";
 import { ShareDialog } from "@/components/share-dialog";
+import { WordlessLoadingSkeleton } from "@/components/wordless-loading-skeleton";
 import { useWordlessGame } from "@/hooks/use-wordless-game";
 import { cn, formatTime } from "@/lib/utils";
 
@@ -392,14 +393,11 @@ export default function Games({
                   </div>
                 </>
               ) : (
-                <div className="flex flex-1 items-center justify-center">
-                  <div className="relative">
-                    <div className="h-12 w-12 animate-loading rounded-full border-4 border-violet-200 border-t-violet-500" />
-                    <span className="absolute left-1/2 top-14 -translate-x-1/2 text-violet-500">
-                      Loading...
-                    </span>
-                  </div>
-                </div>
+                <WordlessLoadingSkeleton
+                  columns={game.columns}
+                  gameMode={game.gameMode}
+                  showKeyboard={game.showKeyboard}
+                />
               )}
             </div>
           </div>

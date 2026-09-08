@@ -21,7 +21,7 @@ export function DailyStatsPanel({
       onClick={() => {
         router.push("/stats");
       }}
-      icon={<Trophy className="h-4 w-4 text-violet-500" />}
+      icon={<Trophy className="h-[18px] w-[18px] text-violet-500" />}
     />
   );
 }

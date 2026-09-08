@@ -5,12 +5,12 @@ import {
 } from "@/lib/waffle-game";
 import type { WaffleDailyCommunityStats, WaffleDailyStats } from "@/types/waffle";
 
-import { getWaffleAheadOfPlayers } from "@/components/iframes/waffle-game/waffle-client-helpers";
+import { getWaffleAheadOfPlayers } from "@/components/waffle-game/waffle-client-helpers";
 import type {
   WaffleApiResponse,
   WaffleMode,
   WaffleShareSnapshot,
-} from "@/components/iframes/waffle-game/waffle-client-types";
+} from "@/components/waffle-game/waffle-client-types";
 
 type ResolvedShareSnapshot = {
   solved: boolean;
