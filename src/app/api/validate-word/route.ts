@@ -66,6 +66,31 @@ export async function GET(request: NextRequest) {
         rawProfile,
         word,
       );
+
+      if (!lookup.scheduleEntry) {
+        return NextResponse.json({
+          valid: false,
+          word,
+          profile: rawProfile,
+          source: "daily_schedule",
+          status: "missing_schedule",
+          reason: "No Daily Challenge was found for that date.",
+        });
+      }
+
+      const expectedLength = lookup.scheduleEntry.wordLength;
+
+      if (word.length !== expectedLength) {
+        return NextResponse.json({
+          valid: false,
+          word,
+          profile: rawProfile,
+          source: "daily_schedule",
+          status: "length_mismatch",
+          reason: `Word must be ${expectedLength} letters long.`,
+        });
+      }
+
       const validation = resolveDailyGuessEligibility({
         guess: word,
         scheduleWord: lookup.scheduleEntry?.word ?? null,

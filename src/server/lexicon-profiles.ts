@@ -154,47 +154,44 @@ export async function getDailyGuessValidationLookup(
   profileKey: LexiconProfileKey,
   guess: string,
 ) {
-  const result = await client.execute({
+  const scheduleResult = await client.execute({
     sql: `
       SELECT
         ds.challenge_date,
         ds.word AS solution_word,
         ds.difficulty,
         ds.sequence,
-        lw.word_length,
-        lp.eligible,
-        lp.reason,
-        lp.score,
-        lp.status,
-        lp.word
+        lw.word_length
       FROM daily_schedule ds
       JOIN lexicon_words lw ON lw.word = ds.word
-      LEFT JOIN lexicon_profiles lp
-        ON lp.profile_key = ?
-        AND lp.word = ?
-        AND lp.word_length = lw.word_length
       WHERE ds.challenge_date = ?
         AND ds.version = ?
       LIMIT 1
     `,
-    args: [profileKey, guess, challengeDate, version],
+    args: [challengeDate, version],
   });
 
-  const row = result.rows[0] as Record<string, unknown> | undefined;
+  const row = scheduleResult.rows[0] as Record<string, unknown> | undefined;
+  const scheduleEntry = row
+    ? {
+        date: String(row.challenge_date),
+        word: String(row.solution_word),
+        difficulty: String(row.difficulty),
+        sequence: Number(row.sequence),
+        wordLength: Number(row.word_length),
+      }
+    : null;
+  const guessProfileEntry = scheduleEntry
+    ? await getLexiconProfileEntry(
+      client,
+      profileKey,
+      guess,
+      scheduleEntry.wordLength,
+    )
+    : null;
   const lookup: DailyGuessValidationLookup = {
-    scheduleEntry: row
-      ? {
-          date: String(row.challenge_date),
-          word: String(row.solution_word),
-          difficulty: String(row.difficulty),
-          sequence: Number(row.sequence),
-          wordLength: Number(row.word_length),
-        }
-      : null,
-    guessProfileEntry:
-      row?.word && row.word_length
-        ? mapLexiconProfileEntry(row)
-        : null,
+    scheduleEntry,
+    guessProfileEntry,
   };
 
   return lookup;
