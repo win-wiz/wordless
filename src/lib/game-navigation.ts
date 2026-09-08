@@ -63,7 +63,7 @@ export const GAME_NAVIGATION_ITEMS: readonly GameNavigationItem[] = [
     source: "local",
     icon: "strands",
     modeSupport: "none",
-    includeInMobileSidebar: true,
+    includeInMobileSidebar: false,
     includeInMoreGames: true,
   },
   {

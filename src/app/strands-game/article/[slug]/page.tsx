@@ -8,6 +8,7 @@ import { getStrandsPuzzleBySlug } from "@/server/strands-puzzles";
 import { createTursoClient } from "@/server/turso";
 import type { StrandsPuzzleData } from "@/types/strands";
 
+export const runtime = "edge";
 export const revalidate = 3600;
 
 type StrandsArticlePageProps = {
