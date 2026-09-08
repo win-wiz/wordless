@@ -9,6 +9,7 @@ import {
   ChefHat,
   CircleHelp,
   Gamepad2,
+  Grid3x3,
   Infinity,
   Layers3,
   Menu,
@@ -58,6 +59,8 @@ function renderGameIcon(icon: GameNavigationItem["icon"]) {
       return <ChefHat className="h-4 w-4" />;
     case "stack":
       return <Layers3 className="h-4 w-4" />;
+    case "strands":
+      return <Grid3x3 className="h-4 w-4" />;
     default:
       return <Gamepad2 className="h-4 w-4" />;
   }

@@ -118,3 +118,46 @@
 .animate-waffle-solved {
   animation: waffle-solved-glow 900ms ease-out;
 }
+
+/* Strands 游戏动效（§3.6） */
+
+@keyframes path-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* 配合 path 元素上的 pathLength="1" strokeDasharray="1" 使用 */
+.animate-path-draw {
+  animation: path-draw 0.6s ease-in-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-path-draw {
+    animation: none;
+  }
+}
+
+@keyframes strands-toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.strands-toast {
+  animation: strands-toast-in 300ms ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strands-toast {
+    animation: none;
+  }
+}

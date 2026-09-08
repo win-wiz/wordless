@@ -6,7 +6,8 @@ export type GameNavigationIcon =
   | "sparkles"
   | "waffle"
   | "kitchen"
-  | "stack";
+  | "stack"
+  | "strands";
 
 export type GameNavigationItem = {
   href: string;
@@ -52,6 +53,17 @@ export const GAME_NAVIGATION_ITEMS: readonly GameNavigationItem[] = [
     icon: "stack",
     modeSupport: "none",
     includeInMobileSidebar: false,
+    includeInMoreGames: true,
+  },
+  {
+    id: "strands",
+    title: "Strands",
+    shortTitle: "Strands",
+    href: "/strands-game",
+    source: "local",
+    icon: "strands",
+    modeSupport: "none",
+    includeInMobileSidebar: true,
     includeInMoreGames: true,
   },
   {
