@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 type StrandsWinModalProps = {
   isOpen: boolean;
   isPractice: boolean;
+  isWon: boolean;
   theme: string;
   totalHintsUsed: number;
   onClose: () => void;
@@ -18,6 +19,7 @@ type StrandsWinModalProps = {
 export default function StrandsWinModal({
   isOpen,
   isPractice,
+  isWon,
   theme,
   totalHintsUsed,
   onClose,
@@ -60,7 +62,7 @@ export default function StrandsWinModal({
       <DialogContent className="max-w-sm rounded-3xl border border-stone-200 bg-[#fdfbf7]">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-bold text-stone-800">
-            You solved it!
+            {isWon ? "You solved it!" : "Strands Stats"}
           </DialogTitle>
         </DialogHeader>
 
@@ -96,14 +98,16 @@ export default function StrandsWinModal({
             </div>
           ) : null}
 
-          <button
-            type="button"
-            onClick={() => void handleShare()}
-            className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-stone-800 text-sm font-semibold text-white transition-colors hover:bg-stone-900"
-          >
-            <Share2 className="h-4 w-4" />
-            {copied ? "Copied!" : "Share result"}
-          </button>
+          {isWon ? (
+            <button
+              type="button"
+              onClick={() => void handleShare()}
+              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-stone-800 text-sm font-semibold text-white transition-colors hover:bg-stone-900"
+            >
+              <Share2 className="h-4 w-4" />
+              {copied ? "Copied!" : "Share result"}
+            </button>
+          ) : null}
         </div>
       </DialogContent>
     </Dialog>

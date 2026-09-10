@@ -1,36 +1,36 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { Archive, BarChart3, CalendarDays, Dices } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { buildShareText } from "@/lib/strands-engine";
-import { formatUtcDate } from "@/lib/strands-format";
-import { GameModeSwitcher } from "@/components/game-mode-switcher";
 import { ShareDialog } from "@/components/share-dialog";
-import FoundWordsList from "@/components/strands-game/found-words-list";
-import HowToPlaySection from "@/components/strands-game/how-to-play-section";
 import StrandsConfetti from "@/components/strands-game/strands-confetti";
-import StrandsControls from "@/components/strands-game/strands-controls";
+import StrandsBoardLayout from "@/components/strands-game/strands-game-layout";
 import StrandsGrid from "@/components/strands-game/strands-grid";
+import StrandsSidePanel, {
+  StrandsSidePanelSkeleton,
+} from "@/components/strands-game/strands-side-panel";
 import StrandsWinModal from "@/components/strands-game/strands-win-modal";
 import { useStrandsGame } from "@/hooks/use-strands-game";
 import type { StrandsPuzzleData } from "@/types/strands";
 
 export function StrandsLoadingSkeleton() {
   return (
-    <div className="flex w-full flex-col items-center gap-6 py-8">
-      <div className="h-8 w-40 animate-pulse rounded-full bg-stone-200" />
-      <div className="h-4 w-56 animate-pulse rounded-full bg-stone-200" />
-      <div className="grid aspect-[6/8] w-full max-w-[420px] grid-cols-6 grid-rows-8 gap-2 md:gap-3">
-        {Array.from({ length: 48 }, (_, i) => (
-          <div
-            key={i}
-            className="animate-pulse rounded-full border border-stone-200 bg-stone-100"
-          />
-        ))}
-      </div>
+    <div className="flex w-full flex-1 flex-col items-center gap-5">
+      <StrandsBoardLayout
+        sidePanel={<StrandsSidePanelSkeleton />}
+        grid={
+          <div className="mx-auto grid aspect-[6/8] w-full max-w-[420px] grid-cols-6 grid-rows-8 gap-2 md:gap-3 lg:gap-3.5">
+            {Array.from({ length: 48 }, (_, i) => (
+              <div
+                key={i}
+                className="animate-pulse rounded-full border border-stone-200 bg-stone-100"
+              />
+            ))}
+          </div>
+        }
+      />
     </div>
   );
 }
@@ -52,12 +52,26 @@ function StrandsToast({ message }: { message: string | null }) {
 
 function StrandsGameInner({ puzzleData }: { puzzleData: StrandsPuzzleData }) {
   const game = useStrandsGame(puzzleData);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [confettiActive, setConfettiActive] = useState(false);
   const [winModalOpen, setWinModalOpen] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
 
   const { theme, words, article } = puzzleData.puzzle;
   const totalWords = words.length + 1;
+  const isStatsPanelOpen = searchParams.get("panel") === "stats" && !game.isPractice;
+
+  const closeWinModal = useCallback(() => {
+    setWinModalOpen(false);
+    if (searchParams.get("panel") === "stats") {
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("panel");
+      const nextQuery = params.toString();
+      router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
+    }
+  }, [pathname, router, searchParams]);
 
   // §3.7 胜利序列：仅"刚赢"（justWon）才自动播放；恢复的胜利保持静默
   useEffect(() => {
@@ -87,89 +101,39 @@ function StrandsGameInner({ puzzleData }: { puzzleData: StrandsPuzzleData }) {
   const openShare = useCallback(() => setShareDialogOpen(true), []);
 
   return (
-    <div className="flex w-full select-none flex-col items-center gap-6">
+    <div className="flex w-full flex-1 select-none flex-col items-center gap-5">
       <StrandsToast message={game.message} />
       <StrandsConfetti active={confettiActive} />
 
-      <header className="flex w-full max-w-[420px] flex-col items-center gap-2">
-        <div className="flex w-full items-center justify-between">
-          <h1 className="text-3xl font-bold tracking-tight text-stone-800">Strands</h1>
-          <div className="flex items-center gap-2">
-            {game.isWon ? (
-              <button
-                type="button"
-                onClick={() => setWinModalOpen(true)}
-                aria-label="View stats"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 shadow-sm transition-colors hover:bg-stone-100"
-              >
-                <BarChart3 className="h-4 w-4" />
-              </button>
-            ) : null}
-            <Link
-              href="/strands-game/archive"
-              aria-label="Puzzle archive"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 shadow-sm transition-colors hover:bg-stone-100"
-            >
-              <Archive className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
-        <div className="flex w-full items-center justify-between text-sm text-stone-500">
-          <span className="inline-flex items-center gap-1.5">
-            <CalendarDays className="h-4 w-4" />
-            {game.isPractice ? "Practice" : formatUtcDate(puzzleData.date)}
-          </span>
-          <span className="font-medium">
-            {game.foundWords.length}/{totalWords} found
-          </span>
-        </div>
-      </header>
-
-      <GameModeSwitcher
-        activeValue={game.isPractice ? "unlimited" : "daily"}
-        className="w-full max-w-[420px]"
-        items={[
-          {
-            icon: <CalendarDays className="h-4 w-4" />,
-            label: "Daily",
-            value: "daily",
-            href: "/strands-game",
-          },
-          {
-            icon: <Dices className="h-4 w-4" />,
-            label: "Practice",
-            value: "unlimited",
-            href: "/strands-game?mode=practice",
-          },
-        ]}
+      <StrandsBoardLayout
+        sidePanel={
+          <StrandsSidePanel
+            articleSlug={article?.slug ?? null}
+            dateLabel={puzzleData.date}
+            foundWords={game.foundWords}
+            hintMeter={game.hintMeter}
+            isPractice={game.isPractice}
+            isWon={game.isWon}
+            theme={theme}
+            totalWords={totalWords}
+            onRemoveWord={game.removeFoundWord}
+            onShare={openShare}
+            onUseHint={game.useHint}
+          />
+        }
+        grid={
+          <StrandsGrid
+            grid={game.grid}
+            foundWords={game.foundWords}
+            currentPath={game.currentPath}
+            errorPath={game.errorPath}
+            hintCells={game.hintCells}
+            occupiedCells={game.occupiedCells}
+            onCellPointerDown={game.handleCellPointerDown}
+            onPointerMove={game.handlePointerMove}
+          />
+        }
       />
-
-      <StrandsControls
-        theme={theme}
-        hintMeter={game.hintMeter}
-        articleSlug={article?.slug ?? null}
-        onUseHint={game.useHint}
-        onShare={openShare}
-      />
-
-      <FoundWordsList
-        foundWords={game.foundWords}
-        isWon={game.isWon}
-        onRemoveWord={game.removeFoundWord}
-      />
-
-      <StrandsGrid
-        grid={game.grid}
-        foundWords={game.foundWords}
-        currentPath={game.currentPath}
-        errorPath={game.errorPath}
-        hintCells={game.hintCells}
-        occupiedCells={game.occupiedCells}
-        onCellPointerDown={game.handleCellPointerDown}
-        onPointerMove={game.handlePointerMove}
-      />
-
-      <HowToPlaySection />
 
       <ShareDialog
         isOpen={shareDialogOpen}
@@ -182,11 +146,12 @@ function StrandsGameInner({ puzzleData }: { puzzleData: StrandsPuzzleData }) {
       />
 
       <StrandsWinModal
-        isOpen={winModalOpen}
+        isOpen={winModalOpen || isStatsPanelOpen}
         isPractice={game.isPractice}
+        isWon={game.isWon}
         theme={theme}
         totalHintsUsed={game.totalHintsUsed}
-        onClose={() => setWinModalOpen(false)}
+        onClose={closeWinModal}
       />
     </div>
   );
@@ -198,7 +163,8 @@ type StrandsClientProps = {
 
 export default function StrandsClient({ initialDate }: StrandsClientProps) {
   const searchParams = useSearchParams();
-  const isPractice = searchParams.get("mode") === "practice";
+  const modeParam = searchParams.get("mode");
+  const isPractice = modeParam === "practice" || modeParam === "unlimited";
   const dateParam = searchParams.get("date") ?? initialDate ?? null;
 
   const [puzzleData, setPuzzleData] = useState<StrandsPuzzleData | null>(null);

@@ -325,6 +325,7 @@ export default function Games({
                     gameMode={game.gameMode}
                     hasFirstInput={game.hasFirstInput}
                     isGameOver={game.isGameOver}
+                    isLoadingWord={game.isLoadingWord}
                     onDecrease={game.handleDecrease}
                     onIncrease={game.handleIncrease}
                     onStartGame={game.handleStartGame}

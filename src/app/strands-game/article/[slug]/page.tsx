@@ -3,10 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { type Metadata } from "next";
 
-import { formatUtcDate } from "@/lib/strands-format";
 import { getStrandsPuzzleBySlug } from "@/server/strands-puzzles";
 import { createTursoClient } from "@/server/turso";
 import type { StrandsPuzzleData } from "@/types/strands";
+
+import { WordHints } from "./word-hints";
 
 export const runtime = "edge";
 export const revalidate = 3600;
@@ -68,7 +69,7 @@ export default async function StrandsArticlePage({
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-[#f5f0ea]">
-      <article className="mx-auto w-full max-w-2xl px-4 py-10">
+      <article className="mx-auto w-full max-w-screen-lg px-4 py-10">
         <Link
           href={`/strands-game?date=${puzzleData.date}`}
           className="text-sm font-medium text-stone-600 underline-offset-4 hover:text-stone-900 hover:underline"
@@ -81,7 +82,7 @@ export default async function StrandsArticlePage({
             {article.title}
           </h1>
           <p className="text-sm text-stone-500">
-            {formatUtcDate(puzzleData.date)} · Theme: {puzzleData.puzzle.theme}
+            {puzzleData.date} · Theme: {puzzleData.puzzle.theme}
           </p>
         </header>
 
@@ -94,22 +95,7 @@ export default async function StrandsArticlePage({
             <p className="text-amber-900/90">{article.spangramHint}</p>
           </section>
 
-          <section className="flex flex-col gap-3">
-            <h2 className="text-lg font-bold text-stone-800">Word hints</h2>
-            <ul className="flex flex-col gap-3">
-              {article.wordHints.map((wordHint) => (
-                <li
-                  key={wordHint.word}
-                  className="rounded-2xl border border-stone-200 bg-white/90 px-5 py-4"
-                >
-                  <span className="mb-1 inline-block rounded-full bg-[#A6C8FF] px-3 py-0.5 text-xs font-bold tracking-wide text-stone-800">
-                    {wordHint.word}
-                  </span>
-                  <p className="text-sm text-stone-600">{wordHint.hint}</p>
-                </li>
-              ))}
-            </ul>
-          </section>
+          <WordHints wordHints={article.wordHints} />
 
           <p>{article.outro}</p>
         </div>

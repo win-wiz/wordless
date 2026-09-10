@@ -1,10 +1,18 @@
 import dynamic from "next/dynamic";
 import HelpCenter from "@/components/waffle-game/help-center";
-import WaffleLoadingSkeleton from "@/components/waffle-game/waffle-loading-skeleton";
+import WaffleBoardSkeleton from "@/components/waffle-game/waffle-board-skeleton";
 
 const DynamicWaffleClient = dynamic(() => import("@/components/waffle-game/waffle-client"), {
   ssr: false,
-  loading: () => <WaffleLoadingSkeleton standalone />,
+  loading: () => (
+    <div className="container mx-auto flex min-h-[720px] max-w-screen-lg flex-col">
+      <div className="flex flex-1 flex-col items-center py-10">
+        <div className="flex min-h-[720px] w-full flex-col items-center">
+          <WaffleBoardSkeleton />
+        </div>
+      </div>
+    </div>
+  ),
 });
 
 export default function WaffleGamePage() {

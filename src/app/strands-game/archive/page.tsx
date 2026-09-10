@@ -2,7 +2,6 @@ import type { Client } from "@libsql/client";
 import Link from "next/link";
 import { type Metadata } from "next";
 
-import { formatUtcDate } from "@/lib/strands-format";
 import { getArchiveStrandsPuzzles, type StrandsArchiveEntry } from "@/server/strands-puzzles";
 import { createTursoClient } from "@/server/turso";
 
@@ -59,7 +58,7 @@ export default async function StrandsArchivePage() {
               >
                 <div className="flex flex-col">
                   <span className="text-sm font-semibold text-stone-800">
-                    {formatUtcDate(entry.date, "short")}
+                    {entry.date}
                   </span>
                   <span className="text-sm text-stone-500">
                     Theme: {entry.theme}

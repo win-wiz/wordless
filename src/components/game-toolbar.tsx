@@ -1,18 +1,9 @@
 import { CalendarDays, Clock3, Minus, Plus, RefreshCw } from "lucide-react";
 
-import { GameInfoPill } from "@/components/game-info-pill";
+import { GameInfoPill, GameInfoPillSkeleton } from "@/components/game-info-pill";
 import UseTimes from "@/components/use-times";
 import type { DailyWordResponse } from "@/lib/api";
 import type { GameMode } from "@/hooks/use-wordless-game";
-
-function formatLocalDate() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = `${now.getMonth() + 1}`.padStart(2, '0');
-  const day = `${now.getDate()}`.padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
-}
 
 interface GameToolbarProps {
   canDecreaseLength: boolean;
@@ -22,6 +13,7 @@ interface GameToolbarProps {
   gameMode: GameMode;
   hasFirstInput: boolean;
   isGameOver: boolean;
+  isLoadingWord: boolean;
   onDecrease: () => void;
   onIncrease: () => void;
   onStartGame: () => void;
@@ -38,6 +30,7 @@ export function GameToolbar({
   gameMode,
   hasFirstInput,
   isGameOver,
+  isLoadingWord,
   onDecrease,
   onIncrease,
   onStartGame,
@@ -45,9 +38,6 @@ export function GameToolbar({
   showKeyboard,
   totalTime,
 }: GameToolbarProps) {
-  const fallbackDate = formatLocalDate();
-  const challengeDate = dailyChallenge?.date ?? fallbackDate;
-
   return (
     <div className="mb-7 flex w-full justify-center">
       <div className="flex w-full max-w-[640px] flex-wrap items-center justify-center gap-2">
@@ -77,15 +67,29 @@ export function GameToolbar({
           </div>
         )}
 
-        {gameMode === 'daily' && (
-          <GameInfoPill
-            icon={<CalendarDays className="h-4 w-4" />}
-            label="Challenge date"
-            value={challengeDate}
-            valueClassName="text-sm text-zinc-700"
-            className="h-12 border-violet-100/80 bg-white/90 shadow-[0_10px_30px_rgba(139,92,246,0.08)]"
-          />
-        )}
+        {gameMode === 'daily' &&
+          (dailyChallenge ? (
+            <GameInfoPill
+              icon={<CalendarDays className="h-4 w-4" />}
+              label="Challenge date"
+              value={dailyChallenge.date}
+              valueClassName="text-sm text-zinc-700"
+              className="h-12 border-violet-100/80 bg-white/90 shadow-[0_10px_30px_rgba(139,92,246,0.08)]"
+            />
+          ) : isLoadingWord ? (
+            <GameInfoPillSkeleton
+              className="h-12 border-violet-100/80 bg-white/90 shadow-[0_10px_30px_rgba(139,92,246,0.08)]"
+              valueWidthClassName="w-[132px]"
+            />
+          ) : (
+            <GameInfoPill
+              icon={<CalendarDays className="h-4 w-4" />}
+              label="Challenge date unavailable"
+              value="--"
+              valueClassName="text-sm text-zinc-400"
+              className="h-12 border-violet-100/80 bg-white/90 shadow-[0_10px_30px_rgba(139,92,246,0.08)]"
+            />
+          ))}
 
         <div className="flex items-center gap-2">
           <GameInfoPill

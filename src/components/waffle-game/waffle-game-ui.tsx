@@ -11,6 +11,30 @@ import type {
   WafflePlayableCellView,
 } from "@/components/waffle-game/waffle-client-types";
 
+function getWaffleActionButtonClasses({
+  disabled,
+  skeleton = false,
+  variant = "primary",
+}: {
+  disabled: boolean;
+  skeleton?: boolean;
+  variant?: "primary" | "secondary";
+}) {
+  return cn(
+    "relative inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl border px-5 py-4 text-base font-medium transition",
+    skeleton
+      ? variant === "secondary"
+        ? "border-slate-200 bg-slate-50 text-transparent"
+        : "border-slate-200 bg-white text-transparent shadow-[0_8px_24px_rgba(15,23,42,0.04)]"
+      : disabled
+        ? "cursor-not-allowed border-slate-200 bg-white text-slate-400"
+        : variant === "secondary"
+          ? "border-slate-200 bg-slate-50 text-slate-700 hover:-translate-y-0.5 hover:border-blue-200 hover:bg-slate-100 hover:text-slate-800"
+          : "border-slate-200 bg-white text-slate-700 shadow-[0_8px_24px_rgba(15,23,42,0.04)] hover:-translate-y-0.5 hover:border-blue-200 hover:bg-slate-50 hover:text-slate-800",
+    "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-300 focus-visible:ring-offset-2",
+  );
+}
+
 function getTileStatePalette(state: WaffleTileState) {
   if (state === "green") {
     return "border-transparent shadow-[0_12px_24px_rgba(5,150,105,0.2)]";
@@ -178,6 +202,37 @@ export const WaffleGameBoard = memo(function WaffleGameBoard({
   );
 });
 
+export function WaffleGameFrame({
+  board,
+  footer,
+  toolbar,
+}: {
+  board: ReactNode;
+  footer?: ReactNode;
+  toolbar?: ReactNode;
+}) {
+  return (
+    <>
+      {toolbar ? (
+        <div className="mb-8 flex w-full justify-center">
+          <div className="flex w-full max-w-[760px] flex-wrap items-center justify-center gap-3">
+            {toolbar}
+          </div>
+        </div>
+      ) : null}
+
+      <div className="relative flex w-full flex-col items-center">
+        {board}
+        {footer ? (
+          <div className="mt-6 w-full max-w-[760px]">
+            {footer}
+          </div>
+        ) : null}
+      </div>
+    </>
+  );
+}
+
 export function ActionButton({
   disabled,
   icon,
@@ -191,13 +246,7 @@ export function ActionButton({
 }) {
   return (
     <button
-      className={cn(
-        "inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl border px-5 py-4 text-base font-medium transition",
-        disabled
-          ? "cursor-not-allowed border-slate-200 bg-white text-slate-400"
-          : "border-slate-200 bg-white text-slate-700 shadow-[0_8px_24px_rgba(15,23,42,0.04)] hover:-translate-y-0.5 hover:border-blue-200 hover:bg-slate-50 hover:text-slate-800",
-        "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-300 focus-visible:ring-offset-2",
-      )}
+      className={getWaffleActionButtonClasses({ disabled })}
       disabled={disabled}
       onClick={onClick}
       type="button"
@@ -205,6 +254,37 @@ export function ActionButton({
       {icon}
       {label}
     </button>
+  );
+}
+
+export function ActionButtonSkeleton({
+  includeIcon = true,
+  label,
+  variant = "primary",
+  wide = false,
+}: {
+  includeIcon?: boolean;
+  label: string;
+  variant?: "primary" | "secondary";
+  wide?: boolean;
+}) {
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        getWaffleActionButtonClasses({ disabled: true, skeleton: true, variant }),
+        wide && "w-full",
+      )}
+    >
+      {includeIcon ? <span className="h-4 w-4 shrink-0 rounded-full bg-transparent" /> : null}
+      <span className="invisible">{label}</span>
+      <span
+        className={cn(
+          "absolute top-1/2 h-4 -translate-y-1/2 animate-pulse rounded-full bg-slate-200/80",
+          includeIcon ? "left-11 right-5" : "inset-x-5",
+        )}
+      />
+    </div>
   );
 }
 

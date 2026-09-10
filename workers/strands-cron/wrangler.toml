@@ -1,0 +1,17 @@
+name = "wordless-strands-cron"
+main = "src/index.ts"
+compatibility_date = "2025-03-10"
+
+[triggers]
+# UTC 00:05 = 北京时间 08:05，每日题日期按 UTC 计算，与应用侧 getStrandsDateKey 一致
+crons = ["5 0 * * *"]
+
+[vars]
+LOOKAHEAD_DAYS = "3"
+INVENTORY_ALERT_THRESHOLD = "4"
+
+# 以下通过 wrangler secret put 配置（勿写入本文件）:
+#   TURSO_DATABASE_URL  - Turso 库地址（https://xxx.turso.io）
+#   TURSO_AUTH_TOKEN    - Turso 访问令牌
+#   ALERT_WEBHOOK_URL   - （可选）库存不足告警 webhook，POST {text}
+#   MANUAL_TRIGGER_TOKEN - （可选）手动触发 /run 的访问令牌

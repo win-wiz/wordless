@@ -54,3 +54,7 @@ yarn-error.log*
 db/*
 doc/*
 scripts/*
+
+# cloudflare workers
+workers/**/.dev.vars
+workers/**/.wrangler

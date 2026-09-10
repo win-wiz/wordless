@@ -4,8 +4,10 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import Image from "next/image";
 import logo from "@/../public/wordless.png";
 import {
+  Archive,
   ArrowUpRight,
   BarChart3,
+  Brain,
   ChefHat,
   CircleHelp,
   Gamepad2,
@@ -26,7 +28,7 @@ import { GameModeSwitcher } from "@/components/game-mode-switcher";
 import { NavIconButton } from "@/components/nav-icon-button";
 import { UserMenu } from "@/components/auth/user-menu";
 import { Dialog, DialogDescription, DialogOverlay, DialogPortal, DialogTitle } from "@/components/ui/dialog";
-import { GAME_NAVIGATION_ITEMS, getGameHref, isGameActive } from "@/lib/game-navigation";
+import { GAME_NAVIGATION_ITEMS, getGameByPathname, getGameHref, isGameActive } from "@/lib/game-navigation";
 import type { GameNavigationItem, HeaderGameMode } from "@/lib/game-navigation";
 import { cn } from "@/lib/utils";
 
@@ -61,6 +63,8 @@ function renderGameIcon(icon: GameNavigationItem["icon"]) {
       return <Layers3 className="h-4 w-4" />;
     case "strands":
       return <Grid3x3 className="h-4 w-4" />;
+    case "memory":
+      return <Brain className="h-4 w-4" />;
     default:
       return <Gamepad2 className="h-4 w-4" />;
   }
@@ -72,7 +76,6 @@ export default function Header() {
   const searchParams = useSearchParams();
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const [navPanelLeft, setNavPanelLeft] = useState(16);
   const [sidebarMode, setSidebarMode] = useState<HeaderGameMode>('daily');
   const isHomePage = pathname === '/';
   const isWafflePage = pathname === '/waffle-game';
@@ -81,6 +84,11 @@ export default function Header() {
     MODE_PARAM_VALUES.has(searchParams.get('mode') ?? "") ? 'unlimited' : 'daily';
   const showsWaffleStatsEntry = isWafflePage && activeMode === "daily";
   const isWaffleStatsPanelOpen = searchParams.get("panel") === "stats";
+  const isStrandsPage = pathname === '/strands-game';
+  const strandsMode = searchParams.get('mode');
+  const isStrandsPractice = strandsMode === 'practice' || strandsMode === 'unlimited';
+  const showsStrandsStatsEntry = isStrandsPage && !isStrandsPractice;
+  const isStrandsStatsPanelOpen = isStrandsPage && searchParams.get("panel") === "stats";
 
   const updateCurrentRouteParams = (updater: (params: URLSearchParams) => void) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -138,6 +146,16 @@ export default function Header() {
     });
   };
 
+  const handleOpenStrandsStats = () => {
+    updateCurrentRouteParams((params) => {
+      params.set("panel", "stats");
+    });
+  };
+
+  const handleOpenStrandsArchive = () => {
+    router.push('/strands-game/archive');
+  };
+
   useEffect(() => {
     setMobileNavOpen(false);
   }, [pathname, searchParams]);
@@ -146,35 +164,11 @@ export default function Header() {
     setSidebarMode(activeMode);
   }, [activeMode]);
 
-  useEffect(() => {
-    const updateNavPanelPosition = () => {
-      if (typeof window === "undefined") {
-        return;
-      }
-
-      const contentMaxWidth = 1024;
-      const contentInset = 16;
-      const containerLeft = Math.max(contentInset, (window.innerWidth - contentMaxWidth) / 2 + contentInset);
-      setNavPanelLeft(containerLeft);
-    };
-
-    updateNavPanelPosition();
-
-    if (!mobileNavOpen) {
-      return;
-    }
-
-    window.addEventListener("resize", updateNavPanelPosition);
-    window.addEventListener("scroll", updateNavPanelPosition, { passive: true });
-
-    return () => {
-      window.removeEventListener("resize", updateNavPanelPosition);
-      window.removeEventListener("scroll", updateNavPanelPosition);
-    };
-  }, [mobileNavOpen]);
-
   const helpVisible = true;
   const mobileSidebarGames = GAME_NAVIGATION_ITEMS.filter((item) => item.includeInMobileSidebar);
+  const activeGame = getGameByPathname(pathname);
+  const headerTitle = activeGame?.title ?? "Wordless";
+  const headerTagline = activeGame?.tagline ?? "Daily word challenge, every day";
 
   return (
     <header className="sticky top-0 z-30 w-full border-b border-violet-100/80 bg-white/90 backdrop-blur-xl">
@@ -201,12 +195,11 @@ export default function Header() {
                 />
                 <DialogPrimitive.Content
                   className={cn(
-                    "fixed inset-y-0 z-50 flex h-[100dvh] w-[min(92vw,26rem)] flex-col overflow-hidden border-r border-violet-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,245,255,0.96))] shadow-[28px_0_90px_rgba(24,24,27,0.22)] outline-none will-change-transform",
+                    "fixed inset-y-0 left-0 z-50 flex h-[100dvh] w-[min(92vw,26rem)] flex-col overflow-hidden border-r border-violet-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,245,255,0.96))] shadow-[28px_0_90px_rgba(24,24,27,0.22)] outline-none will-change-transform",
                     "transition-[transform,opacity] duration-[360ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
                     "data-[state=open]:translate-x-0 data-[state=open]:opacity-100 data-[state=open]:scale-100",
                     "data-[state=closed]:-translate-x-[calc(100%+3rem)] data-[state=closed]:opacity-0 data-[state=closed]:scale-[0.985]",
                   )}
-                  style={{ left: `${navPanelLeft}px` }}
                 >
                   <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-r from-transparent to-violet-200/20" />
                   <div className="flex items-center justify-between border-b border-violet-100 px-5 py-4">
@@ -285,7 +278,7 @@ export default function Header() {
                                     href={getGameHref(item, sidebarMode)}
                                     onClick={() => setMobileNavOpen(false)}
                                     className={cn(
-                                      "group flex items-center justify-between rounded-[26px] border px-4 py-4 shadow-[0_14px_40px_rgba(24,24,27,0.08)] transition-all duration-200",
+                                      "group relative flex items-center justify-between rounded-[26px] border px-4 py-4 shadow-[0_14px_40px_rgba(24,24,27,0.08)] transition-all duration-200",
                                       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300 focus-visible:ring-offset-2",
                                       isCurrent
                                         ? "border-violet-200 bg-[linear-gradient(135deg,rgba(245,243,255,0.98),rgba(255,255,255,0.98))]"
@@ -294,6 +287,11 @@ export default function Header() {
                                           : "border-violet-100 bg-white/95 hover:border-violet-200 hover:bg-violet-50/70",
                                     )}
                                   >
+                                    {item.isNew ? (
+                                      <span className="absolute -top-2 right-5 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white shadow-[0_6px_16px_rgba(124,58,237,0.35)]">
+                                        New
+                                      </span>
+                                    ) : null}
                                     <div className="flex min-w-0 items-center gap-3">
                                       <span
                                         className={cn(
@@ -310,9 +308,6 @@ export default function Header() {
                                       <div className="min-w-0">
                                         <p className="truncate text-base font-semibold text-zinc-900">
                                           {item.shortTitle}
-                                        </p>
-                                        <p className="mt-1 text-xs text-zinc-500">
-                                          {item.source === "local" ? "Built into Wordless" : "Embedded from partner page"}
                                         </p>
                                       </div>
                                     </div>
@@ -350,10 +345,10 @@ export default function Header() {
               />
               <div className="flex flex-col">
                 <span className="bg-gradient-to-r from-zinc-900 to-violet-600 bg-clip-text text-xl font-bold tracking-[-0.03em] text-transparent md:text-2xl">
-                  Wordless
+                  {headerTitle}
                 </span>
                 <span className="hidden text-xs font-medium text-zinc-500 md:block">
-                  Daily word challenge, every day
+                  {headerTagline}
                 </span>
               </div>
             </Link>
@@ -367,6 +362,25 @@ export default function Header() {
               <NavIconButton
                 active={isWaffleStatsPanelOpen}
                 onClick={handleOpenWaffleStats}
+                label="Stats"
+                icon={<BarChart3 className="h-[18px] w-[18px]" />}
+                className="h-8 w-8"
+              />
+            ) : null}
+
+            {isStrandsPage ? (
+              <NavIconButton
+                onClick={handleOpenStrandsArchive}
+                label="Archive"
+                icon={<Archive className="h-[18px] w-[18px]" />}
+                className="h-8 w-8"
+              />
+            ) : null}
+
+            {showsStrandsStatsEntry ? (
+              <NavIconButton
+                active={isStrandsStatsPanelOpen}
+                onClick={handleOpenStrandsStats}
                 label="Stats"
                 icon={<BarChart3 className="h-[18px] w-[18px]" />}
                 className="h-8 w-8"
@@ -402,6 +416,23 @@ export default function Header() {
               <NavIconButton
                 active={isWaffleStatsPanelOpen}
                 onClick={handleOpenWaffleStats}
+                label="Stats"
+                icon={<BarChart3 className="h-[18px] w-[18px]" />}
+              />
+            ) : null}
+
+            {isStrandsPage ? (
+              <NavIconButton
+                onClick={handleOpenStrandsArchive}
+                label="Archive"
+                icon={<Archive className="h-[18px] w-[18px]" />}
+              />
+            ) : null}
+
+            {showsStrandsStatsEntry ? (
+              <NavIconButton
+                active={isStrandsStatsPanelOpen}
+                onClick={handleOpenStrandsStats}
                 label="Stats"
                 icon={<BarChart3 className="h-[18px] w-[18px]" />}
               />
